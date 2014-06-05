@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GamerSpot</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="pc_feeds">
+        <item>http://www.pcgamer.com/feed/</item>
+        <item>http://www.joystiq.com/pc/rss.xml</item>
+    </string-array>
+
+    <string-array name="xbox_feeds">
+        <item>http://www.joystiq.com/xbox/rss.xml</item>
+        <item>http://www.totalxbox.com/rss/feed.php?type=1&amp;priority=1&amp;limit=20</item>
+        <item>http://n4g.com/rss/news?channel=xbox-one&amp;sort=latest</item>
+    </string-array>
+
+</resources>
