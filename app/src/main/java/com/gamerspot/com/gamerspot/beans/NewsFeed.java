@@ -22,13 +22,15 @@ public class NewsFeed implements Serializable, Comparable {
     private String guid;
     private String title;
     private String description;
-    private URL link;
-    private Date date;
+    private String link;
+    private String date;
     private String author;
     private String provider;
     private int platform;
 
-    public NewsFeed(String provider, String guid, String title, String description, URL link, Date date, String author) {
+    public NewsFeed(){}
+
+    public NewsFeed(String guid, String provider, String title, String description, String link, String date, String author, int platform) {
         this.provider = provider;
         this.guid = guid;
         this.title = title;
@@ -36,6 +38,7 @@ public class NewsFeed implements Serializable, Comparable {
         this.link = link;
         this.date = date;
         this.author = author;
+        this.platform = platform;
     }
 
     public String getGuid() {
@@ -62,19 +65,19 @@ public class NewsFeed implements Serializable, Comparable {
         this.description = description;
     }
 
-    public URL getLink() {
+    public String getLink() {
         return link;
     }
 
-    public void setLink(URL link) {
+    public void setLink(String link) {
         this.link = link;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -92,6 +95,19 @@ public class NewsFeed implements Serializable, Comparable {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public int getPlatform(){
+        return platform;
+    }
+
+    public void setPlatform(int platformIn) {
+        this.platform = platformIn;
+    }
+
+    @Override
+    public String toString() {
+        return getTitle()+" - " + getProvider()+" "+ getPlatform();
     }
 
     @Override

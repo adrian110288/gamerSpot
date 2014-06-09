@@ -1,5 +1,7 @@
 package com.gamerspot;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -10,52 +12,157 @@ import com.android.volley.*;
 import com.android.volley.toolbox.*;
 import com.gamerspot.com.gamerspot.beans.NewsFeed;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.xml.parsers.*;
+import javax.xml.parsers.*;
+
 public class NewsActivity extends ActionBarActivity {
 
-    //private static RequestQueue queue;
-    //private ArrayList<String> pcFeedUrls = new ArrayList<String>();
+    private HashMap<Integer, String[]> urlsMap;
+    private static FeedFetcherTask downloadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
+        downloadTask = new FeedFetcherTask(this.getApplicationContext());
+        downloadTask.execute();
 
-
-        String[] pcUrls = this.getResources().getStringArray(R.array.pc_feeds);
-
-        for(String url : pcUrls) {
-            fetchNews(url, NewsFeed.PLATFORM_PC);
-        }
     }
 
-    private void fetchNews(final String url, int platformIn) {
+    private class FeedFetcherTask extends AsyncTask<Void, Void, ArrayList<NewsFeed>> {
 
-        final int platform = platformIn;
+        private Context context;
+        private String[] pcFeedUrls;
 
-        StringRequest xmlDoc = new StringRequest(Request.Method.GET, url,
+        private ArrayList<NewsFeed> newFeedsList;
 
-                new Response.Listener<String>() {
+        private FeedFetcherTask(Context c) {
 
-                    @Override
-                    public void onResponse(String s) {
+            context = c;
+            pcFeedUrls = c.getResources().getStringArray(R.array.pc_feeds);
 
-                        Log.i(url, s.length() +" for "+ platform);
-                    }
-                },
+            newFeedsList = new ArrayList<NewsFeed>();
+        }
 
-                new Response.ErrorListener() {
+        @Override
+        protected ArrayList<NewsFeed> doInBackground(Void... params) {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("LOG", "Error fetching news");
+            getNewsForPc();
+
+            return newFeedsList;
+        }
+
+        /*
+        @Override
+        protected void onPostExecute(ArrayList<NewsFeed> o) {
+            super.onPostExecute(o);
+        }
+
+        @Override
+        protected void onProgressUpdate(Object[] values) {
+            super.onProgressUpdate(values);
+        }*/
+
+        private void getNewsForPc(){
+
+            int platform = NewsFeed.PLATFORM_PC;
+
+            long time = System.currentTimeMillis();
+            for(String url: pcFeedUrls) {
+
+                parseRssFeed(url, platform);
+            }
+
+            long finish = System.currentTimeMillis()-time;
+
+            Log.i("time elapsed", finish/1000.0 + "");
+        }
+
+        private void parseRssFeed(String urlIn, int platformIn){
+
+            try {
+                URL url = new URL(urlIn);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                InputSource is = new InputSource(br);
+
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.parse(is);
+
+                NodeList nodeList = document.getElementsByTagName("item");
+
+                String provider = document.getElementsByTagName("title").item(0).getTextContent();
+                int platform = platformIn;
+
+                for(int i=0;i<nodeList.getLength(); i++) {
+
+                    Node node = nodeList.item(i);
+                    NewsFeed feed = null;
+                    String title;
+                    String link;
+                    String description;
+                    String guid;
+                    String pubDate;
+                    String creator;
+
+                    if(node.getNodeType() == Node.ELEMENT_NODE) {
+
+                        Element element = (Element) node;
+                        feed = new NewsFeed();
+
+                        title = element.getElementsByTagName("title").item(0).getTextContent();
+                        feed.setTitle(title);
+
+                        link = element.getElementsByTagName("link").item(0).getTextContent();
+                        feed.setLink(link);
+
+                        description = element.getElementsByTagName("description").item(0).getTextContent();
+                        feed.setDescription(description);
+
+                        guid = element.getElementsByTagName("guid").item(0).getTextContent();
+                        feed.setGuid(guid);
+
+                        pubDate = element.getElementsByTagName("pubDate").item(0).getTextContent();
+                        feed.setDate(pubDate);
+
+                        creator = element.getElementsByTagName("dc:creator").item(0).getTextContent();
+                        feed.setAuthor(creator);
+
+                        feed.setProvider(provider);
+                        feed.setPlatform(platform);
+
+                        Log.i("feed", feed.toString());
+
+                        newFeedsList.add(feed);
+
                     }
                 }
-        );
 
-        queue.add(xmlDoc);
+                //TODO insert to SQLite
+                //TODO return list of NewsFeed
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

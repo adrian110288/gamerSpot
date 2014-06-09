@@ -1,6 +1,8 @@
 package com.gamerspot;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -24,49 +26,53 @@ import java.util.Collections;
 public class FeedFetcher {
 
     private Context context;
+
+    //URLs to RSS feeds
     private String[] pcUrls;
     private String[] xBoxUrls;
     private String[] playStationUrls;
 
+    //final list containing all of the new feeds
     private ArrayList<NewsFeed> newFeeds;
+
+    private static Thread backgroundDownload;
+    private static Handler downloadThreadHandler;
+
+    private static final int THREAD_FINISH = 1;
 
     public FeedFetcher(Context c) {
 
         context = c;
+        newFeeds = new ArrayList<NewsFeed>();
 
         pcUrls = context.getResources().getStringArray(R.array.pc_feeds);
-        xBoxUrls = context.getResources().getStringArray(R.array.xbox_feeds);
+        //xBoxUrls = context.getResources().getStringArray(R.array.xbox_feeds);
         //TODO get playstation urls
+
     }
 
     public ArrayList<NewsFeed> fetchAll(){
 
-        ArrayList<NewsFeed> allNewFeeds = new ArrayList<NewsFeed>();
 
-        allNewFeeds.addAll(fetchForPC());
-
-        //Collections.sort(allNewFeeds);
-
-        return allNewFeeds;
+        return null;
     }
 
-    public ArrayList<NewsFeed> fetchForPC(){
+    public void fetchForPC(){
 
         final int platform = NewsFeed.PLATFORM_PC;
-        newFeeds = new ArrayList<NewsFeed>();
 
         for(String url: pcUrls) {
 
             newFeeds.addAll(downloadFeeds(url, platform));
         }
-
-        return newFeeds;
     }
 
+    /*
     public ArrayList<NewsFeed> fetchForXBox(){}
 
     public ArrayList<NewsFeed> fetchForPlayStation(){}
 
+    */
     private ArrayList<NewsFeed> downloadFeeds(final String urlIn, final int platform) {
 
         String xmlFeed = "";
