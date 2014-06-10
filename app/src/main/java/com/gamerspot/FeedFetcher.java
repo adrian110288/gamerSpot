@@ -2,23 +2,13 @@ package com.gamerspot;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.gamerspot.com.gamerspot.beans.NewsFeed;
+import com.gamerspot.beans.NewsFeed;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Created by Adrian on 05-Jun-14.

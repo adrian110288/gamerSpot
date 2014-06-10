@@ -2,7 +2,7 @@ package com.gamerspot;
 
 import android.util.Log;
 
-import com.gamerspot.com.gamerspot.beans.NewsFeed;
+import com.gamerspot.beans.NewsFeed;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

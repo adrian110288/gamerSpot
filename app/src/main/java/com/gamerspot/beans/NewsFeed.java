@@ -1,7 +1,12 @@
-package com.gamerspot.com.gamerspot.beans;
+package com.gamerspot.beans;
+
+import android.util.Log;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -23,23 +28,12 @@ public class NewsFeed implements Serializable, Comparable {
     private String title;
     private String description;
     private String link;
-    private String date;
-    private String author;
+    private Date date;
+    private String creator;
     private String provider;
     private int platform;
 
     public NewsFeed(){}
-
-    public NewsFeed(String guid, String provider, String title, String description, String link, String date, String author, int platform) {
-        this.provider = provider;
-        this.guid = guid;
-        this.title = title;
-        this.description = description;
-        this.link = link;
-        this.date = date;
-        this.author = author;
-        this.platform = platform;
-    }
 
     public String getGuid() {
         return guid;
@@ -73,20 +67,25 @@ public class NewsFeed implements Serializable, Comparable {
         this.link = link;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(String dateIn) {
+        date = new Date(dateIn);
     }
 
-    public String getAuthor() {
-        return author;
+    public void setDate(long milisecondsIn) {
+
+        date = new Date(milisecondsIn);
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String author) {
+        this.creator = author;
     }
 
     public String getProvider() {
@@ -107,11 +106,14 @@ public class NewsFeed implements Serializable, Comparable {
 
     @Override
     public String toString() {
-        return getTitle()+" - " + getProvider()+" "+ getPlatform();
+        return getTitle()+" - " + getProvider()+" - "+ getPlatform() +" - "+getDate().toString();
     }
 
     @Override
     public int compareTo(Object another) {
-        return 0;
+
+        Date otherDate = ((NewsFeed) another).getDate();
+
+        return this.getDate().compareTo(otherDate);
     }
 }
