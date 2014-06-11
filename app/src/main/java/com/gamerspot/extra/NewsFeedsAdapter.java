@@ -84,9 +84,29 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
                 holder.platform_textView.setText("PC");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PC));
             }
+
+            case 2: {
+                holder.platform_textView.setText("XBOX");
+                holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
+            }
+
+            case 3: {
+                holder.platform_textView.setText("PLAYSTATION");
+                holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
+            }
+
+            case 4: {
+                holder.platform_textView.setText("NINTENDO");
+                holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
+            }
+
+            case 5: {
+                holder.platform_textView.setText("MOBILE");
+                holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
+            }
         }
 
-        holder.date_textView.setText(df.format("dd/MM/yyyy hh:mm", feed.getDate()));
+        holder.date_textView.setText(df.format("dd/MM/yyyy HH:mm", feed.getDate()));
 
 
         return convertView;

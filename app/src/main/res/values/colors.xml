@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="PLATFORM_PC">#000</color>
+
+    <!-- Application theme colors -->
+    <color name="APP_TEXT_COLOR">#1A1A1A</color>
+
+    <!-- ListView items - game platform indicators -->
+    <color name="PLATFORM_PC">#1A1A1A</color>
+    <color name="PLATFORM_XBOX">#009933</color>
+    <color name="PLATFORM_PLAYSTATION">#0052CC</color>
+    <color name="PLATFORM_NINTENDO">#19D1FF</color>
+    <color name="PLATFORM_MOBILE">#D11919</color>
+
 </resources>

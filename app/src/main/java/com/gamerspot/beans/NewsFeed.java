@@ -17,7 +17,9 @@ public class NewsFeed implements Serializable, Comparable {
     /*
     1: pc
     2: xbox
-    3: ps
+    3: playstation
+    4: nintendo
+    5: mobile
      */
 
     public static final int PLATFORM_PC = 1;
