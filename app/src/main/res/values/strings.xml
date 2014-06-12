@@ -2,18 +2,48 @@
 <resources>
 
     <string name="app_name">GamerSpot</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Error messages -->
+    <string name="connection_exception_error">Error downloading feed. Try again later</string>
 
     <string-array name="pc_feeds">
         <item>http://www.pcgamer.com/feed/</item>
-        <item>http://www.joystiq.com/pc/rss.xml</item>
+        <!-- <item>http://www.joystiq.com/pc/rss.xml</item> -->
+        <item>http://www.incgamers.com/feed</item> <!-- CDATA warning -->
+        <item>http://www.pcgamesn.com/mainrss.xml</item>
     </string-array>
 
     <string-array name="xbox_feeds">
         <item>http://www.joystiq.com/xbox/rss.xml</item>
         <item>http://www.totalxbox.com/rss/feed.php?type=1&amp;priority=1&amp;limit=20</item>
-        <item>http://n4g.com/rss/news?channel=xbox-one&amp;sort=latest</item>
+        <!-- <item>http://n4g.com/rss/news?channel=xbox-one&amp;sort=latest</item> -->
+        <item>http://www.joystiq.com/kinect/rss.xml</item>
+    </string-array>
+
+    <string-array name="playstation_feeds">
+        <item>http://www.joystiq.com/ps3/rss.xml</item>
+        <item>http://www.joystiq.com/move/rss.xml</item>
+        <item>http://www.joystiq.com/psp/rss.xml</item>
+        <item>http://www.joystiq.com/vita/rss.xml</item>
+        <item>http://uk.playstation.com/rss/news/en_GB/</item>
+    </string-array>
+
+    <string-array name="nintendo_feeds">
+        <item>http://www.joystiq.com/wii/rss.xml</item>
+        <item>http://www.joystiq.com/wii-u/rss.xml</item>
+        <item>http://www.joystiq.com/ds/rss.xml</item>
+        <item>http://www.joystiq.com/3ds/rss.xml</item>
+        <item>http://www.nintendolife.com/feeds/news</item>
+        <item>http://www.officialnintendomagazine.co.uk/rss/feed.php?type=1&amp;limit=10</item>
+    </string-array>
+
+    <string-array name="mobile_feeds">
+        <item>http://www.joystiq.com/mobile/rss.xml</item>
+        <item>http://www.mobilegamefaqs.com/rss/mgfs_news.rss</item>
+        <item>http://www.gamezebo.com/ipad/rss</item>
+        <item>http://www.gamezebo.com/iphone/rss</item>
+        <item>http://www.gamezebo.com/android/rss</item>
     </string-array>
 
 </resources>

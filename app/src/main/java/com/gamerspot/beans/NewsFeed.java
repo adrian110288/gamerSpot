@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +25,9 @@ public class NewsFeed implements Serializable, Comparable {
 
     public static final int PLATFORM_PC = 1;
     public static final int PLATFORM_XBOX = 2;
-    public static final int PLATFORM_PS = 3;
+    public static final int PLATFORM_PLAYSTATION = 3;
+    public static final int PLATFORM_NINTENDO = 4;
+    public static final int PLATFORM_MOBILE = 5;
 
     private String guid;
     private String title;
@@ -74,7 +77,18 @@ public class NewsFeed implements Serializable, Comparable {
     }
 
     public void setDate(String dateIn) {
-        date = new Date(dateIn);
+        try {
+            date = new Date(dateIn);
+        }
+        catch(IllegalArgumentException iae){
+
+            DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            try {
+                date = inputFormat.parse(dateIn);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setDate(long milisecondsIn) {
@@ -108,7 +122,7 @@ public class NewsFeed implements Serializable, Comparable {
 
     @Override
     public String toString() {
-        return getTitle()+" - " + getProvider()+" - "+ getPlatform() +" - "+getDate().toString();
+        return "ID "+getGuid()+" TITLE "+getTitle()+" DESCRIPTION " + getDescription()+" LINK "+ getLink() +" CREATOR "+getCreator() +" PROVIDER "+getProvider() + " PLATFORM "+getPlatform();
     }
 
     @Override

@@ -83,26 +83,37 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
             case 1: {
                 holder.platform_textView.setText("PC");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PC));
+                break;
             }
 
             case 2: {
                 holder.platform_textView.setText("XBOX");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
+                break;
             }
 
             case 3: {
                 holder.platform_textView.setText("PLAYSTATION");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
+                break;
             }
 
             case 4: {
                 holder.platform_textView.setText("NINTENDO");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
+                break;
             }
 
             case 5: {
                 holder.platform_textView.setText("MOBILE");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
+                break;
+            }
+
+            default: {
+                holder.platform_textView.setText("");
+                holder.helperView.setBackgroundColor(0);
+                break;
             }
         }
 

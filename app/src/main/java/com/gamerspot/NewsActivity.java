@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
@@ -23,8 +24,10 @@ import javax.xml.parsers.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.*;
 
 public class NewsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
@@ -42,7 +45,7 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
         /*
          * Customization of ActionBar
          */
-        appName  = this.getResources().getString(R.string.app_name);
+        appName  = getResources().getString(R.string.app_name);
         ActionBar actionBar = getSupportActionBar();
         SpannableString spannableString = new SpannableString(appName);
         spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -64,6 +67,10 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
 
         private Context context;
         private String[] pcFeedUrls;
+        private String[] xboxFeedUrls;
+        private String[] playstationFeedUrls;
+        private String[] nintendoFeedUrls;
+        private String[] mobileFeedUrls;
 
         private ArrayList<NewsFeed> newFeedsList;
         private DAO dao;
@@ -73,6 +80,11 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
 
             context = c;
             pcFeedUrls = c.getResources().getStringArray(R.array.pc_feeds);
+            xboxFeedUrls = c.getResources().getStringArray(R.array.xbox_feeds);
+            playstationFeedUrls = c.getResources().getStringArray(R.array.playstation_feeds);
+            nintendoFeedUrls = c.getResources().getStringArray(R.array.nintendo_feeds);
+            mobileFeedUrls = c.getResources().getStringArray(R.array.mobile_feeds);
+
             newFeedsList = new ArrayList<NewsFeed>();
             dao = new DAO(context);
         }
@@ -83,6 +95,11 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
             long time = System.currentTimeMillis();
 
             getNewsForPc();
+            getNewsForXbox();
+            getNewsForPlaystation();
+            getNewsForNintendo();
+            getNewsForMobile();
+
             storeNewsInDatabase();
 
             long finish = System.currentTimeMillis()-time;
@@ -97,6 +114,9 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
 
             ArrayList<NewsFeed> list = dao.getAllFeeds();
 
+            for(NewsFeed f: list) {
+                //Log.i("FEED", f.toString());
+            }
             feedsAdapter = new NewsFeedsAdapter(context, list);
             newsFeedsListView.setAdapter(feedsAdapter);
         }
@@ -112,6 +132,42 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
             int platform = NewsFeed.PLATFORM_PC;
 
             for(String url: pcFeedUrls) {
+                parseRssFeed(url, platform);
+            }
+        }
+
+        private void getNewsForXbox(){
+
+            int platform = NewsFeed.PLATFORM_XBOX;
+
+            for(String url: xboxFeedUrls) {
+                parseRssFeed(url, platform);
+            }
+        }
+
+        private void getNewsForPlaystation(){
+
+            int platform = NewsFeed.PLATFORM_PLAYSTATION;
+
+            for(String url: playstationFeedUrls) {
+                parseRssFeed(url, platform);
+            }
+        }
+
+        private void getNewsForNintendo(){
+
+            int platform = NewsFeed.PLATFORM_NINTENDO;
+
+            for(String url: nintendoFeedUrls) {
+                parseRssFeed(url, platform);
+            }
+        }
+
+        private void getNewsForMobile(){
+
+            int platform = NewsFeed.PLATFORM_MOBILE;
+
+            for(String url: mobileFeedUrls) {
                 parseRssFeed(url, platform);
             }
         }
@@ -141,8 +197,10 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
                     String title;
                     String link;
                     String description;
+                    NodeList guidNodeList;
                     String guid;
                     String pubDate;
+                    NodeList creatorNodeList;
                     String creator;
 
                     if(node.getNodeType() == Node.ELEMENT_NODE) {
@@ -159,14 +217,28 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
                         description = element.getElementsByTagName("description").item(0).getTextContent();
                         feed.setDescription(description);
 
-                        guid = element.getElementsByTagName("guid").item(0).getTextContent();
-                        feed.setGuid(guid);
+                        guidNodeList = element.getElementsByTagName("guid");
+
+                        if(guidNodeList == null | guidNodeList.getLength() < 1){
+                            feed.setGuid(link);
+                        }
+                        else{
+                            guid = guidNodeList.item(0).getTextContent();
+                            feed.setGuid(guid);
+                        }
 
                         pubDate = element.getElementsByTagName("pubDate").item(0).getTextContent();
                         feed.setDate(pubDate);
 
-                        creator = element.getElementsByTagName("dc:creator").item(0).getTextContent();
-                        feed.setCreator(creator);
+                        creatorNodeList = element.getElementsByTagName("dc:creator");
+
+                        if(creatorNodeList == null | creatorNodeList.getLength() <1) {
+                            feed.setCreator(provider);
+                        }
+                        else {
+                            creator = creatorNodeList.item(0).getTextContent();
+                            feed.setCreator(creator);
+                        }
 
                         feed.setProvider(provider);
                         feed.setPlatform(platform);
@@ -175,12 +247,18 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
 
                     }
                 }
+            }
+            catch (ConnectException ce) {
+                Log.i("EXCEPTION", "ConnectException");
+                Toast.makeText(context, context.getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
+            }
 
-                //TODO insert to SQLite
-                //TODO return list of NewsFeed
-
-            } catch (Exception e) {
+            catch(UnknownHostException uhe){
+                Log.i("EXCEPTION", "UnknownHostException");
+            }
+            catch (Exception e) {
                 e.printStackTrace();
+                Log.i("EXCEPTION", "Exception");
             }
         }
 
