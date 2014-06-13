@@ -1,4 +1,4 @@
-package com.gamerspot;
+package com.gamerspot.activities;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
 import com.gamerspot.database.GamerSpotDBHelper;

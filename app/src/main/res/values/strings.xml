@@ -7,6 +7,22 @@
     <!-- Error messages -->
     <string name="connection_exception_error">Error downloading feed. Try again later</string>
 
+    <!-- Navigation Drawer items -->
+    <string-array name="nav_drawer_items">
+        <item>All news</item>
+        <item>PC news</item>
+        <item>Xbox news</item>
+        <item>Playstation news</item>
+        <item>Nintendo news</item>
+        <item>Mobile news</item>
+    </string-array>
+
+    <!-- Navigation Drawer Accessibility -->
+    <string name="drawer_title">Main Menu</string>
+    <string name="nav_drawer_open">Drawer opened</string>
+    <string name="nav_drawer_close">Drawer closed</string>
+
+    <!-- RSS Urls -->
     <string-array name="pc_feeds">
         <item>http://www.pcgamer.com/feed/</item>
         <!-- <item>http://www.joystiq.com/pc/rss.xml</item> -->
