@@ -151,6 +151,9 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
             int platform = NewsFeed.PLATFORM_PLAYSTATION;
 
             for(String url: playstationFeedUrls) {
+
+                Log.i("URL_STRING", url);
+
                 parseRssFeed(url, platform);
             }
         }
@@ -191,22 +194,26 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
                 String provider = document.getElementsByTagName("title").item(0).getTextContent();
                 int platform = platformIn;
 
+                Node node;
+                NewsFeed feed = null;
+                String title;
+                String link;
+                String description;
+                NodeList guidNodeList;
+                String guid;
+                String pubDate;
+                NodeList creatorNodeList;
+                String creator;
+
+                Element element;
+
                 for(int i=0;i<nodeList.getLength(); i++) {
 
-                    Node node = nodeList.item(i);
-                    NewsFeed feed = null;
-                    String title;
-                    String link;
-                    String description;
-                    NodeList guidNodeList;
-                    String guid;
-                    String pubDate;
-                    NodeList creatorNodeList;
-                    String creator;
+                    node = nodeList.item(i);
 
                     if(node.getNodeType() == Node.ELEMENT_NODE) {
 
-                        Element element = (Element) node;
+                        element = (Element) node;
                         feed = new NewsFeed();
 
                         title = element.getElementsByTagName("title").item(0).getTextContent();
@@ -255,7 +262,7 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
             }
 
             catch(UnknownHostException uhe){
-                Log.i("EXCEPTION", "UnknownHostException");
+                uhe.printStackTrace();
             }
             catch (Exception e) {
                 e.printStackTrace();
