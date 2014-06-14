@@ -32,25 +32,11 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.*;
 
-public class NewsActivity extends ActionBarActivity {
-
-    private static String appName;
+public class NewsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-        setContentView(R.layout.nav_drawer);
-
-        /*
-         * Customization of ActionBar
-         */
-        appName  = getResources().getString(R.string.app_name);
-        ActionBar actionBar = getSupportActionBar();
-        SpannableString spannableString = new SpannableString(appName);
-        spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        actionBar.setTitle(spannableString);
 
         if(findViewById(R.id.content_frame ) != null) {
 
@@ -60,8 +46,6 @@ public class NewsActivity extends ActionBarActivity {
 
             NewsHeadlinesFragment headlinesFragment = new NewsHeadlinesFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment).commit();
-
-
         }
 
     }
