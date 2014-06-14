@@ -109,6 +109,8 @@ public class NewsHeadlinesFragment extends ListFragment {
 
             long time = System.currentTimeMillis();
 
+            getActivity().setProgressBarIndeterminateVisibility(true);
+
             getNewsForPc();
             getNewsForXbox();
             getNewsForPlaystation();
@@ -129,6 +131,8 @@ public class NewsHeadlinesFragment extends ListFragment {
 
             feedList.addAll(0, newFeeds);
             feedsAdapter.notifyDataSetChanged();
+
+            getActivity().setProgressBarIndeterminateVisibility(false);
 
             if(newFeeds.size() > 0 ) {
                 Toast.makeText(context, newFeeds.size() + " "+context.getResources().getString(R.string.new_feeds_count), Toast.LENGTH_LONG).show();
