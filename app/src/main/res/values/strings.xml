@@ -4,8 +4,10 @@
     <string name="app_name">GamerSpot</string>
     <string name="action_settings">Settings</string>
 
-    <!-- Error messages -->
+    <!-- Mssages -->
     <string name="connection_exception_error">Error downloading feed. Try again later</string>
+    <string name="new_feeds_count"> new game news added. Scroll up to see them</string>
+
 
     <!-- Navigation Drawer items -->
     <string-array name="nav_drawer_items">

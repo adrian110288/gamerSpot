@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.gamerspot.beans.NewsFeed;
@@ -23,6 +25,7 @@ public class DAO {
     private SQLiteDatabase database;
     private ContentValues values;
     private ArrayList<NewsFeed> queriedList;
+    private ArrayList<NewsFeed> newlyInsertedFeeds;
 
     private static final String[] listViewProjection = {
             DatabaseContract.NewsFeedTable.COLUMN_NAME_ID,
@@ -36,6 +39,7 @@ public class DAO {
     };
 
     String sortOrder = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
+    String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT 10 OFFSET 0 ";
 
     public DAO(Context contextIn) {
         this.context = contextIn;
@@ -46,11 +50,15 @@ public class DAO {
         dbHelper.close();
     }
 
-    public int insertAllFeeds(ArrayList<NewsFeed> list) {
+    public ArrayList<NewsFeed> insertAllFeeds(ArrayList<NewsFeed> list) {
 
         database = dbHelper.getWritableDatabase();
+
+        newlyInsertedFeeds = new ArrayList<NewsFeed>();
         int count =0;
         values = new ContentValues();
+
+
 
         try{
             database.beginTransaction();
@@ -68,7 +76,7 @@ public class DAO {
                     values.put(DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM, feed.getPlatform());
 
                     long inserted = database.insertOrThrow(DatabaseContract.NewsFeedTable.TABLE_NAME, null, values);
-                    if(inserted != -1) count++;
+                    if(inserted != -1) newlyInsertedFeeds.add(feed);
                 }
 
                 catch(Exception e) {
@@ -87,7 +95,7 @@ public class DAO {
 
         Log.i("ROWS_INSERTED", count + "");
 
-        return count;
+        return newlyInsertedFeeds;
     }
 
     public ArrayList<NewsFeed> getAllFeeds(){
@@ -96,7 +104,7 @@ public class DAO {
         queriedList = new ArrayList<NewsFeed>();
         NewsFeed feed;
 
-        Cursor c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, null, null, null, null, sortOrder);
+        Cursor c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, null, null, null, null, sortOrderWithLimit);
         c.moveToNext();
 
         while(!c.isAfterLast()) {

@@ -18,6 +18,7 @@ import com.gamerspot.database.DAO;
 import com.gamerspot.database.GamerSpotDBHelper;
 import com.gamerspot.extra.CustomTypefaceSpan;
 import com.gamerspot.extra.NewsFeedsAdapter;
+import com.gamerspot.fragments.NewsHeadlinesFragment;
 
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
@@ -31,17 +32,14 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.*;
 
-public class NewsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class NewsActivity extends ActionBarActivity {
 
-    private static FeedFetcherTask downloadTask;
     private static String appName;
-    private ListView newsFeedsListView;
-    private NewsFeedsAdapter feedsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news);
+        setContentView(R.layout.nav_drawer);
 
         /*
          * Customization of ActionBar
@@ -52,228 +50,18 @@ public class NewsActivity extends ActionBarActivity implements AdapterView.OnIte
         spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         actionBar.setTitle(spannableString);
 
-        newsFeedsListView = (ListView) findViewById(R.id.NewsFeedslistView);
-        newsFeedsListView.setOnItemClickListener(this);
+        if(findViewById(R.id.content_frame ) != null) {
 
-        downloadTask = new FeedFetcherTask(this.getApplicationContext());
-        downloadTask.execute();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    private class FeedFetcherTask extends AsyncTask<String, Void, Void> {
-
-        private Context context;
-        private String[] pcFeedUrls;
-        private String[] xboxFeedUrls;
-        private String[] playstationFeedUrls;
-        private String[] nintendoFeedUrls;
-        private String[] mobileFeedUrls;
-
-        private ArrayList<NewsFeed> newFeedsList;
-        private DAO dao;
-
-
-        private FeedFetcherTask(Context c) {
-
-            context = c;
-            pcFeedUrls = c.getResources().getStringArray(R.array.pc_feeds);
-            xboxFeedUrls = c.getResources().getStringArray(R.array.xbox_feeds);
-            playstationFeedUrls = c.getResources().getStringArray(R.array.playstation_feeds);
-            nintendoFeedUrls = c.getResources().getStringArray(R.array.nintendo_feeds);
-            mobileFeedUrls = c.getResources().getStringArray(R.array.mobile_feeds);
-
-            newFeedsList = new ArrayList<NewsFeed>();
-            dao = new DAO(context);
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-
-            long time = System.currentTimeMillis();
-
-            getNewsForPc();
-            getNewsForXbox();
-            getNewsForPlaystation();
-            getNewsForNintendo();
-            getNewsForMobile();
-
-            storeNewsInDatabase();
-
-            long finish = System.currentTimeMillis()-time;
-            Log.i("time elapsed", finish/1000.0 + "");
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void o) {
-            super.onPostExecute(o);
-
-            ArrayList<NewsFeed> list = dao.getAllFeeds();
-
-            for(NewsFeed f: list) {
-                //Log.i("FEED", f.toString());
-            }
-            feedsAdapter = new NewsFeedsAdapter(context, list);
-            newsFeedsListView.setAdapter(feedsAdapter);
-        }
-
-        /*
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-            super.onProgressUpdate(values);
-        }*/
-
-        private void getNewsForPc(){
-
-            int platform = NewsFeed.PLATFORM_PC;
-
-            for(String url: pcFeedUrls) {
-                parseRssFeed(url, platform);
-            }
-        }
-
-        private void getNewsForXbox(){
-
-            int platform = NewsFeed.PLATFORM_XBOX;
-
-            for(String url: xboxFeedUrls) {
-                parseRssFeed(url, platform);
-            }
-        }
-
-        private void getNewsForPlaystation(){
-
-            int platform = NewsFeed.PLATFORM_PLAYSTATION;
-
-            for(String url: playstationFeedUrls) {
-
-                Log.i("URL_STRING", url);
-
-                parseRssFeed(url, platform);
-            }
-        }
-
-        private void getNewsForNintendo(){
-
-            int platform = NewsFeed.PLATFORM_NINTENDO;
-
-            for(String url: nintendoFeedUrls) {
-                parseRssFeed(url, platform);
-            }
-        }
-
-        private void getNewsForMobile(){
-
-            int platform = NewsFeed.PLATFORM_MOBILE;
-
-            for(String url: mobileFeedUrls) {
-                parseRssFeed(url, platform);
-            }
-        }
-
-        private void parseRssFeed(String urlIn, int platformIn){
-
-            try {
-                URL url = new URL(urlIn);
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                InputSource is = new InputSource(br);
-
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document document = builder.parse(is);
-
-                NodeList nodeList = document.getElementsByTagName("item");
-
-                String provider = document.getElementsByTagName("title").item(0).getTextContent();
-                int platform = platformIn;
-
-                Node node;
-                NewsFeed feed = null;
-                String title;
-                String link;
-                String description;
-                NodeList guidNodeList;
-                String guid;
-                String pubDate;
-                NodeList creatorNodeList;
-                String creator;
-
-                Element element;
-
-                for(int i=0;i<nodeList.getLength(); i++) {
-
-                    node = nodeList.item(i);
-
-                    if(node.getNodeType() == Node.ELEMENT_NODE) {
-
-                        element = (Element) node;
-                        feed = new NewsFeed();
-
-                        title = element.getElementsByTagName("title").item(0).getTextContent();
-                        feed.setTitle(title);
-
-                        link = element.getElementsByTagName("link").item(0).getTextContent();
-                        feed.setLink(link);
-
-                        description = element.getElementsByTagName("description").item(0).getTextContent();
-                        feed.setDescription(description);
-
-                        guidNodeList = element.getElementsByTagName("guid");
-
-                        if(guidNodeList == null | guidNodeList.getLength() < 1){
-                            feed.setGuid(link);
-                        }
-                        else{
-                            guid = guidNodeList.item(0).getTextContent();
-                            feed.setGuid(guid);
-                        }
-
-                        pubDate = element.getElementsByTagName("pubDate").item(0).getTextContent();
-                        feed.setDate(pubDate);
-
-                        creatorNodeList = element.getElementsByTagName("dc:creator");
-
-                        if(creatorNodeList == null | creatorNodeList.getLength() <1) {
-                            feed.setCreator(provider);
-                        }
-                        else {
-                            creator = creatorNodeList.item(0).getTextContent();
-                            feed.setCreator(creator);
-                        }
-
-                        feed.setProvider(provider);
-                        feed.setPlatform(platform);
-
-                        newFeedsList.add(feed);
-
-                    }
-                }
-            }
-            catch (ConnectException ce) {
-                Log.i("EXCEPTION", "ConnectException");
-                Toast.makeText(context, context.getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
+            if (savedInstanceState != null) {
+                return;
             }
 
-            catch(UnknownHostException uhe){
-                uhe.printStackTrace();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                Log.i("EXCEPTION", "Exception");
-            }
+            NewsHeadlinesFragment headlinesFragment = new NewsHeadlinesFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment).commit();
+
+
         }
 
-        private void storeNewsInDatabase(){
-
-            int rows = dao.insertAllFeeds(newFeedsList);
-        }
     }
 
     @Override
