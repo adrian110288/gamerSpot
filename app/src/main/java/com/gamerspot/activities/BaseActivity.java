@@ -82,8 +82,8 @@ public class BaseActivity extends ActionBarActivity {
 
         drawerLayout.setDrawerListener(drawerToggle);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class BaseActivity extends ActionBarActivity {
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void setActionBar(String title) {
+    private void setActionBar(String title) {
 
         ActionBar actionBar = getSupportActionBar();
         SpannableString spannableString = new SpannableString(title);

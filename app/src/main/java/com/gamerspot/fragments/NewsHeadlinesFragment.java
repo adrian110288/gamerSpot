@@ -64,16 +64,9 @@ public class NewsHeadlinesFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        downloadTask.execute();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        downloadTask.execute();
-    }
-
 
     @Override
     public void onPause() {
@@ -131,6 +124,7 @@ public class NewsHeadlinesFragment extends ListFragment {
 
             feedList.addAll(0, newFeeds);
             feedsAdapter.notifyDataSetChanged();
+            retainListViewPosition();
 
             getActivity().setProgressBarIndeterminateVisibility(false);
 
@@ -140,11 +134,13 @@ public class NewsHeadlinesFragment extends ListFragment {
 
         }
 
-        /*
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-            super.onProgressUpdate(values);
-        }*/
+        private void retainListViewPosition(){
+
+            int index = getListView().getFirstVisiblePosition() + newFeeds.size();
+            View v = getListView().getChildAt(0);
+            int top = (v == null) ? 0 : v.getTop();
+            getListView().setSelectionFromTop(index, top);
+        }
 
         private void getNewsForPc(){
 
@@ -275,7 +271,7 @@ public class NewsHeadlinesFragment extends ListFragment {
             }
             catch (ConnectException ce) {
                 Log.i("EXCEPTION", "ConnectException");
-                Toast.makeText(context, context.getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), getActivity().getApplicationContext().getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
             }
 
             catch(UnknownHostException uhe){

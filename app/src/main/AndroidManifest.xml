@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gamerspot" >
 
+    <uses-sdk android:minSdkVersion="10"/>
+    <uses-sdk android:targetSdkVersion="19"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"

@@ -47,7 +47,6 @@ public class NewsActivity extends BaseActivity {
             NewsHeadlinesFragment headlinesFragment = new NewsHeadlinesFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment).commit();
         }
-
     }
 
     @Override
