@@ -1,39 +1,12 @@
 package com.gamerspot.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.*;
-import android.support.v4.app.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.text.*;
-import android.util.Log;
 import android.view.*;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
-
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
-import com.gamerspot.database.DAO;
-import com.gamerspot.database.GamerSpotDBHelper;
-import com.gamerspot.extra.CustomTypefaceSpan;
-import com.gamerspot.extra.NewsFeedsAdapter;
 import com.gamerspot.fragments.NewsDetailsFragment;
 import com.gamerspot.fragments.NewsHeadlinesFragment;
-
-import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-import javax.xml.parsers.*;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.*;
 
 public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.OnHeadlineSelectedListener{
 
@@ -53,6 +26,12 @@ public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment).commit();
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -77,17 +56,9 @@ public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.
     @Override
     public void onArticleSelected(NewsFeed feedClicked) {
 
-        //detailsFragment  = getSupportFragmentManager().findFragmentById(R.id.news_details_fragment);
-
-        //if(detailsFragment == null) {
-
             Intent intent = new Intent(this, NewsDetailsActivity.class);
             intent.putExtra("FEED", feedClicked);
             startActivity(intent);
-
-
-
-       // }
 
     }
 }

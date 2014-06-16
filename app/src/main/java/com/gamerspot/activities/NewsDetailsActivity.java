@@ -2,7 +2,7 @@ package com.gamerspot.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.*;
 
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
@@ -25,6 +25,10 @@ public class NewsDetailsActivity extends FragmentActivity {
         b.putSerializable("FEED", feedIn);
         detailsFragment.setArguments(b);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.details_content_frame, detailsFragment).commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.details_content_frame, detailsFragment);
+        transaction.commit();
+
+        //getSupportFragmentManager().beginTransaction().add(R.id.details_content_frame, detailsFragment).commit();
     }
 }

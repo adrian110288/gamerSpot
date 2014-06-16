@@ -48,13 +48,15 @@ public class NewsHeadlinesFragment extends ListFragment {
     private DAO dao;
 
     private NewsDetailsFragment detailsFragment;
+    private static int launchCount = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         context = getActivity().getApplicationContext();
-
+        launchCount++;
+        Log.i("COUNT LAUNCH", launchCount +"");
         feedList = new ArrayList<NewsFeed>();
         detailsFragment = new NewsDetailsFragment();
 
@@ -65,6 +67,12 @@ public class NewsHeadlinesFragment extends ListFragment {
         dao.close();
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
         setListAdapter(feedsAdapter);
+
+        if(launchCount == 1){
+            downloadTask.execute();
+        }
+
+
     }
 
     @Override
@@ -83,9 +91,16 @@ public class NewsHeadlinesFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //downloadTask.execute();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //downloadTask.execute();
+    }
+
 
     public interface OnHeadlineSelectedListener {
         public void onArticleSelected(NewsFeed feed);
@@ -129,6 +144,8 @@ public class NewsHeadlinesFragment extends ListFragment {
 
         @Override
         protected Void doInBackground(String... params) {
+
+            Log.i("ASYNCTASK", "started");
 
             long time = System.currentTimeMillis();
 
