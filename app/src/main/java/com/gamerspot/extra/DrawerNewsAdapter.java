@@ -99,9 +99,6 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
                 holder.newsIndicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
             }
         }
-        else{
-
-        }
 
         return convertView;
 

@@ -1,8 +1,10 @@
 package com.gamerspot.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.*;
+import android.support.v4.app.*;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.*;
@@ -18,6 +20,7 @@ import com.gamerspot.database.DAO;
 import com.gamerspot.database.GamerSpotDBHelper;
 import com.gamerspot.extra.CustomTypefaceSpan;
 import com.gamerspot.extra.NewsFeedsAdapter;
+import com.gamerspot.fragments.NewsDetailsFragment;
 import com.gamerspot.fragments.NewsHeadlinesFragment;
 
 import org.w3c.dom.*;
@@ -32,7 +35,9 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.*;
 
-public class NewsActivity extends BaseActivity {
+public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.OnHeadlineSelectedListener{
+
+    private NewsDetailsFragment detailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class NewsActivity extends BaseActivity {
 
             NewsHeadlinesFragment headlinesFragment = new NewsHeadlinesFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment).commit();
+
         }
     }
 
@@ -66,5 +72,22 @@ public class NewsActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onArticleSelected(NewsFeed feedClicked) {
+
+        //detailsFragment  = getSupportFragmentManager().findFragmentById(R.id.news_details_fragment);
+
+        //if(detailsFragment == null) {
+
+            Intent intent = new Intent(this, NewsDetailsActivity.class);
+            intent.putExtra("FEED", feedClicked);
+            startActivity(intent);
+
+
+
+       // }
+
     }
 }

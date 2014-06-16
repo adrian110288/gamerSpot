@@ -1,5 +1,6 @@
 package com.gamerspot.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,9 +43,11 @@ public class NewsHeadlinesFragment extends ListFragment {
     private Context context;
     private static FeedFetcherTask downloadTask;
     private NewsFeedsAdapter feedsAdapter;
-
+    private OnHeadlineSelectedListener mCallback;
     private ArrayList<NewsFeed> feedList;
     private DAO dao;
+
+    private NewsDetailsFragment detailsFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,13 +56,28 @@ public class NewsHeadlinesFragment extends ListFragment {
         context = getActivity().getApplicationContext();
 
         feedList = new ArrayList<NewsFeed>();
+        detailsFragment = new NewsDetailsFragment();
 
         downloadTask = new FeedFetcherTask(context);
         dao = new DAO(context);
 
         feedList = dao.getAllFeeds();
+        dao.close();
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
         setListAdapter(feedsAdapter);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception.
+        try {
+            mCallback = (OnHeadlineSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnHeadlineSelectedListener");
+        }
     }
 
     @Override
@@ -69,9 +87,15 @@ public class NewsHeadlinesFragment extends ListFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    public interface OnHeadlineSelectedListener {
+        public void onArticleSelected(NewsFeed feed);
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+
+        mCallback.onArticleSelected(feedList.get(position));
+        getListView().setItemChecked(position, true);
     }
 
     @Override

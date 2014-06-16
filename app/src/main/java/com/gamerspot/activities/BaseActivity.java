@@ -26,7 +26,6 @@ import com.gamerspot.extra.DrawerNewsAdapter;
  */
 public class BaseActivity extends ActionBarActivity {
 
-    private String[] drawerNewsItems;
     private DrawerLayout drawerLayout;
     private ListView drawerNewsListView;
     private DrawerNewsAdapter drawerListAdapter;
@@ -47,8 +46,6 @@ public class BaseActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.nav_drawer);
 
-        navDrawerHeaderTypeface = Typeface.createFromAsset(getAssets(), "weblysleekuis_bold.ttf");
-
         /*
          * Customization of ActionBar
          */
@@ -57,15 +54,7 @@ public class BaseActivity extends ActionBarActivity {
         actionBarTitle = appName;
         drawerTitle = getResources().getString(R.string.drawer_title);
 
-        newsHeader = (TextView) findViewById(R.id.left_drawer_news_heading);
-        newsHeader.setTypeface(navDrawerHeaderTypeface);
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerNewsListView = (ListView) findViewById(R.id.left_drawer_newslist);
-
-        drawerNewsItems = this.getResources().getStringArray(R.array.drawer_news_items);
-
-
+        instantiateViews();
 
         drawerListAdapter = new DrawerNewsAdapter(this);
         drawerNewsListView.setAdapter(drawerListAdapter);
@@ -126,6 +115,16 @@ public class BaseActivity extends ActionBarActivity {
         SpannableString spannableString = new SpannableString(title);
         spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         actionBar.setTitle(spannableString);
+
+    }
+
+    private void instantiateViews(){
+
+        newsHeader = (TextView) findViewById(R.id.left_drawer_news_heading);
+        navDrawerHeaderTypeface = Typeface.createFromAsset(getAssets(), "weblysleekuis_bold.ttf");
+        newsHeader.setTypeface(navDrawerHeaderTypeface);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerNewsListView = (ListView) findViewById(R.id.left_drawer_newslist);
 
     }
 
