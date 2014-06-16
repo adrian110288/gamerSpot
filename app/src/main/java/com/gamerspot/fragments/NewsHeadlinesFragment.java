@@ -196,7 +196,7 @@ public class NewsHeadlinesFragment extends ListFragment {
             if(getActivity() != null){
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
-            
+
             if(newFeeds.size() > 0 ) {
                 Toast.makeText(context, newFeeds.size() + " "+context.getResources().getString(R.string.new_feeds_count), Toast.LENGTH_LONG).show();
             }

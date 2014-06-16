@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EBEBEB">
+
+    <LinearLayout
+        android:id="@+id/scroll_view"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/details_header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="#FFF">
+
+            <TextView
+                android:id="@+id/details_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"/>
+
+            <TextView
+                android:id="@+id/details_creator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/details_title"
+                android:text="Creator"
+                />
+
+            <TextView
+                android:id="@+id/details_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:layout_alignTop="@+id/details_creator"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/details_desc_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:background="#FFF" >
+
+            <TextView
+                android:id="@+id/details_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="wadawdadawd"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_full_article"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Full article"
+            android:layout_margin="8dp"/>
+
+    </LinearLayout>
+
+</ScrollView>
