@@ -43,6 +43,7 @@
         android:layout_margin="15dp"
         android:textColor="@color/APP_TEXT_COLOR"
         android:textSize="18dp"
+        android:textStyle="bold"
         android:layout_below="@+id/helperView"
         />
 

@@ -31,7 +31,6 @@ public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -59,6 +58,5 @@ public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.
             Intent intent = new Intent(this, NewsDetailsActivity.class);
             intent.putExtra("FEED", feedClicked);
             startActivity(intent);
-
     }
 }

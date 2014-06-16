@@ -4,9 +4,11 @@
     <string name="app_name">GamerSpot</string>
     <string name="action_settings">Settings</string>
 
-    <!-- Mssages -->
+    <!-- Messages -->
     <string name="connection_exception_error">Error downloading feed. Try again later</string>
     <string name="new_feeds_count"> new game news added. Scroll up to see them</string>
+    <string name="no_network_connection">Please check your internet connection</string>
+    <string name="network_connecton_lost">Cannot check news at this time</string>
 
 
     <!-- Navigation Drawer items -->

@@ -2,9 +2,12 @@ package com.gamerspot.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.net.ConnectivityManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,8 +49,8 @@ public class NewsHeadlinesFragment extends ListFragment {
     private OnHeadlineSelectedListener mCallback;
     private ArrayList<NewsFeed> feedList;
     private DAO dao;
-
-    private NewsDetailsFragment detailsFragment;
+    private ConnectivityManager connManager;
+    private NetworkInfo networkInfo;
     private static int launchCount = 0;
 
     @Override
@@ -58,7 +61,6 @@ public class NewsHeadlinesFragment extends ListFragment {
         launchCount++;
         Log.i("COUNT LAUNCH", launchCount +"");
         feedList = new ArrayList<NewsFeed>();
-        detailsFragment = new NewsDetailsFragment();
 
         downloadTask = new FeedFetcherTask(context);
         dao = new DAO(context);
@@ -68,11 +70,28 @@ public class NewsHeadlinesFragment extends ListFragment {
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
         setListAdapter(feedsAdapter);
 
-        if(launchCount == 1){
-            downloadTask.execute();
+
+    }
+
+    private boolean isOnline(){
+
+        boolean isOnline = false;
+
+        connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(networkInfo.isConnected()) {
+            isOnline = true;
+        }
+        else {
+            networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if(networkInfo.isConnected()) {
+                isOnline = true;
+            }
         }
 
-
+        return isOnline;
     }
 
     @Override
@@ -88,22 +107,23 @@ public class NewsHeadlinesFragment extends ListFragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public interface OnHeadlineSelectedListener {
+        public void onArticleSelected(NewsFeed feed);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //downloadTask.execute();
-    }
-
-
-    public interface OnHeadlineSelectedListener {
-        public void onArticleSelected(NewsFeed feed);
+        if(launchCount == 1){
+            if(isOnline()){
+                downloadTask.execute();
+            }
+            else{
+                Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -145,22 +165,22 @@ public class NewsHeadlinesFragment extends ListFragment {
         @Override
         protected Void doInBackground(String... params) {
 
-            Log.i("ASYNCTASK", "started");
-
             long time = System.currentTimeMillis();
 
-            getActivity().setProgressBarIndeterminateVisibility(true);
 
-            getNewsForPc();
-            getNewsForXbox();
-            getNewsForPlaystation();
-            getNewsForNintendo();
-            getNewsForMobile();
+                getActivity().setProgressBarIndeterminateVisibility(true);
 
-            storeNewsInDatabase();
+                getNewsForPc();
+                getNewsForXbox();
+                getNewsForPlaystation();
+                getNewsForNintendo();
+                getNewsForMobile();
 
-            long finish = System.currentTimeMillis()-time;
-            Log.i("time elapsed", finish / 1000.0 + "");
+                storeNewsInDatabase();
+
+                long finish = System.currentTimeMillis() - time;
+                Log.i("time elapsed", finish / 1000.0 + "");
+
 
             return null;
         }
@@ -171,15 +191,23 @@ public class NewsHeadlinesFragment extends ListFragment {
 
             feedList.addAll(0, newFeeds);
             feedsAdapter.notifyDataSetChanged();
-            retainListViewPosition();
+            //retainListViewPosition();
 
-            getActivity().setProgressBarIndeterminateVisibility(false);
-
+            if(getActivity() != null){
+                getActivity().setProgressBarIndeterminateVisibility(false);
+            }
+            
             if(newFeeds.size() > 0 ) {
                 Toast.makeText(context, newFeeds.size() + " "+context.getResources().getString(R.string.new_feeds_count), Toast.LENGTH_LONG).show();
             }
-
         }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            Log.i("ASYNCTASK", "ASyncTask cancelled");
+        }
+
 
         private void retainListViewPosition(){
 
@@ -318,12 +346,13 @@ public class NewsHeadlinesFragment extends ListFragment {
             }
             catch (ConnectException ce) {
                 Log.i("EXCEPTION", "ConnectException");
-                Toast.makeText(getActivity().getApplicationContext(), getActivity().getApplicationContext().getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
             }
 
             catch(UnknownHostException uhe){
                 uhe.printStackTrace();
             }
+
             catch (Exception e) {
                 e.printStackTrace();
                 Log.i("EXCEPTION", "Exception");

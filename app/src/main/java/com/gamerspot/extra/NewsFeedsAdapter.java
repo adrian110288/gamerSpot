@@ -38,8 +38,8 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
 
         context = contextIn;
         platformFont = Typeface.createFromAsset(context.getAssets(), "Gamegirl.ttf");
-        titleFont = Typeface.createFromAsset(context.getAssets(), "weblysleekuis_bold.ttf");
-        dateFont = Typeface.createFromAsset(context.getAssets(), "weblysleekuisl.ttf");
+        titleFont = Typeface.createFromAsset(context.getAssets(), "CandelaBold.otf");
+        dateFont = Typeface.createFromAsset(context.getAssets(), "CandelaBook.otf");
         df = new DateFormat();
 
         feedsList = (ArrayList<NewsFeed>) feedsListIn;

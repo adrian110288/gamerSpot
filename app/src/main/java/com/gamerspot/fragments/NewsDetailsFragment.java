@@ -2,26 +2,28 @@ package com.gamerspot.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.gamerspot.beans.NewsFeed;
+
 /**
  * Created by Adrian on 13-Jun-14.
  */
 public class NewsDetailsFragment extends Fragment {
 
-    private Bundle bundle;
+    private NewsFeed feed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bundle = getArguments();
-
-        Log.i("ARGUMEMTS", bundle.size()+"");
+        feed = (NewsFeed) getArguments().get("FEED");
 
     }
 
