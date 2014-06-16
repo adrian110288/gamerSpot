@@ -1,6 +1,7 @@
 package com.gamerspot.activities;
 
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -14,23 +15,29 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.gamerspot.R;
 import com.gamerspot.extra.CustomTypefaceSpan;
+import com.gamerspot.extra.DrawerNewsAdapter;
 
 /**
  * Created by Adrian on 12-Jun-14.
  */
 public class BaseActivity extends ActionBarActivity {
 
-    private String[] drawerItems;
+    private String[] drawerNewsItems;
     private DrawerLayout drawerLayout;
-    private ListView drawerListView;
-    private ArrayAdapter<String> drawerListAdapter;
+    private ListView drawerNewsListView;
+    private DrawerNewsAdapter drawerListAdapter;
+
+    private TextView newsHeader;
 
     private ActionBarDrawerToggle drawerToggle;
     private String actionBarTitle;
     private String drawerTitle;
+
+    private Typeface navDrawerHeaderTypeface;
 
     private static String appName;
 
@@ -38,26 +45,32 @@ public class BaseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
         setContentView(R.layout.nav_drawer);
+
+        navDrawerHeaderTypeface = Typeface.createFromAsset(getAssets(), "weblysleekuis_bold.ttf");
 
         /*
          * Customization of ActionBar
          */
         appName  = getResources().getString(R.string.app_name);
         setActionBar(appName);
-
         actionBarTitle = appName;
         drawerTitle = getResources().getString(R.string.drawer_title);
 
-        drawerItems = this.getResources().getStringArray(R.array.nav_drawer_items);
+        newsHeader = (TextView) findViewById(R.id.left_drawer_news_heading);
+        newsHeader.setTypeface(navDrawerHeaderTypeface);
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerListView = (ListView) findViewById(R.id.left_drawer);
+        drawerNewsListView = (ListView) findViewById(R.id.left_drawer_newslist);
 
-        drawerListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems);
-        drawerListView.setAdapter(drawerListAdapter);
+        drawerNewsItems = this.getResources().getStringArray(R.array.drawer_news_items);
 
-        drawerListView.setOnItemClickListener(new ListView.OnItemClickListener(){
+
+
+        drawerListAdapter = new DrawerNewsAdapter(this);
+        drawerNewsListView.setAdapter(drawerListAdapter);
+
+        drawerNewsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,7 +92,6 @@ public class BaseActivity extends ActionBarActivity {
                 setActionBar(actionBarTitle);
             }
         };
-
         drawerLayout.setDrawerListener(drawerToggle);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

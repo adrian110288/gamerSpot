@@ -10,7 +10,7 @@
 
 
     <!-- Navigation Drawer items -->
-    <string-array name="nav_drawer_items">
+    <string-array name="drawer_news_items">
         <item>All news</item>
         <item>PC news</item>
         <item>Xbox news</item>

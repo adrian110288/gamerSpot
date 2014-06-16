@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:minHeight="48dp"
+    android:orientation="horizontal"
+    android:paddingLeft="16dp">
+    
+    <ViewStub
+        android:id="@+id/drawer_stub"
+        android:inflatedId="@+id/drawer_news_indicator"
+        android:layout="@layout/drawer_news_item"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="12dp"/>
+
+    <TextView
+        android:id="@+id/drawer_news_listItem_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textSize="18dp"
+        android:layout_toRightOf="@+id/drawer_news_indicator" />
+
+</RelativeLayout>

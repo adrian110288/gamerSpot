@@ -65,14 +65,13 @@ public class NewsHeadlinesFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        downloadTask.execute();
+        //downloadTask.execute();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
     }
 
     @Override

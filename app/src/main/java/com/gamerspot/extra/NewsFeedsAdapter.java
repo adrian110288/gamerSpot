@@ -31,6 +31,7 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
     private NewsFeed feed;
     private int platform;
     private DateFormat df;
+    private LayoutInflater mInflater;
 
     public NewsFeedsAdapter(Context contextIn, List<NewsFeed> feedsListIn) {
         super(contextIn, 0, feedsListIn);
@@ -55,7 +56,7 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
         feed = getItem(position);
         platform = feed.getPlatform();
 
-        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
 
