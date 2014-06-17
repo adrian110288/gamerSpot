@@ -118,7 +118,7 @@ public class NewsHeadlinesFragment extends ListFragment {
 
         if(launchCount == 1){
             if(isOnline()){
-                downloadTask.execute();
+                //downloadTask.execute();
             }
             else{
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
