@@ -38,8 +38,8 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
 
         context = contextIn;
         platformFont = Typeface.createFromAsset(context.getAssets(), "Gamegirl.ttf");
-        titleFont = Typeface.createFromAsset(context.getAssets(), "CandelaBold.otf");
-        dateFont = Typeface.createFromAsset(context.getAssets(), "CandelaBook.otf");
+        titleFont = Typeface.createFromAsset(context.getAssets(), "sans.semi-condensed.ttf");
+        dateFont = Typeface.createFromAsset(context.getAssets(), "sans.semi-condensed.ttf");
         df = new DateFormat();
 
         feedsList = (ArrayList<NewsFeed>) feedsListIn;
@@ -123,7 +123,7 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
             }
         }
 
-        holder.date_textView.setText(df.format("dd/MM/yyyy HH:mm", feed.getDate()));
+        holder.date_textView.setText(df.format(context.getResources().getString(R.string.date_format), feed.getDate()));
 
         return convertView;
     }
