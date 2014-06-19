@@ -3,6 +3,7 @@ package com.gamerspot.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Window;
 
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
@@ -16,6 +17,7 @@ public class NewsDetailsActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_news_details);
 
         NewsFeed feedIn = (NewsFeed) getIntent().getSerializableExtra("FEED");

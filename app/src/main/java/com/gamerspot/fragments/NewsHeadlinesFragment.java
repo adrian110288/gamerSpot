@@ -65,6 +65,7 @@ public class NewsHeadlinesFragment extends ListFragment {
         downloadTask = new FeedFetcherTask(context);
         dao = new DAO(context);
 
+        //TODO Loader required - Genymotion log (Skipped xxx frames. The application may be doing too much work on its main thread.)
         feedList = dao.getAllFeeds();
         dao.close();
         feedsAdapter = new NewsFeedsAdapter(context, feedList);

@@ -1,18 +1,22 @@
 package com.gamerspot.fragments;
 
+import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.format.DateFormat;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +48,12 @@ import java.util.logging.LogRecord;
  */
 public class NewsDetailsFragment extends Fragment {
 
+    private static final int IMAGE_DOWNLOAD_QUEUE_COMPLETED = 1;
+
     private NewsFeed feed;
+    //TODO Use CommonUtilities
     private Typeface font;
+    //TODO Use CommonUtilities
     private DateFormat df;
     private int descriptionLayoutWidth = 0;
 
@@ -58,20 +66,48 @@ public class NewsDetailsFragment extends Fragment {
 
     private static HashMap<String, BitmapDrawable> cachedImages;
     private Handler downloadFinishHandler;
-    private List<URL> urlList;
+    private static List<URL> urlList;
+
+    private static FragmentManager fragmentManager;
+    private static ImagesDownloadDialogFragment imagesDownloadDialogFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
+        //TODO Use CommonUtilities
         font = Typeface.createFromAsset(getActivity().getAssets(), "sans.semi-condensed.ttf");
         cachedImages = new HashMap();
 
         Log.i("NO OF IMAGES", cachedImages.size()+"");
-
+        //TODO Use CommonUtilities
         df = new DateFormat();
         feed = (NewsFeed) getArguments().get("FEED");
         urlList = new ArrayList<URL>();
+        fragmentManager = getFragmentManager();
+        imagesDownloadDialogFragment = new ImagesDownloadDialogFragment();
+
+        Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
+
+            URL url;
+
+            @Override
+            public Drawable getDrawable(String source) {
+
+                try{
+
+                    url = new URL(source);
+                    urlList.add(url);
+
+                }
+                catch (MalformedURLException mue){
+                    mue.printStackTrace();
+                }
+
+                return null;
+            }
+        }, null);
 
         downloadFinishHandler = new Handler() {
 
@@ -79,7 +115,14 @@ public class NewsDetailsFragment extends Fragment {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
 
-                if(msg.what == 1) {
+                if(msg.what == IMAGE_DOWNLOAD_QUEUE_COMPLETED) {
+
+                    getActivity().setProgressBarIndeterminateVisibility(false);
+
+                    titleView.setText(feed.getTitle());
+                    creatorView.setText(feed.getCreator());
+                    //TODO Use CommonUtilities
+                    dateView.setText(df.format(getActivity().getResources().getString(R.string.date_format), feed.getDate()));
 
                     descriptionView.setText(Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
 
@@ -99,15 +142,14 @@ public class NewsDetailsFragment extends Fragment {
                                 ratio = (double) w/h;
 
                                 drawable.setBounds(0,0, descriptionLayoutWidth, (int) (descriptionLayoutWidth/ratio));
-
                             }
 
                             return drawable;
                         }
                     }, null));
 
+                    descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
                 }
-
             }
         };
     }
@@ -122,6 +164,7 @@ public class NewsDetailsFragment extends Fragment {
         creatorView = (TextView) view.findViewById(R.id.details_creator);
         creatorView.setTypeface(font);
         dateView = (TextView) view.findViewById(R.id.details_date);
+        //TODO Use CommonUtilities
         dateView.setTypeface(font);
         descriptionLinearLayout = (LinearLayout) view.findViewById(R.id.details_desc_layout);
         descriptionView = (TextView) view.findViewById(R.id.details_description);
@@ -135,28 +178,11 @@ public class NewsDetailsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        titleView.setText(feed.getTitle());
-        creatorView.setText(feed.getCreator());
-        dateView.setText(df.format(getActivity().getResources().getString(R.string.date_format), feed.getDate()));
-
-        Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
-            @Override
-            public Drawable getDrawable(String source) {
-
-                try{
-
-                    URL url = new URL(source);
-                    urlList.add(url);
-
-                }
-                catch (MalformedURLException mue){
-                    mue.printStackTrace();
-                }
-
-                return null;
-            }
-        }, null);
-
+        if(urlList.size() !=0){
+            getActivity().setProgressBarIndeterminateVisibility(true);
+            Toast.makeText(getActivity(), "Downloading images ...", Toast.LENGTH_SHORT).show();
+           // imagesDownloadDialogFragment.show(fragmentManager, "DIALOG");
+        }
 
         final ViewTreeObserver viewTreeObserver = descriptionLinearLayout.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -193,12 +219,9 @@ public class NewsDetailsFragment extends Fragment {
             cache = cacheIn;
         }
 
-
         @Override
         public void run() {
             super.run();
-
-            Log.i("THREAD", "thread starting");
 
             try {
                 for (URL url : urlList) {
@@ -206,13 +229,11 @@ public class NewsDetailsFragment extends Fragment {
                     cache.put(url.toString(), (BitmapDrawable) image);
                 }
 
-                handler.sendEmptyMessage(1);
+                handler.sendEmptyMessage(IMAGE_DOWNLOAD_QUEUE_COMPLETED);
             }
             catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-
-
         }
     }
 }
