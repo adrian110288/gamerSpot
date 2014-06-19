@@ -70,8 +70,6 @@ public class NewsHeadlinesFragment extends ListFragment {
         dao.close();
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
         setListAdapter(feedsAdapter);
-
-
     }
 
     private boolean isOnline(){
@@ -117,9 +115,11 @@ public class NewsHeadlinesFragment extends ListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getListView().setFastScrollEnabled(true);
+
         if(launchCount == 1){
             if(isOnline()){
-                //downloadTask.execute();
+                downloadTask.execute();
             }
             else{
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
