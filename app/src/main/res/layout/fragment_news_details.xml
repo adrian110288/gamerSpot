@@ -68,8 +68,10 @@
             android:id="@+id/button_full_article"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full article"
-            android:layout_margin="8dp"/>
+            android:text="Read full article"
+            android:layout_margin="8dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/fa_selector"/>
 
     </LinearLayout>
 

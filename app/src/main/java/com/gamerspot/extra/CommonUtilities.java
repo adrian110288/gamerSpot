@@ -67,6 +67,7 @@ public class CommonUtilities {
 
     public void setActionBar(ActionBar actionBar) {
 
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         spannableString.setSpan(new CustomTypefaceSpan(context, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         actionBar.setTitle(spannableString);
     }

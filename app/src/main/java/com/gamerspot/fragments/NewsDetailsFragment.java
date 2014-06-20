@@ -1,11 +1,13 @@
 package com.gamerspot.fragments;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
@@ -36,6 +38,7 @@ import com.gamerspot.beans.NewsFeed;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,6 +51,7 @@ import java.util.logging.LogRecord;
  */
 public class NewsDetailsFragment extends Fragment {
 
+    private static final int IMAGE_DOWNLOAD_CONNECTION_EXCEPTION = -1;
     private static final int IMAGE_DOWNLOAD_QUEUE_COMPLETED = 1;
 
     private NewsFeed feed;
@@ -67,6 +71,7 @@ public class NewsDetailsFragment extends Fragment {
     private static HashMap<String, BitmapDrawable> cachedImages;
     private Handler downloadFinishHandler;
     private static List<URL> urlList;
+    private Intent intent;
 
     private static FragmentManager fragmentManager;
     private static ImagesDownloadDialogFragment imagesDownloadDialogFragment;
@@ -85,6 +90,8 @@ public class NewsDetailsFragment extends Fragment {
         df = new DateFormat();
         feed = (NewsFeed) getArguments().get("FEED");
         urlList = new ArrayList<URL>();
+        intent = new Intent(Intent.ACTION_VIEW);
+
         fragmentManager = getFragmentManager();
         imagesDownloadDialogFragment = new ImagesDownloadDialogFragment();
 
@@ -150,6 +157,10 @@ public class NewsDetailsFragment extends Fragment {
 
                     descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
                 }
+
+                else if (msg.what == IMAGE_DOWNLOAD_CONNECTION_EXCEPTION ) {
+                    //TODO Connection exception handled needs implemeting
+                }
             }
         };
     }
@@ -177,6 +188,14 @@ public class NewsDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        fullArticleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent.setData(Uri.parse(feed.getLink()));
+                startActivity(intent);
+            }
+        });
 
         if(urlList.size() !=0){
             getActivity().setProgressBarIndeterminateVisibility(true);
@@ -231,6 +250,11 @@ public class NewsDetailsFragment extends Fragment {
 
                 handler.sendEmptyMessage(IMAGE_DOWNLOAD_QUEUE_COMPLETED);
             }
+            catch (ConnectException ce){
+                ce.printStackTrace();
+                handler.sendEmptyMessage(IMAGE_DOWNLOAD_CONNECTION_EXCEPTION);
+            }
+
             catch (IOException ioe) {
                 ioe.printStackTrace();
             }

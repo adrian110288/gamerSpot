@@ -39,7 +39,7 @@ public class DAO {
     };
 
     String sortOrder = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
-    String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT 10 OFFSET 0 ";
+    String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT 50 OFFSET 0 ";
 
     public DAO(Context contextIn) {
         this.context = contextIn;
@@ -50,15 +50,12 @@ public class DAO {
         dbHelper.close();
     }
 
-    public ArrayList<NewsFeed> insertAllFeeds(ArrayList<NewsFeed> list) {
+    public int insertAllFeeds(ArrayList<NewsFeed> list) {
 
         database = dbHelper.getWritableDatabase();
 
-        newlyInsertedFeeds = new ArrayList<NewsFeed>();
         int count =0;
         values = new ContentValues();
-
-
 
         try{
             database.beginTransaction();
@@ -76,7 +73,12 @@ public class DAO {
                     values.put(DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM, feed.getPlatform());
 
                     long inserted = database.insertOrThrow(DatabaseContract.NewsFeedTable.TABLE_NAME, null, values);
-                    if(inserted != -1) newlyInsertedFeeds.add(feed);
+                    if(inserted != -1) {
+
+                        count++;
+
+                        Log.i("NEWS FEED", feed.getTitle()+" "+ feed.getDate().toString());
+                    }
                 }
 
                 catch(Exception e) {
@@ -95,7 +97,7 @@ public class DAO {
 
         Log.i("ROWS_INSERTED", count + "");
 
-        return newlyInsertedFeeds;
+        return count;
     }
 
     public ArrayList<NewsFeed> getAllFeeds(){
@@ -124,5 +126,10 @@ public class DAO {
         }
 
         return queriedList;
+    }
+
+    public boolean setFeedVisited(String guid){
+        //TODO setFeedVisited method to implement
+        return false;
     }
 }

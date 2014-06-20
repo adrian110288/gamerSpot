@@ -7,10 +7,15 @@
 
     <!-- Messages -->
     <string name="connection_exception_error">Error downloading feed. Try again later</string>
+    <string name="no_new_tweets">No new feeds</string>
     <string name="new_feeds_count"> new game news added. Scroll up to see them</string>
     <string name="no_network_connection">Please check your internet connection</string>
     <string name="network_connecton_lost">Cannot check news at this time</string>
 
+    <plurals name="new_feeds_plurals">
+        <item quantity="one">1 new feed. Touch here to see it</item>
+        <item quantity="other">%d new feeds. Touch here to see them</item>
+    </plurals>
 
     <!-- Navigation Drawer items -->
     <string-array name="drawer_news_items">

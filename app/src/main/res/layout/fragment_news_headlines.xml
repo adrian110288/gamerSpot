@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/headlines_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/new_feeds_button"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:maxHeight="70dp"
+        android:layout_alignParentBottom="true"
+        android:text="New feed"
+        android:textAlignment="center"
+        android:background="@drawable/new_feeds_button_layer_list"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>

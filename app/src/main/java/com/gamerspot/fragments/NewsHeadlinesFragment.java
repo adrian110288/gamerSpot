@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.net.ConnectivityManagerCompat;
 import android.util.Log;
@@ -13,6 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,6 +26,10 @@ import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
 import com.gamerspot.extra.NewsFeedsAdapter;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -41,17 +51,23 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Created by Adrian on 13-Jun-14.
  */
-public class NewsHeadlinesFragment extends ListFragment {
+public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private Context context;
     private static FeedFetcherTask downloadTask;
+    private ListView listView;
+    private Button newFeedsButton;
+    private static boolean buttonDismissed = false;
+    private static int buttonVisible = Button.GONE;
     private NewsFeedsAdapter feedsAdapter;
     private OnHeadlineSelectedListener mCallback;
-    private ArrayList<NewsFeed> feedList;
+    private static ArrayList<NewsFeed> feedList = new ArrayList<NewsFeed>();;
     private DAO dao;
     private ConnectivityManager connManager;
     private NetworkInfo networkInfo;
     private static int launchCount = 0;
+    private static int newRowsInserted = 0;
+    private String pluralString;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,33 +75,39 @@ public class NewsHeadlinesFragment extends ListFragment {
 
         context = getActivity().getApplicationContext();
         launchCount++;
-        Log.i("COUNT LAUNCH", launchCount +"");
-        feedList = new ArrayList<NewsFeed>();
+        pluralString = getResources().getQuantityString(R.plurals.new_feeds_plurals, newRowsInserted, newRowsInserted);
 
         downloadTask = new FeedFetcherTask(context);
         dao = new DAO(context);
 
         //TODO Loader required - Genymotion log (Skipped xxx frames. The application may be doing too much work on its main thread.)
-        feedList = dao.getAllFeeds();
+        if(launchCount == 1) {
+            feedList = dao.getAllFeeds();
+        }
+
         dao.close();
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
-        setListAdapter(feedsAdapter);
+
     }
 
-    private boolean isOnline(){
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_news_headlines, null);
+    }
+
+    private boolean isOnline() {
 
         boolean isOnline = false;
 
         connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        if(networkInfo.isConnected()) {
+        if (networkInfo.isConnected()) {
             isOnline = true;
-        }
-        else {
+        } else {
             networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if(networkInfo.isConnected()) {
+            if (networkInfo.isConnected()) {
                 isOnline = true;
             }
         }
@@ -106,32 +128,62 @@ public class NewsHeadlinesFragment extends ListFragment {
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        mCallback.onArticleSelected(feedList.get(position));
+        listView.setItemChecked(position, true);
+    }
+
 
     public interface OnHeadlineSelectedListener {
         public void onArticleSelected(NewsFeed feed);
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getListView().setFastScrollEnabled(true);
+        newFeedsButton = (Button) view.findViewById(R.id.new_feeds_button);
+        newFeedsButton.setText(pluralString);
+        newFeedsButton.setVisibility(buttonVisible);
 
-        if(launchCount == 1){
-            if(isOnline()){
-                downloadTask.execute();
+        if(newRowsInserted == 0){
+            newFeedsButton.setVisibility(Button.GONE);
+        }
+
+        newFeedsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                buttonVisible = Button.GONE;
+
+                feedList.clear();
+                feedList = dao.getAllFeeds();
+                feedsAdapter.addAll(feedList);
+                feedsAdapter.notifyDataSetChanged();
+                listView.smoothScrollToPosition(0);
+                newFeedsButton.setVisibility(buttonVisible);
+
+                buttonDismissed = true;
             }
-            else{
+        });
+
+        listView = (ListView) view.findViewById(R.id.headlines_list_view);
+        listView.setAdapter(feedsAdapter);
+        listView.setOnItemClickListener(this);
+
+        listView.setFastScrollEnabled(true);
+
+        if (launchCount == 1) {
+            if (isOnline()) {
+                downloadTask.execute();
+            } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-
-        mCallback.onArticleSelected(feedList.get(position));
-        getListView().setItemChecked(position, true);
     }
 
     @Override
@@ -139,7 +191,7 @@ public class NewsHeadlinesFragment extends ListFragment {
         super.onPause();
     }
 
-    private class FeedFetcherTask extends AsyncTask<String, Void, Void> {
+    private class FeedFetcherTask extends AsyncTask<String, Void, Integer> {
 
         private Context context;
         private String[] pcFeedUrls;
@@ -149,7 +201,6 @@ public class NewsHeadlinesFragment extends ListFragment {
         private String[] mobileFeedUrls;
 
         private ArrayList<NewsFeed> newFeeds;
-        private int newRowsInserted = 0;
 
         public FeedFetcherTask(Context c) {
 
@@ -164,115 +215,118 @@ public class NewsHeadlinesFragment extends ListFragment {
         }
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected Integer doInBackground(String... params) {
 
             long time = System.currentTimeMillis();
 
+            getActivity().setProgressBarIndeterminateVisibility(true);
 
-                getActivity().setProgressBarIndeterminateVisibility(true);
+            getNewsForPc();
+            getNewsForXbox();
+            getNewsForPlaystation();
+            getNewsForNintendo();
+            getNewsForMobile();
 
-                getNewsForPc();
-                getNewsForXbox();
-                getNewsForPlaystation();
-                getNewsForNintendo();
-                getNewsForMobile();
+            newRowsInserted = storeNewsInDatabase();
 
-                storeNewsInDatabase();
-
-                long finish = System.currentTimeMillis() - time;
-                Log.i("time elapsed", finish / 1000.0 + "");
-
+            long finish = System.currentTimeMillis() - time;
+            Log.i("time elapsed", finish / 1000.0 + "");
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void o) {
-            super.onPostExecute(o);
+        protected void onPostExecute(Integer count) {
+            super.onPostExecute(count);
 
-            feedList.addAll(0, newFeeds);
-            feedsAdapter.notifyDataSetChanged();
-            //retainListViewPosition();
-
-            if(getActivity() != null){
+            if (getActivity() != null) {
                 getActivity().setProgressBarIndeterminateVisibility(false);
+
+                if (newRowsInserted == 0) {
+                    Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.no_new_tweets), Toast.LENGTH_SHORT).show();
+                } else {
+                    newFeedsButton.setVisibility(Button.VISIBLE);
+                    buttonVisible = Button.VISIBLE;
+                    newFeedsButton.setText(getResources().getQuantityString(R.plurals.new_feeds_plurals, newRowsInserted, newRowsInserted));
+
+                    //TODO Create animation
+                }
             }
 
-            if(newFeeds.size() > 0 ) {
-                Toast.makeText(context, newFeeds.size() + " "+context.getResources().getString(R.string.new_feeds_count), Toast.LENGTH_LONG).show();
+            else{
+                buttonVisible = Button.VISIBLE;
             }
+
         }
 
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            Log.i("ASYNCTASK", "ASyncTask cancelled");
         }
 
+        private void retainListViewPosition() {
 
-        private void retainListViewPosition(){
-
-            int index = getListView().getFirstVisiblePosition() + newFeeds.size();
-            View v = getListView().getChildAt(0);
+            int index = listView.getFirstVisiblePosition() + newFeeds.size();
+            View v = listView.getChildAt(0);
             int top = (v == null) ? 0 : v.getTop();
-            getListView().setSelectionFromTop(index, top);
+            listView.setSelectionFromTop(index, top);
         }
 
-        private void getNewsForPc(){
+        private void getNewsForPc() {
 
             int platform = NewsFeed.PLATFORM_PC;
 
-            for(String url: pcFeedUrls) {
+            for (String url : pcFeedUrls) {
                 parseRssFeed(url, platform);
             }
         }
 
-        private void getNewsForXbox(){
+        private void getNewsForXbox() {
 
             int platform = NewsFeed.PLATFORM_XBOX;
 
-            for(String url: xboxFeedUrls) {
+            for (String url : xboxFeedUrls) {
                 parseRssFeed(url, platform);
             }
         }
 
-        private void getNewsForPlaystation(){
+        private void getNewsForPlaystation() {
 
             int platform = NewsFeed.PLATFORM_PLAYSTATION;
 
-            for(String url: playstationFeedUrls) {
-
-                Log.i("URL_STRING", url);
+            for (String url : playstationFeedUrls) {
 
                 parseRssFeed(url, platform);
             }
         }
 
-        private void getNewsForNintendo(){
+        private void getNewsForNintendo() {
 
             int platform = NewsFeed.PLATFORM_NINTENDO;
 
-            for(String url: nintendoFeedUrls) {
+            for (String url : nintendoFeedUrls) {
                 parseRssFeed(url, platform);
             }
         }
 
-        private void getNewsForMobile(){
+        private void getNewsForMobile() {
 
             int platform = NewsFeed.PLATFORM_MOBILE;
 
-            for(String url: mobileFeedUrls) {
+            for (String url : mobileFeedUrls) {
                 parseRssFeed(url, platform);
             }
         }
 
-        private void parseRssFeed(String urlIn, int platformIn){
+        private void parseRssFeed(String urlIn, int platformIn) {
+
+            //TODO Too many GC, also need to close streams
 
             try {
-                URL url = new URL(urlIn);
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                HttpClient apacheClient = new DefaultHttpClient();
+                HttpResponse response = apacheClient.execute(new HttpGet(urlIn));
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
                 InputSource is = new InputSource(br);
 
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -297,11 +351,11 @@ public class NewsHeadlinesFragment extends ListFragment {
 
                 Element element;
 
-                for(int i=0;i<nodeList.getLength(); i++) {
+                for (int i = 0; i < nodeList.getLength(); i++) {
 
                     node = nodeList.item(i);
 
-                    if(node.getNodeType() == Node.ELEMENT_NODE) {
+                    if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                         element = (Element) node;
                         feed = new NewsFeed();
@@ -317,10 +371,9 @@ public class NewsHeadlinesFragment extends ListFragment {
 
                         guidNodeList = element.getElementsByTagName("guid");
 
-                        if(guidNodeList == null | guidNodeList.getLength() < 1){
+                        if (guidNodeList == null | guidNodeList.getLength() < 1) {
                             feed.setGuid(link);
-                        }
-                        else{
+                        } else {
                             guid = guidNodeList.item(0).getTextContent();
                             feed.setGuid(guid);
                         }
@@ -330,10 +383,9 @@ public class NewsHeadlinesFragment extends ListFragment {
 
                         creatorNodeList = element.getElementsByTagName("dc:creator");
 
-                        if(creatorNodeList == null | creatorNodeList.getLength() <1) {
+                        if (creatorNodeList == null | creatorNodeList.getLength() < 1) {
                             feed.setCreator(provider);
-                        }
-                        else {
+                        } else {
                             creator = creatorNodeList.item(0).getTextContent();
                             feed.setCreator(creator);
                         }
@@ -344,25 +396,20 @@ public class NewsHeadlinesFragment extends ListFragment {
                         newFeeds.add(feed);
                     }
                 }
-            }
-            catch (ConnectException ce) {
+            } catch (ConnectException ce) {
                 Log.i("EXCEPTION", "ConnectException");
                 Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
-            }
-
-            catch(UnknownHostException uhe){
+            } catch (UnknownHostException uhe) {
                 uhe.printStackTrace();
-            }
-
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Log.i("EXCEPTION", "Exception");
             }
         }
 
-        private void storeNewsInDatabase(){
+        private int storeNewsInDatabase() {
 
-            newFeeds = dao.insertAllFeeds(newFeeds);
+            return dao.insertAllFeeds(newFeeds);
         }
     }
 }
