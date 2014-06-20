@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -51,7 +52,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Created by Adrian on 13-Jun-14.
  */
-public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     private Context context;
     private static FeedFetcherTask downloadTask;
@@ -135,6 +136,25 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         listView.setItemChecked(position, true);
     }
 
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+        int threshold = 1;
+
+        if (scrollState == SCROLL_STATE_IDLE) {
+            if (listView.getLastVisiblePosition() >= listView.getCount() - threshold) {
+
+                //TODO Implement loading more data
+
+                Log.i("LOG", "Load more data");
+
+                listView.setOnScrollListener(null);
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
 
     public interface OnHeadlineSelectedListener {
         public void onArticleSelected(NewsFeed feed);
@@ -174,6 +194,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         listView = (ListView) view.findViewById(R.id.headlines_list_view);
         listView.setAdapter(feedsAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnScrollListener(this);
 
         listView.setFastScrollEnabled(true);
 

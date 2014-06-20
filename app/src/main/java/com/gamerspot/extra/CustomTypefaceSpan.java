@@ -65,8 +65,7 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
 
 	@Override
 	public void updateMeasureState(TextPaint p) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

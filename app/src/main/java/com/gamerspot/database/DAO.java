@@ -39,7 +39,7 @@ public class DAO {
     };
 
     String sortOrder = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
-    String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT 50 OFFSET 0 ";
+    String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT 20 OFFSET 0 ";
 
     public DAO(Context contextIn) {
         this.context = contextIn;
