@@ -2,7 +2,14 @@
 <resources>
 
     <string name="app_name">GamerSpot</string>
+
     <string name="action_settings">Settings</string>
+    <string name="action_about">About</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_search">Search articles</string>
+    <string name="action_favourite">Add to favourites</string>
+    <string name="action_share">Share</string>
+
     <string name="date_format">dd/MM/yyyy hh:mm</string>
 
     <!-- Messages -->
@@ -31,6 +38,14 @@
     <string name="drawer_title">Main Menu</string>
     <string name="nav_drawer_open">Drawer opened</string>
     <string name="nav_drawer_close">Drawer closed</string>
+
+    <!-- Search dialog strings -->
+    <string name="string_dialog_title">Search</string>
+    <string name="string_dialog_radiogroup_header">Search through:</string>
+    <string name="string_dialog_radiogroup_item1">Article titles</string>
+    <string name="string_dialog_radiogroup_item2">Article titles and text</string>
+    <string name="string_dialog_button">Search</string>
+    <string name="string_dialog_edittext_hint">Enter search phrase</string>
 
     <!-- RSS Urls -->
     <string-array name="pc_feeds">

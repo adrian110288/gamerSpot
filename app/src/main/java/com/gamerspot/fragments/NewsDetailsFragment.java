@@ -171,7 +171,13 @@ public class NewsDetailsFragment extends Fragment {
                     displayOnlyText();
                 }
 
-                descriptionLinearLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                try{
+                    descriptionLinearLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+                catch (NoSuchMethodError nsme){
+                    descriptionLinearLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+
 
             }
         });

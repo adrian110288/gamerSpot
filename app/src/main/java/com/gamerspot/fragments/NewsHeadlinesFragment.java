@@ -2,20 +2,19 @@ package com.gamerspot.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.support.v4.net.ConnectivityManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -41,9 +40,6 @@ import org.xml.sax.InputSource;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -70,12 +66,14 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     private static int launchCount = 0;
     private static int newRowsInserted = 0;
     private String pluralString;
+    private SearchDialogFragment searchDialogFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         context = getActivity().getApplicationContext();
+        setHasOptionsMenu(true);
         launchCount++;
         pluralString = getResources().getQuantityString(R.plurals.new_feeds_plurals, newRowsInserted, newRowsInserted);
 
@@ -163,7 +161,17 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
                 feedList.clear();
                 feedList = dao.getAllFeeds();
-                feedsAdapter.addAll(feedList);
+
+                try{
+                    feedsAdapter.addAll(feedList);
+                }
+                catch (NoSuchMethodError nsme){
+
+                    for(NewsFeed f: feedList) {
+                        feedsAdapter.add(f);
+                    }
+                }
+
                 feedsAdapter.notifyDataSetChanged();
                 listView.smoothScrollToPosition(0);
                 newFeedsButton.setVisibility(buttonVisible);
@@ -191,6 +199,35 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.news, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == R.id.action_search) {
+
+            searchDialogFragment = new SearchDialogFragment();
+            searchDialogFragment.setTargetFragment(this, 1);
+            searchDialogFragment.show(getFragmentManager(), "search");
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Toast.makeText(getActivity(), data.getStringExtra("phrase"), Toast.LENGTH_SHORT).show();
     }
 
     private class FeedFetcherTask extends AsyncTask<String, Void, Integer> {

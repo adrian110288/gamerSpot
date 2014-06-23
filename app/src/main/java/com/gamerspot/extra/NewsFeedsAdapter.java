@@ -89,35 +89,35 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
             case 1: {
                 holder.platform_textView.setText("PC");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PC));
-                convertView.setBackground(context.getResources().getDrawable(R.drawable.pc_newsfeed_selector));
+                convertView.setBackgroundResource(R.drawable.pc_newsfeed_selector);
                 break;
             }
 
             case 2: {
                 holder.platform_textView.setText("XBOX");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
-                convertView.setBackground(context.getResources().getDrawable(R.drawable.xbox_newsfeed_selector));
+                convertView.setBackgroundResource(R.drawable.xbox_newsfeed_selector);
                 break;
             }
 
             case 3: {
                 holder.platform_textView.setText("PLAYSTATION");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
-                convertView.setBackground(context.getResources().getDrawable(R.drawable.playstation_newsfeed_selector));
+                convertView.setBackgroundResource(R.drawable.playstation_newsfeed_selector);
                 break;
             }
 
             case 4: {
                 holder.platform_textView.setText("NINTENDO");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
-                convertView.setBackground(context.getResources().getDrawable(R.drawable.nintendo_newsfeed_selector));
+                convertView.setBackgroundResource(R.drawable.nintendo_newsfeed_selector);
                 break;
             }
 
             case 5: {
                 holder.platform_textView.setText("MOBILE");
                 holder.helperView.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
-                convertView.setBackground(context.getResources().getDrawable(R.drawable.mobile_newsfeed_selector));
+                convertView.setBackgroundResource(R.drawable.mobile_newsfeed_selector);
                 break;
             }
 
