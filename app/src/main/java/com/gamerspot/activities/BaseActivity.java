@@ -17,8 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gamerspot.R;
+import com.gamerspot.extra.App;
 import com.gamerspot.extra.CustomTypefaceSpan;
 import com.gamerspot.extra.DrawerNewsAdapter;
+
+import static com.gamerspot.extra.App.*;
 
 /**
  * Created by Adrian on 12-Jun-14.
@@ -28,11 +31,10 @@ public class BaseActivity extends ActionBarActivity {
     private DrawerLayout drawerLayout;
     private ListView drawerNewsListView;
     private DrawerNewsAdapter drawerListAdapter;
-
+    private ActionBar bar;
     private TextView newsHeader;
 
     private ActionBarDrawerToggle drawerToggle;
-    private String actionBarTitle;
     private String drawerTitle;
 
     private Typeface navDrawerHeaderTypeface;
@@ -48,9 +50,9 @@ public class BaseActivity extends ActionBarActivity {
         /*
          * Customization of ActionBar
          */
-        appName  = getResources().getString(R.string.app_name);
-        setActionBar(appName);
-        actionBarTitle = appName;
+        appName  = getApplicationContext().getResources().getString(R.string.app_name);
+        bar = getSupportActionBar();
+        App.getUtils(getApplicationContext()).setActionBar(bar, 0, appName);
         drawerTitle = getResources().getString(R.string.drawer_title);
 
         instantiateViews();
@@ -71,13 +73,14 @@ public class BaseActivity extends ActionBarActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                setActionBar(drawerTitle);
+                App.getUtils(getApplicationContext()).setActionBar(bar, 0,drawerTitle);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                setActionBar(actionBarTitle);
+                App.getUtils(getApplicationContext()).setActionBar(bar, 0, appName);
+                //setActionBar(actionBarTitle);
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
@@ -107,7 +110,7 @@ public class BaseActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
-
+    /*
     private void setActionBar(String title) {
 
         ActionBar actionBar = getSupportActionBar();
@@ -116,7 +119,7 @@ public class BaseActivity extends ActionBarActivity {
         actionBar.setTitle(spannableString);
 
     }
-
+*/
     private void instantiateViews(){
 
         newsHeader = (TextView) findViewById(R.id.left_drawer_news_heading);

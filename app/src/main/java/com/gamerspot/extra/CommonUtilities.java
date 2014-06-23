@@ -3,11 +3,16 @@ package com.gamerspot.extra;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import com.gamerspot.R;
 
@@ -19,21 +24,24 @@ import java.util.HashMap;
  */
 public class CommonUtilities {
 
-    private Context context;
+    private static Context context;
     private AssetManager assetManager;
+    private static ConnectivityManager connectivityManager;
+    private static NetworkInfo networkInfo;
     private Typeface textFont;
     private Typeface themeFont;
     private DateFormat df;
     private String dateFormatString;
     private String appName;
-    private SpannableString spannableString;
+    private static SpannableString spannableString;
 
-    private HashMap<String, Drawable> cachedImages;
+    private HashMap<String, BitmapDrawable> cachedImages;
 
     public CommonUtilities(Context c){
 
         context = c;
         assetManager = context.getAssets();
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         textFont = Typeface.createFromAsset(assetManager, "sans.semi-condensed.ttf");
         themeFont = Typeface.createFromAsset(assetManager, "Gamegirl.ttf");
         appName = context.getResources().getString(R.string.app_name);
@@ -41,7 +49,7 @@ public class CommonUtilities {
         df = new DateFormat();
         dateFormatString = context.getResources().getString(R.string.date_format);
 
-        cachedImages = new HashMap<String, Drawable>();
+        cachedImages = new HashMap<String, BitmapDrawable>();
     }
 
     public Typeface getTextFont(){
@@ -57,25 +65,80 @@ public class CommonUtilities {
         return df.format(dateFormatString, dateIn).toString();
     }
 
-    public HashMap<String, Drawable> getCachedImages(){
+    public HashMap<String, BitmapDrawable> getCachedImages(){
         return cachedImages;
     }
 
-    public void addCachedImage(String url, Drawable image) {
+    public BitmapDrawable getCachedImage(String idIn){
+
+        Log.i("LOG", "Getting Image drawable");
+
+        return cachedImages.get(idIn);
+    }
+
+    public void addCachedImage(String url, BitmapDrawable image) {
         cachedImages.put(url, image);
     }
 
-    public void setActionBar(ActionBar actionBar) {
+    public void setCachedImages(HashMap<String, BitmapDrawable> imagesIn) {
 
+        cachedImages = imagesIn;
+    }
+
+    public static void setActionBar(ActionBar actionBar, int platformIn, String name) {
+
+        spannableString = new SpannableString(name);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        spannableString.setSpan(new CustomTypefaceSpan(context, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new CustomTypefaceSpan(context, "Gamegirl.ttf"),0, name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         actionBar.setTitle(spannableString);
+
+        if(platformIn != 0) {
+
+            switch (platformIn){
+
+                case 1: {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.PLATFORM_PC)));
+                    break;
+                }
+                case 2: {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.PLATFORM_XBOX)));
+                    break;
+                }
+                case 3: {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION)));
+                    break;
+                }
+                case 4: {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.PLATFORM_NINTENDO)));
+                    break;
+                }
+                case 5: {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.PLATFORM_MOBILE)));
+                    break;
+                }
+            }
+
+        }
     }
 
-    public void setActionBar(ActionBar actionbar, int platform){
+    public static boolean isOnline() {
 
+        boolean isOnline = false;
+
+        networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (networkInfo.isConnected()) {
+            isOnline = true;
+        } else {
+            networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (networkInfo.isConnected()) {
+                isOnline = true;
+            }
+        }
+
+        return isOnline;
     }
-
 }
 
 

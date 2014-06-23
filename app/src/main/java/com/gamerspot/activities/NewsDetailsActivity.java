@@ -12,6 +12,7 @@ import android.view.Window;
 
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
+import com.gamerspot.extra.App;
 import com.gamerspot.extra.CustomTypefaceSpan;
 import com.gamerspot.fragments.NewsDetailsFragment;
 
@@ -28,11 +29,9 @@ public class NewsDetailsActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_news_details);
 
-        actionbar = getSupportActionBar();
-
         NewsFeed feedIn = (NewsFeed) getIntent().getSerializableExtra("FEED");
 
-        setActionbar(feedIn.getPlatform());
+        App.getUtils(getApplicationContext()).setActionBar(getSupportActionBar(), feedIn.getPlatform(), getResources().getString(R.string.app_name) );
 
         NewsDetailsFragment detailsFragment = new NewsDetailsFragment();
         Bundle b = new Bundle();
@@ -42,37 +41,4 @@ public class NewsDetailsActivity extends ActionBarActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.details_content_frame, detailsFragment).commit();
     }
 
-    //TODO Use CommonUtilities
-    private void setActionbar(int platformIn) {
-
-        String appName = getResources().getString(R.string.app_name);
-        SpannableString spannableString = new SpannableString(appName);
-        spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        actionbar.setTitle(spannableString);
-
-        switch (platformIn){
-
-            case 1: {
-                actionbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.PLATFORM_PC)));
-                break;
-            }
-            case 2: {
-                actionbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.PLATFORM_XBOX)));
-                break;
-            }
-            case 3: {
-                actionbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.PLATFORM_PLAYSTATION)));
-                break;
-            }
-            case 4: {
-                actionbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.PLATFORM_NINTENDO)));
-                break;
-            }
-            case 5: {
-                actionbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.PLATFORM_MOBILE)));
-                break;
-            }
-        }
-
-    }
 }

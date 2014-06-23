@@ -35,6 +35,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
+import com.gamerspot.extra.App;
+import com.gamerspot.extra.CommonUtilities;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -55,66 +57,37 @@ public class NewsDetailsFragment extends Fragment {
     private static final int IMAGE_DOWNLOAD_QUEUE_COMPLETED = 1;
 
     private NewsFeed feed;
-    //TODO Use CommonUtilities
     private Typeface font;
-    //TODO Use CommonUtilities
-    private DateFormat df;
     private int descriptionLayoutWidth = 0;
-
     private TextView titleView;
     private TextView creatorView;
     private TextView dateView;
     private TextView descriptionView;
     private Button fullArticleButton;
     private LinearLayout descriptionLinearLayout;
-
-    private static HashMap<String, BitmapDrawable> cachedImages;
+    private static HashMap<String, BitmapDrawable> cachedImages = new HashMap();;
     private Handler downloadFinishHandler;
     private static List<URL> urlList;
     private Intent intent;
-
     private static FragmentManager fragmentManager;
-    private static ImagesDownloadDialogFragment imagesDownloadDialogFragment;
+    private ViewTreeObserver viewTreeObserver;
+    private static CommonUtilities utils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        //TODO Use CommonUtilities
-        font = Typeface.createFromAsset(getActivity().getAssets(), "sans.semi-condensed.ttf");
-        cachedImages = new HashMap();
+        utils = App.getUtils(getActivity());
+        font = utils.getTextFont();
 
-        Log.i("NO OF IMAGES", cachedImages.size()+"");
-        //TODO Use CommonUtilities
-        df = new DateFormat();
         feed = (NewsFeed) getArguments().get("FEED");
         urlList = new ArrayList<URL>();
         intent = new Intent(Intent.ACTION_VIEW);
 
         fragmentManager = getFragmentManager();
-        imagesDownloadDialogFragment = new ImagesDownloadDialogFragment();
 
-        Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
-
-            URL url;
-
-            @Override
-            public Drawable getDrawable(String source) {
-
-                try{
-
-                    url = new URL(source);
-                    urlList.add(url);
-
-                }
-                catch (MalformedURLException mue){
-                    mue.printStackTrace();
-                }
-
-                return null;
-            }
-        }, null);
+        getImagesUrl(feed.getDescription());
 
         downloadFinishHandler = new Handler() {
 
@@ -126,34 +99,13 @@ public class NewsDetailsFragment extends Fragment {
 
                     getActivity().setProgressBarIndeterminateVisibility(false);
 
+                    utils.setCachedImages(cachedImages);
+
                     titleView.setText(feed.getTitle());
                     creatorView.setText(feed.getCreator());
-                    //TODO Use CommonUtilities
-                    dateView.setText(df.format(getActivity().getResources().getString(R.string.date_format), feed.getDate()));
+                    dateView.setText(utils.getFormattedDate(feed.getDate()));
 
-                    descriptionView.setText(Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
-
-                        Drawable drawable;
-                        int w;
-                        int h;
-                        double ratio;
-
-                        @Override
-                        public Drawable getDrawable(String source) {
-
-                            if(cachedImages.containsKey(source)) {
-
-                                drawable = cachedImages.get(source);
-                                w = drawable.getIntrinsicWidth();
-                                h = drawable.getIntrinsicHeight();
-                                ratio = (double) w/h;
-
-                                drawable.setBounds(0,0, descriptionLayoutWidth, (int) (descriptionLayoutWidth/ratio));
-                            }
-
-                            return drawable;
-                        }
-                    }, null));
+                    displayTextWithImages();
 
                     descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
                 }
@@ -197,13 +149,7 @@ public class NewsDetailsFragment extends Fragment {
             }
         });
 
-        if(urlList.size() !=0){
-            getActivity().setProgressBarIndeterminateVisibility(true);
-            Toast.makeText(getActivity(), "Downloading images ...", Toast.LENGTH_SHORT).show();
-           // imagesDownloadDialogFragment.show(fragmentManager, "DIALOG");
-        }
-
-        final ViewTreeObserver viewTreeObserver = descriptionLinearLayout.getViewTreeObserver();
+        viewTreeObserver = descriptionLinearLayout.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
             @Override
@@ -211,7 +157,22 @@ public class NewsDetailsFragment extends Fragment {
 
                 descriptionLayoutWidth = descriptionLinearLayout.getWidth();
 
-                new DownloadThread(urlList, downloadFinishHandler, cachedImages).start();
+                if(urlList.size() !=0 && utils.isOnline()){
+                    getActivity().setProgressBarIndeterminateVisibility(true);
+                    Toast.makeText(getActivity(), "Downloading images ...", Toast.LENGTH_SHORT).show();
+                    new DownloadThread(urlList, downloadFinishHandler, cachedImages).start();
+                }
+
+                else if(urlList.size() == 0) {
+
+                    Log.i("LOG", "no urls");
+
+                    displayTextWithImages();
+                }
+
+                else if(!utils.isOnline() && urlList.size() != 0) {
+                    displayOnlyText();
+                }
 
                 descriptionLinearLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
@@ -222,6 +183,78 @@ public class NewsDetailsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    private void getImagesUrl(String textIn){
+
+        Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
+
+            URL url;
+            int count = 0;
+
+            @Override
+            public Drawable getDrawable(String source) {
+
+                try{
+                    if(utils.getCachedImage(source) == null){
+
+                        url = new URL(source);
+                        urlList.add(url);
+                        count++;
+                    }
+
+                    Log.i("NUMBER OF URLs", count+"");
+                }
+                catch (MalformedURLException mue){
+                    mue.printStackTrace();
+                }
+
+                return null;
+            }
+        }, null);
+
+    }
+
+    private void displayOnlyText(){
+
+        titleView.setText(feed.getTitle());
+        creatorView.setText(feed.getCreator());
+        dateView.setText(utils.getFormattedDate(feed.getDate()));
+        descriptionView.setText(Html.fromHtml(feed.getDescription(), null, null));
+
+    }
+
+    private void displayTextWithImages(){
+
+        titleView.setText(feed.getTitle());
+        creatorView.setText(feed.getCreator());
+        dateView.setText(utils.getFormattedDate(feed.getDate()));
+
+        descriptionView.setText(Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
+
+            Drawable drawable;
+            int w;
+            int h;
+            double ratio;
+
+            @Override
+            public Drawable getDrawable(String source) {
+
+                if(utils.getCachedImage(source) != null) {
+
+                    Log.i("IMAGE", "Image exists");
+
+                    drawable = utils.getCachedImage(source);
+                    w = drawable.getIntrinsicWidth();
+                    h = drawable.getIntrinsicHeight();
+                    ratio = (double) w/h;
+
+                    drawable.setBounds(0,0, descriptionLayoutWidth, (int) (descriptionLayoutWidth/ratio));
+                }
+
+                return drawable;
+            }
+        }, null));
     }
 
     private class DownloadThread extends Thread{
@@ -250,13 +283,10 @@ public class NewsDetailsFragment extends Fragment {
 
                 handler.sendEmptyMessage(IMAGE_DOWNLOAD_QUEUE_COMPLETED);
             }
-            catch (ConnectException ce){
-                ce.printStackTrace();
-                handler.sendEmptyMessage(IMAGE_DOWNLOAD_CONNECTION_EXCEPTION);
-            }
 
-            catch (IOException ioe) {
-                ioe.printStackTrace();
+            catch (Exception e) {
+                e.printStackTrace();
+                handler.sendEmptyMessage(IMAGE_DOWNLOAD_CONNECTION_EXCEPTION);
             }
         }
     }

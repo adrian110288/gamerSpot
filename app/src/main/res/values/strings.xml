@@ -3,7 +3,7 @@
 
     <string name="app_name">GamerSpot</string>
     <string name="action_settings">Settings</string>
-    <string name="date_format">dd/MM/yyyy HH:mm</string>
+    <string name="date_format">dd/MM/yyyy hh:mm</string>
 
     <!-- Messages -->
     <string name="connection_exception_error">Error downloading feed. Try again later</string>

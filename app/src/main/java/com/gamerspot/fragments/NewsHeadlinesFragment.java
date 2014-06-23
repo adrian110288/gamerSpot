@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
+import com.gamerspot.extra.App;
 import com.gamerspot.extra.NewsFeedsAdapter;
 
 import org.apache.http.HttpResponse;
@@ -94,26 +95,6 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_news_headlines, null);
-    }
-
-    private boolean isOnline() {
-
-        boolean isOnline = false;
-
-        connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (networkInfo.isConnected()) {
-            isOnline = true;
-        } else {
-            networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-            if (networkInfo.isConnected()) {
-                isOnline = true;
-            }
-        }
-
-        return isOnline;
     }
 
     @Override
@@ -199,7 +180,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         listView.setFastScrollEnabled(true);
 
         if (launchCount == 1) {
-            if (isOnline()) {
+            if (App.getUtils(getActivity()).isOnline()) {
                 downloadTask.execute();
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
