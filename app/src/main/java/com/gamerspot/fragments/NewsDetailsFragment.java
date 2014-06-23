@@ -111,7 +111,7 @@ public class NewsDetailsFragment extends Fragment {
                 }
 
                 else if (msg.what == IMAGE_DOWNLOAD_CONNECTION_EXCEPTION ) {
-                    //TODO Connection exception handled needs implemeting
+                    displayOnlyText();
                 }
             }
         };
@@ -127,7 +127,6 @@ public class NewsDetailsFragment extends Fragment {
         creatorView = (TextView) view.findViewById(R.id.details_creator);
         creatorView.setTypeface(font);
         dateView = (TextView) view.findViewById(R.id.details_date);
-        //TODO Use CommonUtilities
         dateView.setTypeface(font);
         descriptionLinearLayout = (LinearLayout) view.findViewById(R.id.details_desc_layout);
         descriptionView = (TextView) view.findViewById(R.id.details_description);
@@ -165,8 +164,6 @@ public class NewsDetailsFragment extends Fragment {
 
                 else if(urlList.size() == 0) {
 
-                    Log.i("LOG", "no urls");
-
                     displayTextWithImages();
                 }
 
@@ -202,8 +199,6 @@ public class NewsDetailsFragment extends Fragment {
                         urlList.add(url);
                         count++;
                     }
-
-                    Log.i("NUMBER OF URLs", count+"");
                 }
                 catch (MalformedURLException mue){
                     mue.printStackTrace();
@@ -241,8 +236,6 @@ public class NewsDetailsFragment extends Fragment {
             public Drawable getDrawable(String source) {
 
                 if(utils.getCachedImage(source) != null) {
-
-                    Log.i("IMAGE", "Image exists");
 
                     drawable = utils.getCachedImage(source);
                     w = drawable.getIntrinsicWidth();

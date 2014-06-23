@@ -71,8 +71,6 @@ public class CommonUtilities {
 
     public BitmapDrawable getCachedImage(String idIn){
 
-        Log.i("LOG", "Getting Image drawable");
-
         return cachedImages.get(idIn);
     }
 

@@ -399,13 +399,11 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
                     }
                 }
             } catch (ConnectException ce) {
-                Log.i("EXCEPTION", "ConnectException");
                 Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.connection_exception_error), Toast.LENGTH_SHORT).show();
             } catch (UnknownHostException uhe) {
                 uhe.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.i("EXCEPTION", "Exception");
             }
         }
 

@@ -30,17 +30,19 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
     private FeedViewHolder holder;
     private NewsFeed feed;
     private int platform;
-    private DateFormat df;
+    //private DateFormat df;
     private LayoutInflater mInflater;
+    private static CommonUtilities utils;
 
     public NewsFeedsAdapter(Context contextIn, List<NewsFeed> feedsListIn) {
         super(contextIn, 0, feedsListIn);
 
         context = contextIn;
-        platformFont = Typeface.createFromAsset(context.getAssets(), "Gamegirl.ttf");
-        titleFont = Typeface.createFromAsset(context.getAssets(), "sans.semi-condensed.ttf");
-        dateFont = Typeface.createFromAsset(context.getAssets(), "sans.semi-condensed.ttf");
-        df = new DateFormat();
+        utils = App.getUtils(context);
+        platformFont = utils.getThemeFont();
+        titleFont = utils.getTextFont();
+        dateFont = utils.getTextFont();
+        //df = new DateFormat();
 
         feedsList = (ArrayList<NewsFeed>) feedsListIn;
     }
@@ -67,11 +69,13 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
             holder.title_textView = (TextView) convertView.findViewById(R.id.feed_title);
             holder.platform_textView = (TextView) convertView.findViewById(R.id.feed_platform);
             holder.date_textView = (TextView) convertView.findViewById(R.id.feed_date);
+            holder.creator_textView = (TextView) convertView.findViewById(R.id.feed_creator);
             holder.helperView = convertView.findViewById(R.id.helperView);
 
             holder.title_textView.setTypeface(titleFont);
             holder.platform_textView.setTypeface(platformFont);
             holder.date_textView.setTypeface(dateFont);
+            holder.creator_textView.setTypeface(titleFont);
 
             convertView.setTag(holder);
 
@@ -79,6 +83,7 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
             holder = (FeedViewHolder) convertView.getTag();
 
         holder.title_textView.setText(feed.getTitle());
+        holder.creator_textView.setText(feed.getProvider());
 
         switch(platform){
             case 1: {
@@ -123,7 +128,7 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
             }
         }
 
-        holder.date_textView.setText(df.format(context.getResources().getString(R.string.date_format), feed.getDate()));
+        holder.date_textView.setText(utils.getFormattedDate(feed.getDate()));
 
         return convertView;
     }

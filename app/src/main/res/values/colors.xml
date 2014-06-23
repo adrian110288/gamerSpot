@@ -6,6 +6,7 @@
     <color name="ACTION_BAR_COLOR">#333333</color>
     <color name="NAV_DRAWER_COLOR">#E6E6E6</color>
     <color name="NAV_DRAWER_HEADER_DIVIDER_COLOR">#5F5F5F</color>
+    <color name="FEED_LIST_ITEM_CREATOR">#FF4719</color>
 
     <!-- ListView items - game platform indicators -->
     <color name="PLATFORM_PC">#1A1A1A</color>

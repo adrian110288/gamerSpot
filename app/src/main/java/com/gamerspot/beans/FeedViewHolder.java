@@ -11,5 +11,6 @@ public class FeedViewHolder {
     public TextView platform_textView;
     public TextView date_textView;
     public TextView title_textView;
+    public TextView creator_textView;
     public View helperView;
 }

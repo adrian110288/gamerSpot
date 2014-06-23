@@ -15,15 +15,16 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="4dp">
 
-    <TextView
-        android:id="@+id/feed_platform"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="4dp"
-        android:paddingRight="5dp"
-        android:layout_marginLeft="15dp"
-        />
+        <TextView
+            android:id="@+id/feed_platform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="4dp"
+            android:paddingRight="5dp"
+            android:layout_marginLeft="15dp"
+            />
+
         </RelativeLayout>
 
     <TextView
@@ -37,14 +38,28 @@
         />
 
     <TextView
+        android:id="@+id/feed_creator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:textColor="@color/FEED_LIST_ITEM_CREATOR"
+        android:layout_below="@+id/helperView"
+        />
+
+    <TextView
         android:id="@+id/feed_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:textColor="@color/APP_TEXT_COLOR"
-        android:textSize="18dp"
+        android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_below="@+id/helperView"
+        android:layout_below="@+id/feed_creator"
         />
 
 </RelativeLayout>
