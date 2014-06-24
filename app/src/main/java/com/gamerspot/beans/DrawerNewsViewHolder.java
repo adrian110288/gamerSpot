@@ -9,5 +9,6 @@ import android.widget.TextView;
  */
 public class DrawerNewsViewHolder {
 
+    public View indicator;
     public TextView newsItem;
 }

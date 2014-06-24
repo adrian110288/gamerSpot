@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,8 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
             holder.newsItem = (android.widget.TextView) convertView.findViewById(R.id.drawer_news_listItem_textView);
             holder.newsItem.setTypeface(typeface);
 
+            holder.indicator = (View) convertView.findViewById(R.id.drawer_news_listItem_indicator);
+
             convertView.setTag(holder);
 
         }
@@ -73,6 +76,14 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
 
         itemText = getItem(position);
         holder.newsItem.setText(itemText);
+
+
+        if(position == 0) holder.indicator.setVisibility(View.INVISIBLE);
+        else if(position == 1) holder.indicator.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+        else if(position == 2) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
+        else if(position == 3) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
+        else if(position == 4) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
+        else if(position == 5) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
 
         return convertView;
 
