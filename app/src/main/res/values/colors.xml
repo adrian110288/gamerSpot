@@ -4,16 +4,21 @@
     <!-- Application theme colors -->
     <color name="APP_TEXT_COLOR">#1A1A1A</color>
     <color name="ACTION_BAR_COLOR">#333333</color>
-    <color name="NAV_DRAWER_COLOR">#E6E6E6</color>
-    <color name="NAV_DRAWER_HEADER_DIVIDER_COLOR">#5F5F5F</color>
+    <color name="NAV_DRAWER_COLOR">#FF222222</color>
+    <color name="NAV_DRAWER_DIVIDER_COLOR">#282828</color>
     <color name="FEED_LIST_ITEM_CREATOR">#FF4719</color>
 
     <!-- ListView items - game platform indicators -->
     <color name="PLATFORM_PC">#1A1A1A</color>
+    <color name="PLATFORM_PC_FADED">#484848</color>
     <color name="PLATFORM_XBOX">#009933</color>
+    <color name="PLATFORM_XBOX_FADED">#33AD5C</color>
     <color name="PLATFORM_PLAYSTATION">#0052CC</color>
+    <color name="PLATFORM_PLAYSTATION_FADED">#3375D6</color>
     <color name="PLATFORM_NINTENDO">#19D1FF</color>
+    <color name="PLATFORM_NINTENDO_FADED">#47DAFF</color>
     <color name="PLATFORM_MOBILE">#D11919</color>
+    <color name="PLATFORM_MOBILE_FADED">#DA4747</color>
 
     <!-- ListView items selected indicators -->
     <color name="PC_SELECTED">#E8E8E8</color>

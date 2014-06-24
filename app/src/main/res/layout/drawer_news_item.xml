@@ -6,24 +6,14 @@
     android:minHeight="48dp"
     android:orientation="horizontal"
     android:paddingLeft="16dp">
-    
-    <ViewStub
-        android:id="@+id/drawer_stub"
-        android:inflatedId="@+id/drawer_news_indicator"
-        android:layout="@layout/drawer_news_item"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="12dp"/>
 
     <TextView
         android:id="@+id/drawer_news_listItem_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:textColor="@android:color/white"
         android:textSize="18dp"
-        android:layout_toRightOf="@+id/drawer_news_indicator" />
+        android:layout_margin="20dp"/>
 
 </RelativeLayout>

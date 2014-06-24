@@ -2,6 +2,7 @@ package com.gamerspot.activities;
 
 import android.content.Intent;
 import android.os.*;
+import android.support.v7.app.ActionBar;
 import android.view.*;
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
@@ -23,7 +24,8 @@ public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.
             }
 
             NewsHeadlinesFragment headlinesFragment = new NewsHeadlinesFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment).commit();
+
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment,"MAIN").commit();
 
         }
     }

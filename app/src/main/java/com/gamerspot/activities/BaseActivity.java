@@ -1,14 +1,17 @@
 package com.gamerspot.activities;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -18,8 +21,10 @@ import android.widget.TextView;
 
 import com.gamerspot.R;
 import com.gamerspot.extra.App;
+import com.gamerspot.extra.CommonUtilities;
 import com.gamerspot.extra.CustomTypefaceSpan;
 import com.gamerspot.extra.DrawerNewsAdapter;
+import com.gamerspot.fragments.NewsHeadlinesFragment;
 
 import static com.gamerspot.extra.App.*;
 
@@ -32,12 +37,13 @@ public class BaseActivity extends ActionBarActivity {
     private ListView drawerNewsListView;
     private DrawerNewsAdapter drawerListAdapter;
     private ActionBar bar;
-    private TextView newsHeader;
 
     private ActionBarDrawerToggle drawerToggle;
     private String drawerTitle;
 
-    private Typeface navDrawerHeaderTypeface;
+    private NewsHeadlinesFragment fragment;
+    private Bundle fragmentBundle;
+    private CommonUtilities utils;
 
     private static String appName;
 
@@ -47,13 +53,16 @@ public class BaseActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_news);
 
+        utils = App.getUtils(getApplicationContext());
         /*
          * Customization of ActionBar
          */
         appName  = getApplicationContext().getResources().getString(R.string.app_name);
         bar = getSupportActionBar();
-        App.getUtils(getApplicationContext()).setActionBar(bar, 0, appName);
+        utils.setActionBar(bar, 0, appName);
         drawerTitle = getResources().getString(R.string.drawer_title);
+
+        utils.setDrawerItemSelected(0);
 
         instantiateViews();
 
@@ -65,6 +74,12 @@ public class BaseActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                if(utils.getDrawerItemSelected() != id){
+                    fragment = (NewsHeadlinesFragment) getSupportFragmentManager().findFragmentByTag("MAIN");
+                    fragment.refresh(id);
+                }
+
+                drawerLayout.closeDrawer(drawerNewsListView);
             }
         });
 
@@ -73,14 +88,13 @@ public class BaseActivity extends ActionBarActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                App.getUtils(getApplicationContext()).setActionBar(bar, 0,drawerTitle);
+                utils.setActionBar(bar, 0,drawerTitle);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                App.getUtils(getApplicationContext()).setActionBar(bar, 0, appName);
-                //setActionBar(actionBarTitle);
+                utils.setActionBar(bar, 0, appName);
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
@@ -110,21 +124,9 @@ public class BaseActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
-    /*
-    private void setActionBar(String title) {
 
-        ActionBar actionBar = getSupportActionBar();
-        SpannableString spannableString = new SpannableString(title);
-        spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"),0, appName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        actionBar.setTitle(spannableString);
-
-    }
-*/
     private void instantiateViews(){
 
-        newsHeader = (TextView) findViewById(R.id.left_drawer_news_heading);
-        navDrawerHeaderTypeface = Typeface.createFromAsset(getAssets(), "weblysleekuis_bold.ttf");
-        newsHeader.setTypeface(navDrawerHeaderTypeface);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerNewsListView = (ListView) findViewById(R.id.left_drawer_newslist);
 

@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.gamerspot.beans.NewsFeed;
 
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,8 @@ public class DAO {
             DatabaseContract.NewsFeedTable.COLUMN_NAME_PROVIDER,
             DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM
     };
+
+    int queryLimit = 20;
 
     String sortOrder = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
     String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT 20 OFFSET 0 ";
@@ -76,8 +79,6 @@ public class DAO {
                     if(inserted != -1) {
 
                         count++;
-
-                        Log.i("NEWS FEED", feed.getTitle()+" "+ feed.getDate().toString());
                     }
                 }
 
@@ -107,9 +108,35 @@ public class DAO {
         NewsFeed feed;
 
         Cursor c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, null, null, null, null, sortOrderWithLimit);
+        queriedList = this.traverseCursor(c);
+
+        return queriedList;
+    }
+
+    public ArrayList<NewsFeed> getPlatformFeeds(long platform) {
+
+        database = dbHelper.getReadableDatabase();
+        queriedList = new ArrayList<NewsFeed>();
+
+        String [] selection = {String.valueOf(platform)};
+
+        Cursor c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM + "=?", selection, null, null, sortOrderWithLimit);
+        queriedList = this.traverseCursor(c);
+
+        return queriedList;
+
+    }
+
+    private ArrayList<NewsFeed> traverseCursor(Cursor c) {
+
+        ArrayList<NewsFeed> tempList = new ArrayList<NewsFeed>();
+        Cursor cursor = c;
+        NewsFeed feed;
+
         c.moveToNext();
 
         while(!c.isAfterLast()) {
+
             feed = new NewsFeed();
 
             feed.setGuid(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_ID)));
@@ -121,11 +148,11 @@ public class DAO {
             feed.setProvider(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_PROVIDER)));
             feed.setPlatform(c.getInt(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM)));
 
-            queriedList.add(feed);
+            tempList.add(feed);
             c.moveToNext();
         }
 
-        return queriedList;
+        return tempList;
     }
 
     public boolean setFeedVisited(String guid){

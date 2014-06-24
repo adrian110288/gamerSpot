@@ -9,7 +9,5 @@ import android.widget.TextView;
  */
 public class DrawerNewsViewHolder {
 
-    public ViewStub stub;
-    public View newsIndicator;
     public TextView newsItem;
 }

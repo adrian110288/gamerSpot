@@ -7,6 +7,8 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -42,7 +44,6 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
         platformFont = utils.getThemeFont();
         titleFont = utils.getTextFont();
         dateFont = utils.getTextFont();
-        //df = new DateFormat();
 
         feedsList = (ArrayList<NewsFeed>) feedsListIn;
     }

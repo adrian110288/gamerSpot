@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
 import com.gamerspot.extra.App;
+import com.gamerspot.extra.CommonUtilities;
 import com.gamerspot.extra.NewsFeedsAdapter;
 
 import org.apache.http.HttpResponse;
@@ -67,6 +69,9 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     private static int newRowsInserted = 0;
     private String pluralString;
     private SearchDialogFragment searchDialogFragment;
+    private CommonUtilities utils;
+
+    private long drawerItemSelected = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,9 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         context = getActivity().getApplicationContext();
         setHasOptionsMenu(true);
         launchCount++;
+
+        utils = App.getUtils(context);
+
         pluralString = getResources().getQuantityString(R.plurals.new_feeds_plurals, newRowsInserted, newRowsInserted);
 
         downloadTask = new FeedFetcherTask(context);
@@ -86,6 +94,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         }
 
         dao.close();
+
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
 
     }
@@ -189,7 +198,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         if (launchCount == 1) {
             if (App.getUtils(getActivity()).isOnline()) {
-                downloadTask.execute();
+                //downloadTask.execute();
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
             }
@@ -228,6 +237,26 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         Toast.makeText(getActivity(), data.getStringExtra("phrase"), Toast.LENGTH_SHORT).show();
+    }
+
+    public void refresh(long id) {
+
+        utils.setDrawerItemSelected(id);
+
+        //feedList.clear();
+
+        if(id != 0) {
+            feedList = dao.getPlatformFeeds(id);
+        }
+
+        else {
+            feedList = dao.getAllFeeds();
+        }
+
+        feedsAdapter = new NewsFeedsAdapter(context, feedList);
+        listView.setAdapter(feedsAdapter);
+        dao.close();
+
     }
 
     private class FeedFetcherTask extends AsyncTask<String, Void, Integer> {

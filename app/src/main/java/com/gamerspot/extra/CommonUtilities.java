@@ -1,6 +1,7 @@
 package com.gamerspot.extra;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,8 +33,12 @@ public class CommonUtilities {
     private Typeface themeFont;
     private DateFormat df;
     private String dateFormatString;
-    private String appName;
+    private static String appName;
     private static SpannableString spannableString;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor prefEditor;
+    private String drawerItemSelectedKey;
 
     private HashMap<String, BitmapDrawable> cachedImages;
 
@@ -48,6 +53,10 @@ public class CommonUtilities {
         spannableString = new SpannableString(appName);
         df = new DateFormat();
         dateFormatString = context.getResources().getString(R.string.date_format);
+
+        sharedPreferences = context.getSharedPreferences(context.getResources().getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
+        prefEditor = sharedPreferences.edit();
+        drawerItemSelectedKey = context.getResources().getString(R.string.drawer_item_selected);
 
         cachedImages = new HashMap<String, BitmapDrawable>();
     }
@@ -85,7 +94,13 @@ public class CommonUtilities {
 
     public static void setActionBar(ActionBar actionBar, int platformIn, String name) {
 
-        spannableString = new SpannableString(name);
+        if(name != null) {
+            spannableString = new SpannableString(name);
+        }
+        else {
+            spannableString = new SpannableString(appName);
+        }
+
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         spannableString.setSpan(new CustomTypefaceSpan(context, "Gamegirl.ttf"),0, name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         actionBar.setTitle(spannableString);
@@ -137,6 +152,19 @@ public class CommonUtilities {
 
         return isOnline;
     }
+
+    public long getDrawerItemSelected(){
+
+        return sharedPreferences.getLong(drawerItemSelectedKey, 0);
+
+    }
+
+    public void setDrawerItemSelected(long id) {
+
+        prefEditor.putLong(drawerItemSelectedKey, id);
+        prefEditor.commit();
+    }
+
 }
 
 
