@@ -2,26 +2,8 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/adrian110288/Documents/AndroidStudioProjects/GamerSpot/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-95058d1a2fcb7732ce89c821469a32be63f7c26d.jar"
-        jar="/Users/adrian110288/android-sdks/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
-    <item
-        dex="/Users/adrian110288/Documents/AndroidStudioProjects/GamerSpot/app/build/intermediates/pre-dexed/debug/rome-1.0-57c345b51fbc7f57b426efefb2b2428c1b43036d.jar"
-        jar="/Users/adrian110288/Documents/AndroidStudioProjects/GamerSpot/app/libs/rome-1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="022b33347f315833e9348cec2751af1a5d5656e4"/>
-    <item
-        dex="/Users/adrian110288/Documents/AndroidStudioProjects/GamerSpot/app/build/intermediates/pre-dexed/debug/classes-5af6869721e29b555bded4799d0fa72c700e1fe4.jar"
-        jar="/Users/adrian110288/Documents/AndroidStudioProjects/GamerSpot/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
-    <item
-        dex="/Users/adrian110288/Documents/AndroidStudioProjects/GamerSpot/app/build/intermediates/pre-dexed/debug/library-1.0.5-afa49e8fb65068248c6ce8b272baf903ec010311.jar"
-        jar="/Users/adrian110288/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.volley/library/1.0.5/f5955713301768e274667a66b942f2b82450ffcf/library-1.0.5.jar"
+        dex="C:\Users\Adrian\AndroidStudioProjects\GamerSpot\app\build\intermediates\pre-dexed\debug\library-1.0.5-d727bc6c0a89035dacf92ac40faa6bc76c20ab22.jar"
+        jar="C:\Users\Adrian\.gradle\caches\modules-2\files-2.1\com.mcxiaoke.volley\library\1.0.5\f5955713301768e274667a66b942f2b82450ffcf\library-1.0.5.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="f5955713301768e274667a66b942f2b82450ffcf"/>

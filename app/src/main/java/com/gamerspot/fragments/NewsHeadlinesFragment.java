@@ -16,10 +16,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.gamerspot.R;
@@ -51,7 +54,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Created by Adrian on 13-Jun-14.
  */
-public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener{
 
     private Context context;
     private static FeedFetcherTask downloadTask;
@@ -70,8 +73,15 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     private String pluralString;
     private SearchDialogFragment searchDialogFragment;
     private CommonUtilities utils;
+    private Animation animOut;
+    private Animation animIn;
 
     private long drawerItemSelected = 0;
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +92,8 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         launchCount++;
 
         utils = App.getUtils(context);
+        animOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+        animIn = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
 
         pluralString = getResources().getQuantityString(R.plurals.new_feeds_plurals, newRowsInserted, newRowsInserted);
 
@@ -139,10 +151,48 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
                 listView.setOnScrollListener(null);
             }
         }
+
+        //if (scrollState == SC)
     }
 
+    private int mLastFirstVisibleItem = 0;
+    private boolean animDownFinished = false;
+    private boolean animUpFinished = false;
+
+
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+        if(listView.getId() == view.getId() && buttonDismissed != true) {
+
+            int currentFirstVisibleItem = listView.getFirstVisiblePosition();
+
+            if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+
+                if(!animDownFinished) {
+
+                    newFeedsButton.startAnimation(animOut);
+                    newFeedsButton.setVisibility(View.GONE);
+                    animDownFinished = true;
+                    //buttonDownAnim.setFillAfter(true);
+                    animUpFinished = false;
+                }
+
+            } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+
+                if(!animUpFinished) {
+                    newFeedsButton.startAnimation(animIn);
+                    newFeedsButton.setVisibility(View.VISIBLE);
+                    animUpFinished = true;
+                    animDownFinished = false;
+                    //buttonUpAnim.setFillAfter(true);
+                }
+            }
+
+            mLastFirstVisibleItem = currentFirstVisibleItem;
+        }
+
+    }
 
     public interface OnHeadlineSelectedListener {
         public void onArticleSelected(NewsFeed feed);
@@ -150,11 +200,12 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         newFeedsButton = (Button) view.findViewById(R.id.new_feeds_button);
         newFeedsButton.setText(pluralString);
+        newFeedsButton.setTypeface(utils.getTextFont());
         newFeedsButton.setVisibility(buttonVisible);
 
         if(newRowsInserted == 0){
@@ -198,7 +249,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         if (launchCount == 1) {
             if (App.getUtils(getActivity()).isOnline()) {
-                //downloadTask.execute();
+                downloadTask.execute();
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
             }
@@ -293,7 +344,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
             getNewsForXbox();
             getNewsForPlaystation();
             getNewsForNintendo();
-            getNewsForMobile();
+            //getNewsForMobile();
 
             newRowsInserted = storeNewsInDatabase();
 

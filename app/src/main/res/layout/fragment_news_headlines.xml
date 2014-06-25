@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel_layout"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ListView
@@ -11,12 +12,14 @@
     <Button
         android:id="@+id/new_feeds_button"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:maxHeight="70dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="New feed"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="25dp"
         android:textAlignment="center"
-        android:background="@drawable/new_feeds_button_layer_list"
+        android:textColor="@android:color/white"
+        android:background="@color/NEW_FEEDS_BUTTON"
         android:layout_centerHorizontal="true"
         />
 
