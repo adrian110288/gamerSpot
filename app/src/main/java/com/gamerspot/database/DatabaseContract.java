@@ -23,4 +23,13 @@ public final class DatabaseContract {
         public static final String COLUMN_NAME_PLATFORM = "platform";
 
     }
+
+    public static abstract class SearchPhrasesTable implements BaseColumns {
+
+        public static final String TABLE_NAME = "SearchPhrases";
+
+        public static final String COLUMN_NAME_ID = "id";
+        public static final String COLUMN_NAME_PHRASE = "phrase";
+
+    }
 }

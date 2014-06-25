@@ -249,6 +249,8 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         if (launchCount == 1) {
             if (App.getUtils(getActivity()).isOnline()) {
+
+                getActivity().setProgressBarIndeterminateVisibility(true);
                 downloadTask.execute();
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
@@ -277,6 +279,18 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
             searchDialogFragment = new SearchDialogFragment();
             searchDialogFragment.setTargetFragment(this, 1);
             searchDialogFragment.show(getFragmentManager(), "search");
+
+            return true;
+        }
+
+        if(id == R.id.action_refresh) {
+
+            if(App.getUtils(context).isOnline()){
+
+                getActivity().setProgressBarIndeterminateVisibility(true);
+                downloadTask = new FeedFetcherTask(context);
+                downloadTask.execute();
+            }
 
             return true;
         }
@@ -338,13 +352,13 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
             long time = System.currentTimeMillis();
 
-            getActivity().setProgressBarIndeterminateVisibility(true);
+            //getActivity().setProgressBarIndeterminateVisibility(true);
 
             getNewsForPc();
             getNewsForXbox();
             getNewsForPlaystation();
             getNewsForNintendo();
-            //getNewsForMobile();
+            getNewsForMobile();
 
             newRowsInserted = storeNewsInDatabase();
 

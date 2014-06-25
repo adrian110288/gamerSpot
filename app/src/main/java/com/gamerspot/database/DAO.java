@@ -46,7 +46,10 @@ public class DAO {
 
     public DAO(Context contextIn) {
         this.context = contextIn;
-        dbHelper = new GamerSpotDBHelper(context);
+
+        if(dbHelper == null) {
+            dbHelper = new GamerSpotDBHelper(context);
+        }
     }
 
     public void close() {
@@ -158,5 +161,41 @@ public class DAO {
     public boolean setFeedVisited(String guid){
         //TODO setFeedVisited method to implement
         return false;
+    }
+
+    public boolean insertPhrase(String phraseIn) {
+
+        database = dbHelper.getWritableDatabase();
+        values = new ContentValues();
+
+        values.put(DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE, phraseIn);
+
+        long inserted = database.insertOrThrow(DatabaseContract.SearchPhrasesTable.TABLE_NAME, null, values);
+
+        return (inserted != -1) ? true : false;
+
+    }
+
+    public ArrayList<String> getPhrases(String phraseIn) {
+
+        database = dbHelper.getReadableDatabase();
+
+        ArrayList<String> result = new ArrayList<String>();
+
+        String selectStatement = "SELECT " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " FROM " + DatabaseContract.SearchPhrasesTable.TABLE_NAME + " WHERE " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " LIKE '"+ phraseIn+"%"+"'";
+        Log.i("PHRASES STATEMENT", selectStatement);
+        Cursor c = database.rawQuery(selectStatement, null);
+
+        c.moveToNext();
+
+        while(!c.isAfterLast()) {
+
+            result.add(c.getString(c.getColumnIndex(DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE)));
+            c.moveToNext();
+        }
+
+        Log.i("PHRASES LIST", result.size()+"");
+
+        return  result;
     }
 }

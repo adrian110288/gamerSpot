@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class GamerSpotDBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "GamerSpot.db";
 
     private static final String COMMA_SEP = ", ";
@@ -27,7 +27,12 @@ public class GamerSpotDBHelper extends SQLiteOpenHelper {
         DatabaseContract.NewsFeedTable.COLUMN_NAME_PROVIDER + TEXT_TYPE + COMMA_SEP +
         DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM + INTEGER_TYPE + " )";
 
+    public static final String SQL_CREATE_SEARCH_PHRASES_TABLE = "CREATE TABLE " + DatabaseContract.SearchPhrasesTable.TABLE_NAME + " (" +
+            DatabaseContract.SearchPhrasesTable.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
+            DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + TEXT_TYPE + " )";
+
     public static final String SQL_DELETE_NEWSFEEDS_TABLE = "DROP TABLE IF EXISTS " + DatabaseContract.NewsFeedTable.TABLE_NAME;
+    public static final String SQL_DELETE_SEARCH_PHRASES_TABLE = "DROP TABLE IF EXISTS " + DatabaseContract.SearchPhrasesTable.TABLE_NAME;
 
     public GamerSpotDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,11 +42,15 @@ public class GamerSpotDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_NEWSFEEDS_TABLE);
         Log.i("DB" , "NewsFeed table created");
+        db.execSQL(SQL_CREATE_SEARCH_PHRASES_TABLE);
+        Log.i("DB" , "SearchPhrases table created");
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DELETE_NEWSFEEDS_TABLE);
+        db.execSQL(SQL_DELETE_SEARCH_PHRASES_TABLE);
         onCreate(db);
     }
 }
