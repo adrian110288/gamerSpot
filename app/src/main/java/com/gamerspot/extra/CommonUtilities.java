@@ -92,7 +92,7 @@ public class CommonUtilities {
         cachedImages = imagesIn;
     }
 
-    public static void setActionBar(ActionBar actionBar, int platformIn, String name) {
+    public void setActionBar(ActionBar actionBar, int platformIn, String name) {
 
         if(name != null) {
             spannableString = new SpannableString(name);

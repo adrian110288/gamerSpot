@@ -292,6 +292,8 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
                 downloadTask.execute();
             }
 
+            else Toast.makeText(getActivity(), context.getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
+
             return true;
         }
 

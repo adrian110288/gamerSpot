@@ -29,9 +29,13 @@ public class NewsDetailsActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_news_details);
 
+
         NewsFeed feedIn = (NewsFeed) getIntent().getSerializableExtra("FEED");
 
-        App.getUtils(getApplicationContext()).setActionBar(getSupportActionBar(), feedIn.getPlatform(), getResources().getString(R.string.app_name) );
+        actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+
+        App.getUtils(getApplicationContext()).setActionBar(actionbar, feedIn.getPlatform(), "GamerSpot");
 
         NewsDetailsFragment detailsFragment = new NewsDetailsFragment();
         Bundle b = new Bundle();

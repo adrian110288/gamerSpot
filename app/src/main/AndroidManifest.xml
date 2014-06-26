@@ -23,7 +23,12 @@
 
         <activity
             android:name=".activities.NewsDetailsActivity"
-        />
+            android:parentActivityName=".activities.NewsActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.NewsActivity"/>
+        </activity>
 
     </application>
 
