@@ -8,5 +8,12 @@
     <style name="SearchDialog" parent="android:Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
     </style>
+    
+    <declare-styleable name="custom">
+        <attr name="type" format="string">
+            <enum name="article" value="0"/>
+            <enum name="search" value="1"/>
+        </attr>
+    </declare-styleable>
 
 </resources>

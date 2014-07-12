@@ -9,6 +9,9 @@
     <color name="NAV_DRAWER_DIVIDER_COLOR">#282828</color>
     <color name="FEED_LIST_ITEM_CREATOR">#FF4719</color>
 
+    <!-- Application theme colors -->
+    <color name="BUTTON_TEXT_COLOR">#FFF</color>
+
     <!-- ListView items - game platform indicators -->
     <color name="PLATFORM_PC">#1A1A1A</color>
     <color name="PLATFORM_PC_FADED">#484848</color>

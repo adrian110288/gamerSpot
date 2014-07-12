@@ -2,6 +2,7 @@
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -64,14 +65,14 @@
 
         </LinearLayout>
 
-        <Button
+        <com.gamerspot.extra.CustomButton
             android:id="@+id/button_full_article"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Read full article"
             android:layout_margin="8dp"
-            android:textColor="@android:color/white"
-            android:background="@drawable/fa_selector"/>
+            android:gravity="center"
+            custom:type="article"
+            />
 
     </LinearLayout>
 

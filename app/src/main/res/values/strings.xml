@@ -42,13 +42,15 @@
     <string name="nav_drawer_close">Drawer closed</string>
 
     <!-- Search dialog strings -->
-    <string name="string_dialog_title">Search</string>
-    <string name="string_dialog_radiogroup_header">Search through:</string>
-    <string name="string_dialog_radiogroup_item1">Article titles</string>
-    <string name="string_dialog_radiogroup_item2">Article titles and text</string>
-    <string name="string_dialog_button">Search</string>
-    <string name="string_dialog_edittext_hint">Enter search phrase</string>
+    <string name="search_dialog_title">Search</string>
+    <string name="search_dialog_radiogroup_header">Search through:</string>
+    <string name="search_dialog_radiogroup_item1">Article titles</string>
+    <string name="search_dialog_radiogroup_item2">Article titles and text</string>
+    <string name="search_dialog_button">Search</string>
+    <string name="search_dialog_edittext_hint">Enter search phrase</string>
 
+    <!-- Button texts -->
+    <string name="button_full_article">Read full article</string>
     <!-- RSS Urls -->
     <string-array name="pc_feeds">
         <item>http://www.pcgamer.com/feed/</item>

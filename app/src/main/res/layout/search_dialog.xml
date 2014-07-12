@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:minWidth="500dp"
@@ -16,7 +17,7 @@
             android:id="@+id/search_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/string_dialog_title"
+            android:text="@string/search_dialog_title"
             android:textSize="25dp"
             android:layout_margin="15dp"
             android:textColor="@android:color/white"/>
@@ -30,7 +31,7 @@
         android:singleLine="true"
         android:layout_margin="15dp"
         android:inputType="textCapSentences"
-        android:hint="@string/string_dialog_edittext_hint"/>
+        android:hint="@string/search_dialog_edittext_hint"/>
 
     <TextView
         android:id="@+id/search_header"
@@ -38,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:text="@string/string_dialog_radiogroup_header"/>
+        android:text="@string/search_dialog_radiogroup_header"/>
 
    <RadioGroup
        android:id="@+id/search_radioGroup"
@@ -50,27 +51,26 @@
            android:id="@+id/radio1"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
-           android:text="@string/string_dialog_radiogroup_item1"
+           android:text="@string/search_dialog_radiogroup_item1"
            android:checked="true"/>
 
        <RadioButton
            android:id="@+id/radio2"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
-           android:text="@string/string_dialog_radiogroup_item2"/>
+           android:text="@string/search_dialog_radiogroup_item2"/>
 
    </RadioGroup>
 
-    <Button
+    <com.gamerspot.extra.CustomButton
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:text="@string/string_dialog_button"
-        android:textColor="@android:color/white"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/fa_selector"/>
+        custom:type="search"
+        />
 
 </LinearLayout>

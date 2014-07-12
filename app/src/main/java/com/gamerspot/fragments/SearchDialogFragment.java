@@ -95,7 +95,6 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
         radio1.setTextSize(18);
         radio2.setTypeface(utils.getTextFont());
         radio2.setTextSize(18);
-        button.setTypeface(utils.getTextFont());
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override

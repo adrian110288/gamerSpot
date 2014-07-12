@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
+import com.gamerspot.extra.Animations;
 import com.gamerspot.extra.App;
 import com.gamerspot.extra.CommonUtilities;
 import com.gamerspot.extra.NewsFeedsAdapter;
@@ -172,6 +173,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
                 if(!animDownFinished) {
 
                     newFeedsButton.startAnimation(animOut);
+                    //Animations.slideOut(newFeedsButton);
                     newFeedsButton.setVisibility(View.GONE);
                     animDownFinished = true;
                     //buttonDownAnim.setFillAfter(true);
@@ -182,6 +184,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
                 if(!animUpFinished) {
                     newFeedsButton.startAnimation(animIn);
+                    //Animations.slideIn(newFeedsButton);
                     newFeedsButton.setVisibility(View.VISIBLE);
                     animUpFinished = true;
                     animDownFinished = false;
