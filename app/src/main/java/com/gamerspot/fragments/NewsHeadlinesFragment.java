@@ -1,5 +1,6 @@
 package com.gamerspot.fragments;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
@@ -76,13 +78,8 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     private CommonUtilities utils;
     private Animation animOut;
     private Animation animIn;
-
+    private int rootViewHeight;
     private long drawerItemSelected = 0;
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,7 +106,6 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         dao.close();
 
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
-
     }
 
     @Override
@@ -137,29 +133,13 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         listView.setItemChecked(position, true);
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-        int threshold = 1;
-
-        if (scrollState == SCROLL_STATE_IDLE) {
-            if (listView.getLastVisiblePosition() >= listView.getCount() - threshold) {
-
-                //TODO Implement loading more data
-
-                Log.i("LOG", "Load more data");
-
-                listView.setOnScrollListener(null);
-            }
-        }
-
-        //if (scrollState == SC)
-    }
-
     private int mLastFirstVisibleItem = 0;
     private boolean animDownFinished = false;
     private boolean animUpFinished = false;
 
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -168,27 +148,34 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
             int currentFirstVisibleItem = listView.getFirstVisiblePosition();
 
-            if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+            if(buttonVisible  == Button.VISIBLE) {
 
-                if(!animDownFinished) {
+            /* Scrolling down the list */
+                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
 
-                    newFeedsButton.startAnimation(animOut);
-                    //Animations.slideOut(newFeedsButton);
-                    newFeedsButton.setVisibility(View.GONE);
-                    animDownFinished = true;
-                    //buttonDownAnim.setFillAfter(true);
-                    animUpFinished = false;
-                }
+                    if (!animDownFinished) {
 
-            } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                        slideButtonDown(newFeedsButton);
+                        //newFeedsButton.startAnimation(animOut);
+                        //Animations.slideOut(newFeedsButton);
+                        //newFeedsButton.setVisibility(View.GONE);
+                        animDownFinished = true;
+                        animUpFinished = false;
+                    }
 
-                if(!animUpFinished) {
-                    newFeedsButton.startAnimation(animIn);
-                    //Animations.slideIn(newFeedsButton);
-                    newFeedsButton.setVisibility(View.VISIBLE);
-                    animUpFinished = true;
-                    animDownFinished = false;
-                    //buttonUpAnim.setFillAfter(true);
+                /* Scrolling up the list */
+                } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+
+                    if (!animUpFinished) {
+
+                        slideButtonUp(newFeedsButton);
+                        //newFeedsButton.startAnimation(animIn);
+                        //Animations.slideIn(newFeedsButton);
+                        //newFeedsButton.setVisibility(View.VISIBLE);
+                        animUpFinished = true;
+                        animDownFinished = false;
+                        //buttonUpAnim.setFillAfter(true);
+                    }
                 }
             }
 
@@ -209,10 +196,10 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         newFeedsButton = (Button) view.findViewById(R.id.new_feeds_button);
         newFeedsButton.setText(pluralString);
         newFeedsButton.setTypeface(utils.getTextFont());
-        newFeedsButton.setVisibility(buttonVisible);
+        //newFeedsButton.setVisibility(buttonVisible);
 
         if(newRowsInserted == 0){
-            newFeedsButton.setVisibility(Button.GONE);
+            //newFeedsButton.setVisibility(Button.GONE);
         }
 
         newFeedsButton.setOnClickListener(new View.OnClickListener() {
@@ -220,7 +207,9 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
 
-                buttonVisible = Button.GONE;
+                //buttonVisible = Button.GONE;
+                slideButtonDown(newFeedsButton);
+                newFeedsButton.setVisibility(Button.GONE);
 
                 feedList.clear();
                 feedList = dao.getAllFeeds();
@@ -237,7 +226,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
                 feedsAdapter.notifyDataSetChanged();
                 listView.smoothScrollToPosition(0);
-                newFeedsButton.setVisibility(buttonVisible);
+                //newFeedsButton.setVisibility(buttonVisible);
 
                 buttonDismissed = true;
             }
@@ -259,6 +248,16 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
             }
         }
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                rootViewHeight = view.getHeight();
+
+                newFeedsButton.setY(rootViewHeight);
+            }
+        });
     }
 
     @Override
@@ -367,11 +366,29 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
             newRowsInserted = storeNewsInDatabase();
 
+
+            NewsHeadlinesFragment.this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (newRowsInserted > 0) {
+
+                        newFeedsButton.setVisibility(Button.VISIBLE);
+                        slideButtonUp(newFeedsButton);
+                    } else {
+                        newFeedsButton.setVisibility(Button.GONE);
+                    }
+
+                }
+            });
+
+
             long finish = System.currentTimeMillis() - time;
-            Log.i("time elapsed", finish / 1000.0 + "");
+            Log.i("time elapsed",finish/1000.0+"");
 
             return null;
         }
+
 
         @Override
         protected void onPostExecute(Integer count) {
@@ -547,5 +564,21 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
             return dao.insertAllFeeds(newFeeds);
         }
+    }
+
+    private void slideButtonUp (final Button buttonIn) {
+
+        //buttonVisible = Button.VISIBLE;
+        //buttonIn.setVisibility(Button.VISIBLE);
+
+        ObjectAnimator.ofFloat(buttonIn, View.TRANSLATION_Y, rootViewHeight - 300).setDuration(200).start();
+    }
+
+    private void slideButtonDown (final Button buttonIn) {
+
+        ObjectAnimator.ofFloat(buttonIn, View.TRANSLATION_Y, rootViewHeight).setDuration(200).start();
+
+        //buttonVisible = Button.INVISIBLE;
+        //buttonIn.setVisibility(Button.INVISIBLE);
     }
 }

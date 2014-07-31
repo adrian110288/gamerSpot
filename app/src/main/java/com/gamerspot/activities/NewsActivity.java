@@ -38,8 +38,8 @@ public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.
     @Override
     public void onArticleSelected(NewsFeed feedClicked) {
 
-            Intent intent = new Intent(this, NewsDetailsActivity.class);
-            intent.putExtra("FEED", feedClicked);
-            startActivity(intent);
+        Intent intent = new Intent(this, NewsDetailsActivity.class);
+        intent.putExtra("FEED", feedClicked);
+        startActivity(intent);
     }
 }
