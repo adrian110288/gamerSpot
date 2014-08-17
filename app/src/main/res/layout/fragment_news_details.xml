@@ -1,49 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EBEBEB">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/scroll_view"
-        android:orientation="vertical"
+    <ImageView
+        android:id="@+id/backgroundImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EBEBEB">
+        android:background="#D4D4D4"
+        android:scaleType="centerCrop"/>
 
-        <RelativeLayout
-            android:id="@+id/details_header_layout"
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/scroll_view"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:padding="8dp"
-            android:background="@drawable/layer_card_background">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/details_title"
+            <RelativeLayout
+                android:id="@+id/details_header_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:textSize="28dp"/>
+                android:layout_margin="8dp"
+                android:padding="8dp"
+                android:background="@drawable/layer_card_background">
 
-            <TextView
-                android:id="@+id/details_creator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:layout_below="@+id/details_title" />
+                <TextView
+                    android:id="@+id/details_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"
+                    android:textSize="28dp"/>
 
-            <TextView
-                android:id="@+id/details_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="16dp"
-                android:layout_alignTop="@+id/details_creator"/>
+                <TextView
+                    android:id="@+id/details_creator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:layout_below="@+id/details_title" />
+
+                <TextView
+                    android:id="@+id/details_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"
+                    android:layout_alignTop="@+id/details_creator"/>
 
             </RelativeLayout>
 
@@ -55,25 +65,27 @@
                 android:padding="8dp"
                 android:background="@drawable/layer_card_background" >
 
-            <TextView
-                android:id="@+id/details_description"
+                <TextView
+                    android:id="@+id/details_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="2dp"
+                    android:textSize="19dp"
+                    />
+
+            </LinearLayout>
+
+            <com.gamerspot.views.CustomButton
+                android:id="@+id/button_full_article"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="2dp"
-                android:textSize="19dp"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:onClick="goToFullArticle"
+                custom:type="article"
                 />
 
         </LinearLayout>
 
-        <com.gamerspot.views.CustomButton
-            android:id="@+id/button_full_article"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            custom:type="article"
-            />
-
-    </LinearLayout>
-
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>

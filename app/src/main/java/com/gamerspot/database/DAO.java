@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.gamerspot.beans.NewsFeed;
 
@@ -197,5 +198,35 @@ public class DAO {
         Log.i("PHRASES LIST", result.size()+"");
 
         return  result;
+    }
+
+    public boolean isFavourite(String feedId) {
+        database = dbHelper.getReadableDatabase();
+
+        String searchStatement = "SELECT " + DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + " FROM " + DatabaseContract.FavouriteFeedsTable.TABLE_NAME  + " WHERE " + DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + " = " + "'" +feedId + "'";
+        Cursor results = database.rawQuery(searchStatement, null);
+
+        return (results.getCount() != 0);
+    }
+
+    public boolean addToFavourites(String feedId) {
+
+        database = dbHelper.getWritableDatabase();
+
+        long inserted = -1;
+
+        if(!isFavourite(feedId)) {
+            values = new ContentValues();
+            values.put(DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID, feedId);
+
+            inserted = database.insertOrThrow(DatabaseContract.FavouriteFeedsTable.TABLE_NAME, null, values);
+        }
+        return (inserted > 0);
+    }
+
+    public boolean removeFromFavourites(String feedId) {
+        database = dbHelper.getWritableDatabase();
+        int rowsAffected = database.delete(DatabaseContract.FavouriteFeedsTable.TABLE_NAME, DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + "="+ "'" +feedId + "'", null );
+        return (rowsAffected > 0);
     }
 }

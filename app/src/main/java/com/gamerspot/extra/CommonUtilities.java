@@ -17,6 +17,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gamerspot.R;
+import com.gamerspot.database.DAO;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class CommonUtilities {
     private String dateFormatString;
     private static String appName;
     private static SpannableString spannableString;
-
+    private DAO dao;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor prefEditor;
     private String drawerItemSelectedKey;
@@ -54,7 +55,7 @@ public class CommonUtilities {
         spannableString = new SpannableString(appName);
         df = new DateFormat();
         dateFormatString = context.getResources().getString(R.string.date_format);
-
+        dao = new DAO(context);
         sharedPreferences = context.getSharedPreferences(context.getResources().getString(R.string.shared_pref_name), Context.MODE_PRIVATE);
         prefEditor = sharedPreferences.edit();
         drawerItemSelectedKey = context.getResources().getString(R.string.drawer_item_selected);
@@ -91,6 +92,10 @@ public class CommonUtilities {
     public void setCachedImages(HashMap<String, BitmapDrawable> imagesIn) {
 
         cachedImages = imagesIn;
+    }
+
+    public DAO getDatabaseAccessor() {
+        return dao;
     }
 
     public void setActionBar(ActionBar actionBar, int platformIn, String name) {

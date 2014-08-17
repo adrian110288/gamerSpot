@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GamerSpot.iml" filepath="$PROJECT_DIR$/GamerSpot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraries/android-stackblur-master/StackBlur/StackBlur.iml" filepath="$PROJECT_DIR$/libraries/android-stackblur-master/StackBlur/StackBlur.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -2,40 +2,28 @@ package com.gamerspot.fragments;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
-import android.text.Html;
+import android.os.*;
+import android.support.v4.app.*;
+import android.support.v4.view.*;
+import android.text.*;
 import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.support.v7.widget.ShareActionProvider;
+import android.view.*;
+import android.widget.*;
 
+import com.enrique.stackblur.StackBlurManager;
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
-import com.gamerspot.extra.GamerSpotApplication;
-import com.gamerspot.extra.CommonUtilities;
+import com.gamerspot.database.DAO;
+import com.gamerspot.extra.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Adrian on 13-Jun-14.
@@ -46,70 +34,39 @@ public class NewsDetailsFragment extends Fragment {
     private static final int IMAGE_DOWNLOAD_QUEUE_COMPLETED = 1;
 
     private NewsFeed feed;
-    private Typeface font;
     private int descriptionLayoutWidth = 0;
     private TextView titleView;
     private TextView creatorView;
     private TextView dateView;
     private TextView descriptionView;
-    private Button fullArticleButton;
+    private ImageView backgroundImageView;
     private LinearLayout descriptionLinearLayout;
-    private static HashMap<String, BitmapDrawable> cachedImages = new HashMap();;
-    private Handler downloadFinishHandler;
+    private static HashMap<String, BitmapDrawable> cachedImages = new HashMap();
     private static List<URL> urlList;
-    private Intent intent;
-    private static FragmentManager fragmentManager;
     private ViewTreeObserver viewTreeObserver;
     private static CommonUtilities utils;
+    private DAO dao;
+    private boolean isArticleFavourite = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
         utils = GamerSpotApplication.getUtils(getActivity());
-        font = utils.getTextFont();
-
         feed = (NewsFeed) getArguments().get("FEED");
         urlList = new ArrayList<URL>();
-        intent = new Intent(Intent.ACTION_VIEW);
-
-        fragmentManager = getFragmentManager();
-
+        dao =utils.getDatabaseAccessor();
         getImagesUrl(feed.getDescription());
-
-        downloadFinishHandler = new Handler() {
-
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-                if(msg.what == IMAGE_DOWNLOAD_QUEUE_COMPLETED) {
-
-                    getActivity().setProgressBarIndeterminateVisibility(false);
-
-                    utils.setCachedImages(cachedImages);
-
-                    titleView.setText(feed.getTitle());
-                    creatorView.setText(feed.getCreator());
-                    dateView.setText(utils.getFormattedDate(feed.getDate()));
-
-                    displayTextWithImages();
-
-                    descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
-                }
-
-                else if (msg.what == IMAGE_DOWNLOAD_CONNECTION_EXCEPTION ) {
-                    displayOnlyText();
-                }
-            }
-        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_news_details, container, false);
+
+        Typeface font = utils.getTextFont();
 
         titleView = (TextView) view.findViewById(R.id.details_title);
         titleView.setTypeface(font);
@@ -120,7 +77,7 @@ public class NewsDetailsFragment extends Fragment {
         descriptionLinearLayout = (LinearLayout) view.findViewById(R.id.details_desc_layout);
         descriptionView = (TextView) view.findViewById(R.id.details_description);
         descriptionView.setTypeface(font);
-        fullArticleButton = (Button) view.findViewById(R.id.button_full_article);
+        backgroundImageView = (ImageView) view.findViewById(R.id.backgroundImageView);
 
         return view;
     }
@@ -129,16 +86,7 @@ public class NewsDetailsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        fullArticleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.setData(Uri.parse(feed.getLink()));
-                startActivity(intent);
-            }
-        });
-
         viewTreeObserver = descriptionLinearLayout.getViewTreeObserver();
-
 
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -150,13 +98,12 @@ public class NewsDetailsFragment extends Fragment {
 
                 if(urlList.size() !=0 && utils.isOnline()){
                     getActivity().setProgressBarIndeterminateVisibility(true);
+                    new DownloadThread(urlList, new DownloadFinishHandler(), cachedImages).start();
                     Toast.makeText(getActivity(), "Downloading images ...", Toast.LENGTH_SHORT).show();
-                    new DownloadThread(urlList, downloadFinishHandler, cachedImages).start();
                 }
 
                 else if(urlList.size() == 0) {
-
-                    displayTextWithImages();
+                    displayText();
                 }
 
                 else if(!utils.isOnline() && urlList.size() != 0) {
@@ -169,30 +116,89 @@ public class NewsDetailsFragment extends Fragment {
                 catch (NoSuchMethodError nsme){
                     descriptionLinearLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
-
-
             }
         });
+    }
+
+    public void goToFullArticle(View view) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(feed.getLink()));
+        startActivity(intent);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.details_menu, menu);
+        setShareOption(menu.findItem(R.id.action_share));
+
+        MenuItem menuItem = menu.findItem(R.id.action_favourite);
+
+        if(dao.isFavourite(feed.getGuid())) {
+            isArticleFavourite = true;
+            menuItem.setIcon(R.drawable.ic_action_3_rating_important);
+        }
+        else menuItem.setIcon(R.drawable.ic_action_3_rating_not_important);
     }
 
     @Override
+    @TargetApi(14)
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
         switch (id) {
-            case android.R.id.home:{
+            case android.R.id.home: {
                 NavUtils.navigateUpFromSameTask(getActivity());
+                return true;
+            }
+
+            case R.id.action_favourite: {
+
+                if(isArticleFavourite == true) {
+                    boolean isRemoved = dao.removeFromFavourites(feed.getGuid());
+                    if(isRemoved) {
+                        item.setIcon(R.drawable.ic_action_3_rating_not_important);
+                        utils.showToast("Article removed as favourites");
+                    }
+                }
+                else {
+                    boolean isAdded = dao.addToFavourites(feed.getGuid());
+                    if(isAdded) {
+                        item.setIcon(R.drawable.ic_action_3_rating_important);
+                        utils.showToast("Article added from favourites");
+                    }
+                }
+
+                isArticleFavourite = !isArticleFavourite;
+
                 return true;
             }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @TargetApi(14)
+    private void setShareOption(MenuItem shareitem){
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareitem);
+        shareActionProvider.setShareIntent(getShareIntent());
+    }
+
+    @TargetApi(14)
+    private Intent getShareIntent() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this article " + feed.getLink());
+        sendIntent.setType("text/plain");
+        return sendIntent;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
 
     }
 
@@ -235,10 +241,9 @@ public class NewsDetailsFragment extends Fragment {
         creatorView.setText(feed.getCreator());
         dateView.setText(utils.getFormattedDate(feed.getDate()));
         descriptionView.setText(Html.fromHtml(feed.getDescription(), null, null));
-
     }
 
-    private void displayTextWithImages(){
+    private void displayText(){
 
         titleView.setText(feed.getTitle());
         creatorView.setText(feed.getCreator());
@@ -301,5 +306,46 @@ public class NewsDetailsFragment extends Fragment {
                 handler.sendEmptyMessage(IMAGE_DOWNLOAD_CONNECTION_EXCEPTION);
             }
         }
+    }
+
+    private class DownloadFinishHandler extends Handler{
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if(msg.what == IMAGE_DOWNLOAD_QUEUE_COMPLETED) {
+
+                getActivity().setProgressBarIndeterminateVisibility(false);
+
+                utils.setCachedImages(cachedImages);
+
+                titleView.setText(feed.getTitle());
+                creatorView.setText(feed.getCreator());
+                dateView.setText(utils.getFormattedDate(feed.getDate()));
+
+                URL url = urlList.get(0);
+                BitmapDrawable d = cachedImages.get(url.toString());
+
+                Bitmap bitmap = d.getBitmap();
+
+                backgroundImageView.setImageBitmap(blurImage(bitmap));
+
+                displayText();
+
+                descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+
+            else if (msg.what == IMAGE_DOWNLOAD_CONNECTION_EXCEPTION ) {
+                displayOnlyText();
+            }
+        }
+    }
+
+    //TODO Make blurredImages persistent
+
+    private Bitmap blurImage(Bitmap bitmap) {
+        StackBlurManager stackBlurManager = new StackBlurManager(bitmap);
+        return stackBlurManager.process(100);
     }
 }

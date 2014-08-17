@@ -21,7 +21,6 @@ public final class DatabaseContract {
         public static final String COLUMN_NAME_CREATOR = "creator";
         public static final String COLUMN_NAME_PROVIDER = "provider";
         public static final String COLUMN_NAME_PLATFORM = "platform";
-
     }
 
     public static abstract class SearchPhrasesTable implements BaseColumns {
@@ -30,6 +29,15 @@ public final class DatabaseContract {
 
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_PHRASE = "phrase";
+
+    }
+
+    public static abstract class FavouriteFeedsTable implements BaseColumns {
+
+        public static final String TABLE_NAME = "FavouriteFeeds";
+
+        public static final String COLUMN_NAME_ID = "faveId";
+        public static final String COLUMN_FAVOURITE_FEED_ID = NewsFeedTable.COLUMN_NAME_ID;
 
     }
 }

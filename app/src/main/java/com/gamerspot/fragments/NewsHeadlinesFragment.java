@@ -135,8 +135,8 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         if (utils.isOnline()) {
 
             getActivity().setProgressBarIndeterminateVisibility(true);
-            downloadTask = new FeedFetcherTask(context, feedFetchHandler);
-            downloadTask.execute();
+            /*downloadTask = new FeedFetcherTask(context, feedFetchHandler);
+            downloadTask.execute();*/
         }
 
         else {
