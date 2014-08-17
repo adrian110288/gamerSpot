@@ -1,14 +1,13 @@
-package com.gamerspot.extra;
+package com.gamerspot.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Button;
 
 import com.gamerspot.R;
 import com.gamerspot.enums.ButtonType;
+import com.gamerspot.extra.GamerSpotApplication;
 
 /**
  * Created by Adrian on 12-Jul-14.
@@ -36,9 +35,9 @@ public class CustomButton extends Button {
 
     private void initializeButton(AttributeSet attrs){
 
-        setTypeface(App.getUtils(context).getTextFont());
+        setTypeface(GamerSpotApplication.getUtils(context).getTextFont());
         setTextColor(getResources().getColor(R.color.BUTTON_TEXT_COLOR));
-        setBackground(getResources().getDrawable(R.drawable.fa_selector));
+        setBackgroundResource(R.drawable.fa_selector);
 
         attr = context.obtainStyledAttributes(attrs, R.styleable.custom);
 

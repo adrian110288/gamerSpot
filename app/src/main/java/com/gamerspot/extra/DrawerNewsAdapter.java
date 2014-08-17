@@ -1,17 +1,12 @@
 package com.gamerspot.extra;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.gamerspot.R;
 import com.gamerspot.beans.DrawerNewsViewHolder;
@@ -35,7 +30,7 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
         super(context, 0);
 
         this.context = context;
-        utils = App.getUtils(context);
+        utils = GamerSpotApplication.getUtils(context);
         typeface = utils.getTextFont();
         newsItems = context.getResources().getStringArray(R.array.drawer_news_items);
     }

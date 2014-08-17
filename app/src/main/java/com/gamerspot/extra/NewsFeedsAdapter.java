@@ -3,12 +3,9 @@ package com.gamerspot.extra;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -40,7 +37,7 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
         super(contextIn, 0, feedsListIn);
 
         context = contextIn;
-        utils = App.getUtils(context);
+        utils = GamerSpotApplication.getUtils(context);
         platformFont = utils.getThemeFont();
         titleFont = utils.getTextFont();
         dateFont = utils.getTextFont();

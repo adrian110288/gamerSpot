@@ -65,7 +65,7 @@
 
         </LinearLayout>
 
-        <com.gamerspot.extra.CustomButton
+        <com.gamerspot.views.CustomButton
             android:id="@+id/button_full_article"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

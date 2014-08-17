@@ -1,16 +1,11 @@
 package com.gamerspot.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +13,13 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.gamerspot.R;
 import com.gamerspot.database.DAO;
-import com.gamerspot.extra.App;
+import com.gamerspot.extra.GamerSpotApplication;
 import com.gamerspot.extra.CommonUtilities;
 
 import java.util.ArrayList;
@@ -52,7 +46,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        utils = App.getUtils(getActivity());
+        utils = GamerSpotApplication.getUtils(getActivity());
         dao = new DAO(getActivity());
 
         phrases = new ArrayList<String>();

@@ -1,26 +1,19 @@
 package com.gamerspot.fragments;
 
-import android.app.FragmentTransaction;
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
-import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,24 +26,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.Volley;
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
-import com.gamerspot.extra.App;
+import com.gamerspot.extra.GamerSpotApplication;
 import com.gamerspot.extra.CommonUtilities;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.LogRecord;
 
 /**
  * Created by Adrian on 13-Jun-14.
@@ -82,7 +67,7 @@ public class NewsDetailsFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        utils = App.getUtils(getActivity());
+        utils = GamerSpotApplication.getUtils(getActivity());
         font = utils.getTextFont();
 
         feed = (NewsFeed) getArguments().get("FEED");
@@ -153,9 +138,12 @@ public class NewsDetailsFragment extends Fragment {
         });
 
         viewTreeObserver = descriptionLinearLayout.getViewTreeObserver();
+
+
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
             @Override
+            @TargetApi(16)
             public void onGlobalLayout() {
 
                 descriptionLayoutWidth = descriptionLinearLayout.getWidth();

@@ -1,32 +1,22 @@
 package com.gamerspot.activities;
 
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.gamerspot.R;
-import com.gamerspot.extra.App;
+import com.gamerspot.extra.GamerSpotApplication;
 import com.gamerspot.extra.CommonUtilities;
-import com.gamerspot.extra.CustomTypefaceSpan;
 import com.gamerspot.extra.DrawerNewsAdapter;
 import com.gamerspot.fragments.NewsHeadlinesFragment;
-
-import static com.gamerspot.extra.App.*;
 
 /**
  * Created by Adrian on 12-Jun-14.
@@ -53,7 +43,7 @@ public class BaseActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_news);
 
-        utils = App.getUtils(getApplicationContext());
+        utils = GamerSpotApplication.getUtils(getApplicationContext());
         /*
          * Customization of ActionBar
          */

@@ -8,8 +8,9 @@ import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.fragments.NewsDetailsFragment;
 import com.gamerspot.fragments.NewsHeadlinesFragment;
+import com.gamerspot.interfaces.OnHeadlineSelectedListener;
 
-public class NewsActivity extends BaseActivity implements NewsHeadlinesFragment.OnHeadlineSelectedListener{
+public class NewsActivity extends BaseActivity implements OnHeadlineSelectedListener {
 
     private NewsDetailsFragment detailsFragment;
 

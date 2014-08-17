@@ -2,25 +2,19 @@
 <pre-dex-items>
 
     <item
-        dex="C:\Users\Adrian\AndroidStudioProjects\GamerSpot\app\build\intermediates\pre-dexed\debug\library-1.0.6-c071cc6b464142433c0f61f787bf8e099ec7ec0e.jar"
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\library-1.0.6-c071cc6b464142433c0f61f787bf8e099ec7ec0e.jar"
         jar="C:\Users\Adrian\.gradle\caches\modules-2\files-2.1\com.mcxiaoke.volley\library\1.0.6\b2e6988baeea1aed656995f973aaa2fc3feaf447\library-1.0.6.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="b2e6988baeea1aed656995f973aaa2fc3feaf447"/>
     <item
-        dex="C:\Users\Adrian\AndroidStudioProjects\GamerSpot\app\build\intermediates\pre-dexed\debug\rome-1.0-c06f8a94d80c6e84d8915eb82363ec06322e098e.jar"
-        jar="C:\Users\Adrian\AndroidStudioProjects\GamerSpot\app\libs\rome-1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="022b33347f315833e9348cec2751af1a5d5656e4"/>
-    <item
-        dex="C:\Users\Adrian\AndroidStudioProjects\GamerSpot\app\build\intermediates\pre-dexed\debug\classes-4f923a0c3d27ce4baef4e22063fbb8e8f21c1827.jar"
-        jar="C:\Users\Adrian\AndroidStudioProjects\GamerSpot\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\classes-e02beb8dca6eee73337351da6091fcb454f1c35e.jar"
+        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
     <item
-        dex="C:\Users\Adrian\AndroidStudioProjects\GamerSpot\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-6f6766fb279271d0b5be42ddeffaa1bbbaf4b80a.jar"
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-6f6766fb279271d0b5be42ddeffaa1bbbaf4b80a.jar"
         jar="E:\Software\android-sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
         jumboMode="false"
         revision="19.1.0"

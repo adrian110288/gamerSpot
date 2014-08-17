@@ -1,19 +1,13 @@
 package com.gamerspot.activities;
 
-import android.app.Activity;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.view.Window;
 
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
-import com.gamerspot.extra.App;
-import com.gamerspot.extra.CustomTypefaceSpan;
+import com.gamerspot.extra.GamerSpotApplication;
 import com.gamerspot.fragments.NewsDetailsFragment;
 
 /**
@@ -35,7 +29,7 @@ public class NewsDetailsActivity extends ActionBarActivity {
         actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
 
-        App.getUtils(getApplicationContext()).setActionBar(actionbar, feedIn.getPlatform(), "GamerSpot");
+        GamerSpotApplication.getUtils(getApplicationContext()).setActionBar(actionbar, feedIn.getPlatform(), "GamerSpot");
 
         NewsDetailsFragment detailsFragment = new NewsDetailsFragment();
         Bundle b = new Bundle();

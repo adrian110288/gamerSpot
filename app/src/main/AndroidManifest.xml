@@ -3,18 +3,21 @@
     package="com.gamerspot" >
 
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="10"/>
+        android:minSdkVersion="11"
+        android:targetSdkVersion="19"/>
 
     <application
-        android:name=".extra.App"
+        android:name=".extra.GamerSpotApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.NewsActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />s
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,7 +26,8 @@
 
         <activity
             android:name=".activities.NewsDetailsActivity"
-            android:parentActivityName=".activities.NewsActivity">
+            android:parentActivityName=".activities.NewsActivity"
+            android:screenOrientation="portrait">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

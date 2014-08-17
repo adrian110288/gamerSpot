@@ -14,6 +14,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.gamerspot.R;
 
@@ -151,6 +152,10 @@ public class CommonUtilities {
         }
 
         return isOnline;
+    }
+
+    public void showToast(String text){
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
     public long getDrawerItemSelected(){

@@ -3,22 +3,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_view_headlines"
     android:layout_width="match_parent" android:layout_height="match_parent">
-
     <ListView
         android:id="@+id/headlines_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/new_feeds_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        android:background="@color/NEW_FEEDS_BUTTON"
-        android:layout_centerHorizontal="true"
-        />
 
 </RelativeLayout>
