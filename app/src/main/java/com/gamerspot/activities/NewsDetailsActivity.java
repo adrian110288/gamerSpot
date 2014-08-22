@@ -1,37 +1,30 @@
 package com.gamerspot.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Window;
+import android.view.View;
 
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
-import com.gamerspot.extra.GamerSpotApplication;
 import com.gamerspot.fragments.NewsDetailsFragment;
+import com.gamerspot.interfaces.FullArticleClickListener;
 
 /**
  * Created by Adrian Lesniak on 16-Jun-14.
  */
-public class NewsDetailsActivity extends ActionBarActivity {
+public class NewsDetailsActivity extends BaseActivity {
 
-    private ActionBar actionbar;
+    private FullArticleClickListener fullArticleClickListener;
+    private NewsDetailsFragment detailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_news_details);
-
-
         NewsFeed feedIn = (NewsFeed) getIntent().getSerializableExtra("FEED");
+        setActionBar(feedIn.getPlatform(), "");
 
-        actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-
-        GamerSpotApplication.getUtils(getApplicationContext()).setActionBar(actionbar, feedIn.getPlatform(), "GamerSpot");
-
-        NewsDetailsFragment detailsFragment = new NewsDetailsFragment();
+        detailsFragment = new NewsDetailsFragment();
+        fullArticleClickListener = detailsFragment;
         Bundle b = new Bundle();
         b.putSerializable("FEED", feedIn);
         detailsFragment.setArguments(b);
@@ -39,4 +32,7 @@ public class NewsDetailsActivity extends ActionBarActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.details_content_frame, detailsFragment).commit();
     }
 
+    public void goToFullArticle(View view) {
+        detailsFragment.goToFullArticle(view);
+    }
 }

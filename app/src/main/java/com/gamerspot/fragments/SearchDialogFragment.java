@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.gamerspot.R;
 import com.gamerspot.database.DAO;
-import com.gamerspot.extra.GamerSpotApplication;
 import com.gamerspot.extra.CommonUtilities;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by Adrian Lesniak on 19-Jun-14.
  */
-public class SearchDialogFragment extends DialogFragment implements View.OnClickListener{
+public class SearchDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private TextView title;
     private TextView radioGroupHeader;
@@ -36,9 +35,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     private RadioButton radio1;
     private RadioButton radio2;
     private Button button;
-
     private DAO dao;
-    private CommonUtilities utils;
     private ArrayAdapter<String> autocompleteAdapter;
     private ArrayList<String> phrases;
 
@@ -46,8 +43,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        utils = GamerSpotApplication.getUtils(getActivity());
-        dao = new DAO(getActivity());
+        dao = CommonUtilities.getDatabaseAccessor();
 
         phrases = new ArrayList<String>();
         autocompleteAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, phrases);
@@ -80,14 +76,14 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        title.setTypeface(utils.getThemeFont());
+        title.setTypeface(CommonUtilities.getThemeFont());
         title.setTextSize(20);
-        editText.setTypeface(utils.getTextFont());
-        radioGroupHeader.setTypeface(utils.getTextFont());
+        editText.setTypeface(CommonUtilities.getTextFont());
+        radioGroupHeader.setTypeface(CommonUtilities.getTextFont());
         radioGroupHeader.setTextSize(18);
-        radio1.setTypeface(utils.getTextFont());
+        radio1.setTypeface(CommonUtilities.getTextFont());
         radio1.setTextSize(18);
-        radio2.setTypeface(utils.getTextFont());
+        radio2.setTypeface(CommonUtilities.getTextFont());
         radio2.setTextSize(18);
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -99,18 +95,16 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.length() > 1) {
+                if (s.length() > 1) {
 
                     phrases = dao.getPhrases(s.toString());
                     editText.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, phrases));
                     dao.close();
                 }
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -128,7 +122,8 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
 
         i.putExtras(b);
 
-        boolean inserted = dao.insertPhrase(phrase);
+        dao.insertPhrase(phrase);
+        dao.close();
 
         getTargetFragment().onActivityResult(1, Activity.RESULT_OK, i);
         dismiss();

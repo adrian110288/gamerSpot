@@ -1,125 +1,95 @@
 package com.gamerspot.activities;
 
-import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
-import android.view.View;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.gamerspot.R;
-import com.gamerspot.extra.GamerSpotApplication;
-import com.gamerspot.extra.CommonUtilities;
-import com.gamerspot.extra.DrawerNewsAdapter;
-import com.gamerspot.fragments.NewsHeadlinesFragment;
+import com.gamerspot.extra.CustomTypefaceSpan;
 
 /**
  * Created by Adrian on 12-Jun-14.
  */
 public class BaseActivity extends ActionBarActivity {
 
-    private DrawerLayout drawerLayout;
-    private ListView drawerNewsListView;
-    private DrawerNewsAdapter drawerListAdapter;
-    private ActionBar bar;
-
-    private ActionBarDrawerToggle drawerToggle;
-    private String drawerTitle;
-
-    private NewsHeadlinesFragment fragment;
-    private Bundle fragmentBundle;
-    private CommonUtilities utils;
-
-    private static String appName;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_news);
-
-        utils = GamerSpotApplication.getUtils(getApplicationContext());
-        /*
-         * Customization of ActionBar
-         */
-        appName  = getApplicationContext().getResources().getString(R.string.app_name);
-        bar = getSupportActionBar();
-        utils.setActionBar(bar, 0, appName);
-        drawerTitle = getResources().getString(R.string.drawer_title);
-
-        utils.setDrawerItemSelected(0);
-
-        instantiateViews();
-
-        drawerListAdapter = new DrawerNewsAdapter(this);
-        drawerNewsListView.setAdapter(drawerListAdapter);
-
-        drawerNewsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if(utils.getDrawerItemSelected() != id){
-                    fragment = (NewsHeadlinesFragment) getSupportFragmentManager().findFragmentByTag("MAIN");
-                    fragment.refresh(id);
-                }
-
-                drawerLayout.closeDrawer(drawerNewsListView);
-            }
-        });
-
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.nav_drawer_open, R.string.nav_drawer_close) {
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                utils.setActionBar(bar, 0,drawerTitle);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                utils.setActionBar(bar, 0, appName);
-            }
-        };
-        drawerLayout.setDrawerListener(drawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        setActionBar();
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
+    protected void setActionBar() {
+        setActionBar(getResources().getString(R.string.app_name));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    protected void setActionBar(String name) {
+        setActionBar(0, name);
+    }
 
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    protected void setActionBar(int platformIn, String name) {
+
+        SpannableString spannableString;
+        String actionBarTitle = "";
+
+        if (actionBar == null) {
+            actionBar = getSupportActionBar();
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
+        spannableString = new SpannableString(name);
+        actionBarTitle = name;
 
-    private void instantiateViews(){
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"), 0, actionBarTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        actionBar.setTitle(spannableString);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerNewsListView = (ListView) findViewById(R.id.left_drawer_newslist);
+        if (platformIn != 0) {
 
+            ColorDrawable colorDrawable = null;
+            Drawable iconDrawable = null;
+
+            switch (platformIn) {
+
+                case 1: {
+                    colorDrawable = new ColorDrawable(this.getResources().getColor(R.color.PLATFORM_PC));
+                    iconDrawable = getResources().getDrawable(R.drawable.ic_action_mouse_512);
+                    break;
+                }
+                case 2: {
+                    colorDrawable = new ColorDrawable(this.getResources().getColor(R.color.PLATFORM_XBOX));
+                    iconDrawable = getResources().getDrawable(R.drawable.ic_action_consoles_xbox_512);
+                    break;
+                }
+                case 3: {
+                    colorDrawable = new ColorDrawable(this.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
+                    iconDrawable = getResources().getDrawable(R.drawable.ic_action_consoles_ps_512);
+                    break;
+                }
+                case 4: {
+                    colorDrawable = new ColorDrawable(this.getResources().getColor(R.color.PLATFORM_NINTENDO));
+                    iconDrawable = getResources().getDrawable(R.drawable.ic_action_nintendo_logo_2);
+                    break;
+                }
+                case 5: {
+                    colorDrawable = new ColorDrawable(this.getResources().getColor(R.color.PLATFORM_MOBILE));
+                    iconDrawable = getResources().getDrawable(R.drawable.ic_action_mobile_phone_8_512);
+                    break;
+                }
+            }
+
+            actionBar.setBackgroundDrawable(colorDrawable);
+            actionBar.setIcon(iconDrawable);
+        }
     }
 
 }

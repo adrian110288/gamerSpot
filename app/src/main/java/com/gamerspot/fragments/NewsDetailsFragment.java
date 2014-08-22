@@ -2,37 +2,54 @@ package com.gamerspot.fragments;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.*;
-import android.support.v4.app.*;
-import android.support.v4.view.*;
-import android.text.*;
-import android.text.method.LinkMovementMethod;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.view.*;
-import android.widget.*;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.enrique.stackblur.StackBlurManager;
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
-import com.gamerspot.extra.*;
+import com.gamerspot.extra.CommonUtilities;
+import com.gamerspot.interfaces.FullArticleClickListener;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Adrian on 13-Jun-14.
  */
-public class NewsDetailsFragment extends Fragment {
+public class NewsDetailsFragment extends Fragment implements FullArticleClickListener {
 
     private static final int IMAGE_DOWNLOAD_CONNECTION_EXCEPTION = -1;
     private static final int IMAGE_DOWNLOAD_QUEUE_COMPLETED = 1;
-
+    private static HashMap<String, BitmapDrawable> cachedImages = new HashMap<String, BitmapDrawable>();
+    private static List<URL> urlList;
     private NewsFeed feed;
     private int descriptionLayoutWidth = 0;
     private TextView titleView;
@@ -41,10 +58,7 @@ public class NewsDetailsFragment extends Fragment {
     private TextView descriptionView;
     private ImageView backgroundImageView;
     private LinearLayout descriptionLinearLayout;
-    private static HashMap<String, BitmapDrawable> cachedImages = new HashMap();
-    private static List<URL> urlList;
     private ViewTreeObserver viewTreeObserver;
-    private static CommonUtilities utils;
     private DAO dao;
     private boolean isArticleFavourite = false;
 
@@ -54,10 +68,9 @@ public class NewsDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-        utils = GamerSpotApplication.getUtils(getActivity());
         feed = (NewsFeed) getArguments().get("FEED");
         urlList = new ArrayList<URL>();
-        dao =utils.getDatabaseAccessor();
+        dao = CommonUtilities.getDatabaseAccessor();
         getImagesUrl(feed.getDescription());
     }
 
@@ -66,7 +79,7 @@ public class NewsDetailsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_news_details, container, false);
 
-        Typeface font = utils.getTextFont();
+        Typeface font = CommonUtilities.getTextFont();
 
         titleView = (TextView) view.findViewById(R.id.details_title);
         titleView.setTypeface(font);
@@ -96,24 +109,19 @@ public class NewsDetailsFragment extends Fragment {
 
                 descriptionLayoutWidth = descriptionLinearLayout.getWidth();
 
-                if(urlList.size() !=0 && utils.isOnline()){
+                if (urlList.size() != 0 && CommonUtilities.isOnline()) {
                     getActivity().setProgressBarIndeterminateVisibility(true);
                     new DownloadThread(urlList, new DownloadFinishHandler(), cachedImages).start();
                     Toast.makeText(getActivity(), "Downloading images ...", Toast.LENGTH_SHORT).show();
-                }
-
-                else if(urlList.size() == 0) {
+                } else if (urlList.size() == 0) {
                     displayText();
-                }
-
-                else if(!utils.isOnline() && urlList.size() != 0) {
+                } else if (!CommonUtilities.isOnline() && urlList.size() != 0) {
                     displayOnlyText();
                 }
 
-                try{
+                try {
                     descriptionLinearLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-                catch (NoSuchMethodError nsme){
+                } catch (NoSuchMethodError nsme) {
                     descriptionLinearLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
             }
@@ -135,11 +143,10 @@ public class NewsDetailsFragment extends Fragment {
 
         MenuItem menuItem = menu.findItem(R.id.action_favourite);
 
-        if(dao.isFavourite(feed.getGuid())) {
+        if (dao.isFavourite(feed.getGuid())) {
             isArticleFavourite = true;
             menuItem.setIcon(R.drawable.ic_action_3_rating_important);
-        }
-        else menuItem.setIcon(R.drawable.ic_action_3_rating_not_important);
+        } else menuItem.setIcon(R.drawable.ic_action_3_rating_not_important);
     }
 
     @Override
@@ -156,18 +163,17 @@ public class NewsDetailsFragment extends Fragment {
 
             case R.id.action_favourite: {
 
-                if(isArticleFavourite == true) {
+                if (isArticleFavourite) {
                     boolean isRemoved = dao.removeFromFavourites(feed.getGuid());
-                    if(isRemoved) {
+                    if (isRemoved) {
                         item.setIcon(R.drawable.ic_action_3_rating_not_important);
-                        utils.showToast("Article removed as favourites");
+                        CommonUtilities.showToast("Article removed from favourites");
                     }
-                }
-                else {
+                } else {
                     boolean isAdded = dao.addToFavourites(feed.getGuid());
-                    if(isAdded) {
+                    if (isAdded) {
                         item.setIcon(R.drawable.ic_action_3_rating_important);
-                        utils.showToast("Article added from favourites");
+                        CommonUtilities.showToast("Article added to favourites");
                     }
                 }
 
@@ -181,7 +187,7 @@ public class NewsDetailsFragment extends Fragment {
     }
 
     @TargetApi(14)
-    private void setShareOption(MenuItem shareitem){
+    private void setShareOption(MenuItem shareitem) {
         ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareitem);
         shareActionProvider.setShareIntent(getShareIntent());
     }
@@ -198,8 +204,6 @@ public class NewsDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-
     }
 
     @Override
@@ -207,7 +211,7 @@ public class NewsDetailsFragment extends Fragment {
         super.onPause();
     }
 
-    private void getImagesUrl(String textIn){
+    private void getImagesUrl(String textIn) {
 
         Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
 
@@ -217,15 +221,14 @@ public class NewsDetailsFragment extends Fragment {
             @Override
             public Drawable getDrawable(String source) {
 
-                try{
-                    if(utils.getCachedImage(source) == null){
+                try {
+                    if (CommonUtilities.getCachedImage(source) == null) {
 
                         url = new URL(source);
                         urlList.add(url);
                         count++;
                     }
-                }
-                catch (MalformedURLException mue){
+                } catch (MalformedURLException mue) {
                     mue.printStackTrace();
                 }
 
@@ -235,19 +238,19 @@ public class NewsDetailsFragment extends Fragment {
 
     }
 
-    private void displayOnlyText(){
+    private void displayOnlyText() {
 
         titleView.setText(feed.getTitle());
         creatorView.setText(feed.getCreator());
-        dateView.setText(utils.getFormattedDate(feed.getDate()));
+        dateView.setText(CommonUtilities.getFormattedDate(feed.getDate()));
         descriptionView.setText(Html.fromHtml(feed.getDescription(), null, null));
     }
 
-    private void displayText(){
+    private void displayText() {
 
         titleView.setText(feed.getTitle());
         creatorView.setText(feed.getCreator());
-        dateView.setText(utils.getFormattedDate(feed.getDate()));
+        dateView.setText(CommonUtilities.getFormattedDate(feed.getDate()));
 
         descriptionView.setText(Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
 
@@ -259,14 +262,14 @@ public class NewsDetailsFragment extends Fragment {
             @Override
             public Drawable getDrawable(String source) {
 
-                if(utils.getCachedImage(source) != null) {
+                if (CommonUtilities.getCachedImage(source) != null) {
 
-                    drawable = utils.getCachedImage(source);
+                    drawable = CommonUtilities.getCachedImage(source);
                     w = drawable.getIntrinsicWidth();
                     h = drawable.getIntrinsicHeight();
-                    ratio = (double) w/h;
+                    ratio = (double) w / h;
 
-                    drawable.setBounds(0,0, descriptionLayoutWidth, (int) (descriptionLayoutWidth/ratio));
+                    drawable.setBounds(0, 0, descriptionLayoutWidth, (int) (descriptionLayoutWidth / ratio));
                 }
 
                 return drawable;
@@ -274,7 +277,12 @@ public class NewsDetailsFragment extends Fragment {
         }, null));
     }
 
-    private class DownloadThread extends Thread{
+    private Bitmap blurImage(Bitmap bitmap) {
+        StackBlurManager stackBlurManager = new StackBlurManager(bitmap);
+        return stackBlurManager.process(100);
+    }
+
+    private class DownloadThread extends Thread {
 
         private Handler handler;
         private List<URL> urlList;
@@ -299,30 +307,30 @@ public class NewsDetailsFragment extends Fragment {
                 }
 
                 handler.sendEmptyMessage(IMAGE_DOWNLOAD_QUEUE_COMPLETED);
-            }
-
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 handler.sendEmptyMessage(IMAGE_DOWNLOAD_CONNECTION_EXCEPTION);
             }
         }
     }
 
-    private class DownloadFinishHandler extends Handler{
+    //TODO Make blurredImages persistent
+
+    private class DownloadFinishHandler extends Handler {
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            if(msg.what == IMAGE_DOWNLOAD_QUEUE_COMPLETED) {
+            if (msg.what == IMAGE_DOWNLOAD_QUEUE_COMPLETED) {
 
                 getActivity().setProgressBarIndeterminateVisibility(false);
 
-                utils.setCachedImages(cachedImages);
+                CommonUtilities.setCachedImages(cachedImages);
 
                 titleView.setText(feed.getTitle());
                 creatorView.setText(feed.getCreator());
-                dateView.setText(utils.getFormattedDate(feed.getDate()));
+                dateView.setText(CommonUtilities.getFormattedDate(feed.getDate()));
 
                 URL url = urlList.get(0);
                 BitmapDrawable d = cachedImages.get(url.toString());
@@ -334,18 +342,9 @@ public class NewsDetailsFragment extends Fragment {
                 displayText();
 
                 descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
-            }
-
-            else if (msg.what == IMAGE_DOWNLOAD_CONNECTION_EXCEPTION ) {
+            } else if (msg.what == IMAGE_DOWNLOAD_CONNECTION_EXCEPTION) {
                 displayOnlyText();
             }
         }
-    }
-
-    //TODO Make blurredImages persistent
-
-    private Bitmap blurImage(Bitmap bitmap) {
-        StackBlurManager stackBlurManager = new StackBlurManager(bitmap);
-        return stackBlurManager.process(100);
     }
 }

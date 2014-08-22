@@ -1,39 +1,29 @@
 package com.gamerspot.activities;
 
 import android.content.Intent;
-import android.os.*;
-import android.support.v7.app.ActionBar;
-import android.view.*;
+import android.os.Bundle;
+
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
-import com.gamerspot.fragments.NewsDetailsFragment;
 import com.gamerspot.fragments.NewsHeadlinesFragment;
 import com.gamerspot.interfaces.OnHeadlineSelectedListener;
 
-public class NewsActivity extends BaseActivity implements OnHeadlineSelectedListener {
-
-    private NewsDetailsFragment detailsFragment;
+public class NewsHeadlinesActivity extends NavigationDrawerActivity implements OnHeadlineSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setActionBar("GamerSpot");
 
-        if(findViewById(R.id.content_frame ) != null) {
+        if (findViewById(R.id.content_frame) != null) {
 
             if (savedInstanceState != null) {
                 return;
             }
 
             NewsHeadlinesFragment headlinesFragment = new NewsHeadlinesFragment();
-
-            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment,"MAIN").commit();
-
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame, headlinesFragment, "MAIN").commit();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

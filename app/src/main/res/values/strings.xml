@@ -22,8 +22,9 @@
     <string name="network_connecton_lost">Cannot check news at this time</string>
 
     <plurals name="new_feeds_plurals">
-        <item quantity="one">1 new feed. Touch here to see it</item>
-        <item quantity="other">%d new feeds. Touch here to see them</item>
+        <item quantity="zero">No updates</item>
+        <item quantity="one">1 new update</item>
+        <item quantity="other">%d new updates</item>
     </plurals>
 
     <!-- Navigation Drawer items -->
@@ -55,7 +56,8 @@
     <string-array name="pc_feeds">
         <item>http://www.pcgamer.com/feed/</item>
         <!-- <item>http://www.joystiq.com/pc/rss.xml</item> -->
-        <item>http://www.incgamers.com/feed</item> <!-- CDATA warning -->
+        <item>http://www.incgamers.com/feed</item>
+        <!-- CDATA warning -->
         <item>http://www.pcgamesn.com/mainrss.xml</item>
     </string-array>
 
