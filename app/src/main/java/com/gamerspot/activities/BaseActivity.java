@@ -15,7 +15,7 @@ import com.gamerspot.extra.CustomTypefaceSpan;
 /**
  * Created by Adrian on 12-Jun-14.
  */
-public class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends ActionBarActivity {
 
     private ActionBar actionBar;
 

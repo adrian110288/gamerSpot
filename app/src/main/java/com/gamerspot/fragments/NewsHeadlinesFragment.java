@@ -60,8 +60,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         //TODO Loader required - Genymotion log (Skipped xxx frames. The application may be doing too much work on its main thread.)
 
-        feedList = dao.getAllFeeds();
-        dao.close();
+        feedList = dao.getFeeds(null);
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
     }
 
@@ -100,6 +99,12 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+        if (scrollState == SCROLL_STATE_IDLE) {
+            if (listView.getLastVisiblePosition() >= listView.getCount() - 1) {
+                loadMoreData();
+            }
+        }
     }
 
     @Override
@@ -157,6 +162,21 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         listView.setOnScrollListener(this);
     }
 
+    private void loadMoreData() {
+
+        long platformId = ((NavigationDrawerActivity) getActivity()).getDrawerItemSelected();
+        ArrayList<NewsFeed> dataToAttach;
+
+        if (platformId == 0) {
+            dataToAttach = dao.getFeeds(null);
+        } else {
+            dataToAttach = dao.getFeeds(platformId);
+        }
+
+        feedList.addAll(dataToAttach);
+        feedsAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -179,6 +199,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         if (id == R.id.action_refresh) {
 
+            //TODO repeated code. Create method for starting async task
             if (CommonUtilities.isOnline()) {
 
                 getActivity().setProgressBarIndeterminateVisibility(true);
@@ -202,15 +223,14 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     public void refresh(long id) {
 
         if (id != 0) {
-            feedList = dao.getPlatformFeeds(id);
+            feedList = dao.getFeeds(id);
         } else {
-            feedList = dao.getAllFeeds();
+            feedList = dao.getFeeds(null);
         }
 
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
         listView.setAdapter(feedsAdapter);
         listView.smoothScrollToPosition(0);
-        dao.close();
     }
 
     private class FeedFetchHandler extends Handler {

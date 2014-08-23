@@ -3,32 +3,18 @@ package com.gamerspot.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.gamerspot.beans.NewsFeed;
 
-import java.lang.reflect.Array;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Adrian on 10-Jun-14.
  */
 public class DAO {
 
-    private Context context;
-    private GamerSpotDBHelper dbHelper;
-    private SQLiteDatabase database;
-    private ContentValues values;
-    private ArrayList<NewsFeed> queriedList;
-    private ArrayList<NewsFeed> newlyInsertedFeeds;
-
+    private final static int QUERY_LIMIT = 20;
     private static final String[] listViewProjection = {
             DatabaseContract.NewsFeedTable.COLUMN_NAME_ID,
             DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE,
@@ -39,16 +25,15 @@ public class DAO {
             DatabaseContract.NewsFeedTable.COLUMN_NAME_PROVIDER,
             DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM
     };
+    private GamerSpotDBHelper dbHelper;
+    private SQLiteDatabase database;
+    private ContentValues values;
+    private ArrayList<NewsFeed> queriedList;
+    private int QUERY_OFFSET = 0;
 
-    int queryLimit = 20;
+    public DAO(Context context) {
 
-    String sortOrder = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
-    String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT 20 OFFSET 0 ";
-
-    public DAO(Context contextIn) {
-        this.context = contextIn;
-
-        if(dbHelper == null) {
+        if (dbHelper == null) {
             dbHelper = new GamerSpotDBHelper(context);
         }
     }
@@ -57,19 +42,27 @@ public class DAO {
         dbHelper.close();
     }
 
+    public void resetLimits() {
+        this.QUERY_OFFSET = 0;
+    }
+
+    private void incrementLimits() {
+        this.QUERY_OFFSET += 20;
+    }
+
     public int insertAllFeeds(ArrayList<NewsFeed> list) {
 
         database = dbHelper.getWritableDatabase();
 
-        int count =0;
+        int count = 0;
         values = new ContentValues();
 
-        try{
+        try {
             database.beginTransaction();
 
-            for(NewsFeed feed : list) {
+            for (NewsFeed feed : list) {
 
-                try{
+                try {
                     values.put(DatabaseContract.NewsFeedTable.COLUMN_NAME_ID, feed.getGuid());
                     values.put(DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE, feed.getTitle());
                     values.put(DatabaseContract.NewsFeedTable.COLUMN_NAME_LINK, feed.getLink());
@@ -80,55 +73,44 @@ public class DAO {
                     values.put(DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM, feed.getPlatform());
 
                     long inserted = database.insertOrThrow(DatabaseContract.NewsFeedTable.TABLE_NAME, null, values);
-                    if(inserted != -1) {
+                    if (inserted != -1) {
 
                         count++;
                     }
-                }
-
-                catch(Exception e) {
+                } catch (Exception e) {
                     continue;
                 }
             }
 
             database.setTransactionSuccessful();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally{
+        } finally {
             database.endTransaction();
         }
-
-        Log.i("ROWS_INSERTED", count + "");
 
         return count;
     }
 
-    public ArrayList<NewsFeed> getAllFeeds(){
+    public ArrayList<NewsFeed> getFeeds(Long platform) {
 
         database = dbHelper.getReadableDatabase();
+        String sortOrderWithLimit = DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC LIMIT " + this.QUERY_LIMIT + " OFFSET " + this.QUERY_OFFSET;
         queriedList = new ArrayList<NewsFeed>();
-        NewsFeed feed;
 
-        Cursor c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, null, null, null, null, sortOrderWithLimit);
+        String[] selection = {String.valueOf(platform)};
+        Cursor c;
+
+        if (platform == null) {
+            c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, null, null, null, null, sortOrderWithLimit);
+        } else {
+            c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM + "=?", selection, null, null, sortOrderWithLimit);
+        }
+
+        incrementLimits();
         queriedList = this.traverseCursor(c);
 
         return queriedList;
-    }
-
-    public ArrayList<NewsFeed> getPlatformFeeds(long platform) {
-
-        database = dbHelper.getReadableDatabase();
-        queriedList = new ArrayList<NewsFeed>();
-
-        String [] selection = {String.valueOf(platform)};
-
-        Cursor c = database.query(DatabaseContract.NewsFeedTable.TABLE_NAME, listViewProjection, DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM + "=?", selection, null, null, sortOrderWithLimit);
-        queriedList = this.traverseCursor(c);
-
-        return queriedList;
-
     }
 
     private ArrayList<NewsFeed> traverseCursor(Cursor c) {
@@ -139,7 +121,7 @@ public class DAO {
 
         c.moveToNext();
 
-        while(!c.isAfterLast()) {
+        while (!c.isAfterLast()) {
 
             feed = new NewsFeed();
 
@@ -159,7 +141,7 @@ public class DAO {
         return tempList;
     }
 
-    public boolean setFeedVisited(String guid){
+    public boolean setFeedVisited(String guid) {
         //TODO setFeedVisited method to implement
         return false;
     }
@@ -183,27 +165,23 @@ public class DAO {
 
         ArrayList<String> result = new ArrayList<String>();
 
-        String selectStatement = "SELECT " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " FROM " + DatabaseContract.SearchPhrasesTable.TABLE_NAME + " WHERE " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " LIKE '"+ phraseIn+"%"+"'";
-        Log.i("PHRASES STATEMENT", selectStatement);
+        String selectStatement = "SELECT " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " FROM " + DatabaseContract.SearchPhrasesTable.TABLE_NAME + " WHERE " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " LIKE '" + phraseIn + "%" + "'";
         Cursor c = database.rawQuery(selectStatement, null);
 
         c.moveToNext();
 
-        while(!c.isAfterLast()) {
+        while (!c.isAfterLast()) {
 
             result.add(c.getString(c.getColumnIndex(DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE)));
             c.moveToNext();
         }
-
-        Log.i("PHRASES LIST", result.size()+"");
-
-        return  result;
+        return result;
     }
 
     public boolean isFavourite(String feedId) {
         database = dbHelper.getReadableDatabase();
 
-        String searchStatement = "SELECT " + DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + " FROM " + DatabaseContract.FavouriteFeedsTable.TABLE_NAME  + " WHERE " + DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + " = " + "'" +feedId + "'";
+        String searchStatement = "SELECT " + DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + " FROM " + DatabaseContract.FavouriteFeedsTable.TABLE_NAME + " WHERE " + DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + " = " + "'" + feedId + "'";
         Cursor results = database.rawQuery(searchStatement, null);
 
         return (results.getCount() != 0);
@@ -215,7 +193,7 @@ public class DAO {
 
         long inserted = -1;
 
-        if(!isFavourite(feedId)) {
+        if (!isFavourite(feedId)) {
             values = new ContentValues();
             values.put(DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID, feedId);
 
@@ -226,7 +204,7 @@ public class DAO {
 
     public boolean removeFromFavourites(String feedId) {
         database = dbHelper.getWritableDatabase();
-        int rowsAffected = database.delete(DatabaseContract.FavouriteFeedsTable.TABLE_NAME, DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + "="+ "'" +feedId + "'", null );
+        int rowsAffected = database.delete(DatabaseContract.FavouriteFeedsTable.TABLE_NAME, DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + "=" + "'" + feedId + "'", null);
         return (rowsAffected > 0);
     }
 }

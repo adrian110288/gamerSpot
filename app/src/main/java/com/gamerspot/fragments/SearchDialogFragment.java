@@ -123,7 +123,6 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
         i.putExtras(b);
 
         dao.insertPhrase(phrase);
-        dao.close();
 
         getTargetFragment().onActivityResult(1, Activity.RESULT_OK, i);
         dismiss();

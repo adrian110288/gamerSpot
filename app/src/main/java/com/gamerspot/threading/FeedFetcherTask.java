@@ -4,12 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.gamerspot.R;
 import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
-import com.gamerspot.extra.NewsFeedsAdapter;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -78,7 +76,7 @@ public class FeedFetcherTask extends AsyncTask<String, Void, Integer> {
         feedFetchHandler.sendEmptyMessage(count);
     }
 
-    private void getUrlsFromResources(){
+    private void getUrlsFromResources() {
         pcFeedUrls = context.getResources().getStringArray(R.array.pc_feeds);
         xboxFeedUrls = context.getResources().getStringArray(R.array.xbox_feeds);
         playstationFeedUrls = context.getResources().getStringArray(R.array.playstation_feeds);

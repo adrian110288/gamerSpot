@@ -10,13 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.gamerspot.R;
+import com.gamerspot.extra.CommonUtilities;
 import com.gamerspot.extra.DrawerNewsAdapter;
 import com.gamerspot.fragments.NewsHeadlinesFragment;
 
 /**
  * Created by Adrian on 21-Aug-14.
  */
-public class NavigationDrawerActivity extends BaseActivity implements ListView.OnItemClickListener {
+public abstract class NavigationDrawerActivity extends BaseActivity implements ListView.OnItemClickListener {
 
     private DrawerLayout drawerLayout;
     private ListView drawerNewsListView;
@@ -68,10 +69,11 @@ public class NavigationDrawerActivity extends BaseActivity implements ListView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         if (selectedDrawerItem != id) {
+            setDrawerItemSelected(id);
             fragment = (NewsHeadlinesFragment) getSupportFragmentManager().findFragmentByTag("MAIN");
             fragment.refresh(id);
-            setDrawerItemSelected(id);
         }
         drawerLayout.closeDrawer(drawerNewsListView);
     }
@@ -82,6 +84,7 @@ public class NavigationDrawerActivity extends BaseActivity implements ListView.O
 
     public void setDrawerItemSelected(long id) {
         selectedDrawerItem = id;
+        CommonUtilities.getDatabaseAccessor().resetLimits();
     }
 
     @Override
@@ -99,5 +102,4 @@ public class NavigationDrawerActivity extends BaseActivity implements ListView.O
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
-
 }

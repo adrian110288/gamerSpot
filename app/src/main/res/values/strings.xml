@@ -24,7 +24,7 @@
     <plurals name="new_feeds_plurals">
         <item quantity="zero">No updates</item>
         <item quantity="one">1 new update</item>
-        <item quantity="other">%d new updates</item>
+        <item quantity="many">%d new updates</item>
     </plurals>
 
     <!-- Navigation Drawer items -->

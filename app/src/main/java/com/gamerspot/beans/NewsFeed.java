@@ -1,13 +1,9 @@
 package com.gamerspot.beans;
 
-import android.util.Log;
-
 import java.io.Serializable;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -38,7 +34,8 @@ public class NewsFeed implements Serializable, Comparable {
     private String provider;
     private int platform;
 
-    public NewsFeed(){}
+    public NewsFeed() {
+    }
 
     public String getGuid() {
         return guid;
@@ -79,8 +76,7 @@ public class NewsFeed implements Serializable, Comparable {
     public void setDate(String dateIn) {
         try {
             date = new Date(dateIn);
-        }
-        catch(IllegalArgumentException iae){
+        } catch (IllegalArgumentException iae) {
 
             DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             try {
@@ -112,7 +108,7 @@ public class NewsFeed implements Serializable, Comparable {
         this.provider = provider;
     }
 
-    public int getPlatform(){
+    public int getPlatform() {
         return platform;
     }
 
@@ -122,7 +118,7 @@ public class NewsFeed implements Serializable, Comparable {
 
     @Override
     public String toString() {
-        return "ID "+getGuid()+" TITLE "+getTitle()+" DESCRIPTION " + getDescription()+" LINK "+ getLink() +" CREATOR "+getCreator() +" PROVIDER "+getProvider() + " PLATFORM "+getPlatform();
+        return "ID " + getGuid() + " TITLE " + getTitle() + " DESCRIPTION " + getDescription() + " LINK " + getLink() + " CREATOR " + getCreator() + " PROVIDER " + getProvider() + " PLATFORM " + getPlatform();
     }
 
     @Override

@@ -4,23 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:minHeight="48dp"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
 
     <View
         android:id="@+id/drawer_news_listItem_indicator"
         android:layout_width="5dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        />
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/drawer_news_listItem_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_margin="20dp"
         android:textColor="@android:color/white"
-        android:textSize="18dp"
-        android:layout_margin="20dp"/>
+        android:textSize="18sp" />
 
 </LinearLayout>
