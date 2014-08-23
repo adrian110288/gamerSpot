@@ -3,59 +3,55 @@ package com.gamerspot.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.gamerspot.R;
 import com.gamerspot.enums.ButtonType;
-import com.gamerspot.extra.GamerSpotApplication;
+import com.gamerspot.extra.CommonUtilities;
 
 /**
  * Created by Adrian on 12-Jul-14.
  */
-public class CustomButton extends Button {
+public class CustomButton extends RelativeLayout {
 
-    private Context context;
     private TypedArray attr;
     private int buttonType;
-
-    public CustomButton(Context context) {
-        super(context);
-    }
+    private TextView text;
+    private ImageView image;
 
     public CustomButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        this.context = context;
         initializeButton(attrs);
     }
 
-    public CustomButton(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    private void initializeButton(AttributeSet attrs) {
+
+        inflate(getContext(), R.layout.full_article_button_layout, this);
+        obtainReferences();
+
+        attr = getContext().obtainStyledAttributes(attrs, R.styleable.custom);
+        buttonType = attr.getInt(R.styleable.custom_type, 0);
+        attr.recycle();
+
+        if (buttonType == (ButtonType.ARTICLE.getType())) {
+            text.setText(R.string.button_full_article);
+            image.setImageDrawable(getResources().getDrawable(R.drawable.collections_view_as_list));
+        } else if (buttonType == (ButtonType.SEARCH.getType())) {
+            text.setText(R.string.search_dialog_button);
+            image.setImageDrawable(getResources().getDrawable(R.drawable.search_bck));
+        }
     }
 
-    private void initializeButton(AttributeSet attrs){
+    private void obtainReferences() {
+        text = (TextView) findViewById(R.id.button_text);
+        text.setTypeface(CommonUtilities.getTextFont());
+        image = (ImageView) findViewById(R.id.button_image);
+    }
 
-        setTypeface(GamerSpotApplication.getUtils(context).getTextFont());
-        setTextColor(getResources().getColor(R.color.BUTTON_TEXT_COLOR));
-        setBackgroundResource(R.drawable.fa_selector);
+    private void updateSelector(int platformId) {
 
-        attr = context.obtainStyledAttributes(attrs, R.styleable.custom);
-
-        buttonType = attr.getInt(R.styleable.custom_type, 0);
-
-        if(buttonType == (ButtonType.ARTICLE.getType())) {
-
-            setText(R.string.button_full_article);
-            setCompoundDrawablesWithIntrinsicBounds(R.drawable.collections_view_as_list, 0, 0, 0);
-            setCompoundDrawablePadding(-250);
-            setPadding(200,0,0,0);
-        }
-
-        else if(buttonType == (ButtonType.SEARCH.getType())) {
-            setText(R.string.search_dialog_button);
-        }
-
-        attr.recycle();
     }
 
 }

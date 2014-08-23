@@ -2,34 +2,32 @@
 <pre-dex-items>
 
     <item
-        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\renderscript-v8-44ffaef7ab2df521581571f416ecf935cf482458.jar"
-        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\GamerSpot\StackBlur\unspecified\libs\renderscript-v8.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="635500d71777395a0b88dab7d6d131a03ff78684"/>
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\classes-e009f32dc3cb1bc9e398e04ea17d3cbb7b7053fd.jar"
+        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\classes.jar"
+        jumboMode="false" revision="19.1.0" sha1="8694693636ab36910c8100ce527c258ff3ebece0" />
     <item
-        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\classes-97b2c2f8bf7a03229aea7cc5c12124624a3daf2c.jar"
-        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\GamerSpot\StackBlur\unspecified\classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3d39c9ac76aeeacf67a93c578394c43ded7048b7"/>
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\internal_impl-20.0.0-c526d0ba441ca5e291a0adfe068a4de49ed93339.jar"
+        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\libs\internal_impl-20.0.0.jar"
+        jumboMode="false" revision="19.1.0" sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d" />
     <item
         dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\library-1.0.6-c071cc6b464142433c0f61f787bf8e099ec7ec0e.jar"
         jar="C:\Users\Adrian\.gradle\caches\modules-2\files-2.1\com.mcxiaoke.volley\library\1.0.6\b2e6988baeea1aed656995f973aaa2fc3feaf447\library-1.0.6.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="b2e6988baeea1aed656995f973aaa2fc3feaf447"/>
+        jumboMode="false" revision="19.1.0" sha1="b2e6988baeea1aed656995f973aaa2fc3feaf447" />
     <item
-        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\classes-e02beb8dca6eee73337351da6091fcb454f1c35e.jar"
-        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\classes-97b2c2f8bf7a03229aea7cc5c12124624a3daf2c.jar"
+        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\GamerSpot\StackBlur\unspecified\classes.jar"
+        jumboMode="false" revision="19.1.0" sha1="3d39c9ac76aeeacf67a93c578394c43ded7048b7" />
     <item
-        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-6f6766fb279271d0b5be42ddeffaa1bbbaf4b80a.jar"
-        jar="E:\Software\android-sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\classes-543374ad7996c5c0292b4f3dec772caf570c4866.jar"
+        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\20.0.0\classes.jar"
+        jumboMode="false" revision="19.1.0" sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef" />
+    <item
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\renderscript-v8-44ffaef7ab2df521581571f416ecf935cf482458.jar"
+        jar="I:\android_studio\GamerSpot\app\build\intermediates\exploded-aar\GamerSpot\StackBlur\unspecified\libs\renderscript-v8.jar"
+        jumboMode="false" revision="19.1.0" sha1="635500d71777395a0b88dab7d6d131a03ff78684" />
+    <item
+        dex="I:\android_studio\GamerSpot\app\build\intermediates\pre-dexed\debug\support-annotations-20.0.0-488ba2082b6724256f149ca9df4eed862e0c68b6.jar"
+        jar="E:\Software\android-sdk\extras\android\m2repository\com\android\support\support-annotations\20.0.0\support-annotations-20.0.0.jar"
+        jumboMode="false" revision="19.1.0" sha1="9d9013e9ff35fc3756411e62873c363c70c638fa" />
 
 </pre-dex-items>

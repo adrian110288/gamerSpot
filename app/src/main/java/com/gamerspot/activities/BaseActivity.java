@@ -50,7 +50,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         actionBarTitle = name;
 
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        spannableString.setSpan(new CustomTypefaceSpan(this, "Gamegirl.ttf"), 0, actionBarTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new CustomTypefaceSpan(this, "fonts/Gamegirl.ttf"), 0, actionBarTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         actionBar.setTitle(spannableString);
 
         if (platformIn != 0) {

@@ -20,11 +20,13 @@
     <string name="new_feeds_count"> new game news added. Scroll up to see them</string>
     <string name="no_network_connection">Please check your internet connection</string>
     <string name="network_connecton_lost">Cannot check news at this time</string>
+    <string name="article_added_to_fav">Article added to favourites</string>
+    <string name="article_removed_from_fav">Article removed from favourites</string>
 
     <plurals name="new_feeds_plurals">
         <item quantity="zero">No updates</item>
         <item quantity="one">1 new update</item>
-        <item quantity="many">%d new updates</item>
+        <item quantity="other">%d new updates</item>
     </plurals>
 
     <!-- Navigation Drawer items -->
@@ -52,6 +54,7 @@
 
     <!-- Button texts -->
     <string name="button_full_article">Read full article</string>
+
     <!-- RSS Urls -->
     <string-array name="pc_feeds">
         <item>http://www.pcgamer.com/feed/</item>

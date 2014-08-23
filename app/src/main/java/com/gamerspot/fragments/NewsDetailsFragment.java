@@ -12,8 +12,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -26,7 +24,6 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.enrique.stackblur.StackBlurManager;
 import com.gamerspot.R;
@@ -34,6 +31,7 @@ import com.gamerspot.beans.NewsFeed;
 import com.gamerspot.database.DAO;
 import com.gamerspot.extra.CommonUtilities;
 import com.gamerspot.interfaces.FullArticleClickListener;
+import com.gamerspot.views.CustomButton;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,6 +53,7 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
     private TextView titleView;
     private TextView creatorView;
     private TextView dateView;
+    private CustomButton fullArticleButton;
     private TextView descriptionView;
     private ImageView backgroundImageView;
     private LinearLayout descriptionLinearLayout;
@@ -91,6 +90,7 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
         descriptionView = (TextView) view.findViewById(R.id.details_description);
         descriptionView.setTypeface(font);
         backgroundImageView = (ImageView) view.findViewById(R.id.backgroundImageView);
+        fullArticleButton = (CustomButton) view.findViewById(R.id.button_full_article);
 
         return view;
     }
@@ -112,7 +112,6 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
                 if (urlList.size() != 0 && CommonUtilities.isOnline()) {
                     getActivity().setProgressBarIndeterminateVisibility(true);
                     new DownloadThread(urlList, new DownloadFinishHandler(), cachedImages).start();
-                    Toast.makeText(getActivity(), "Downloading images ...", Toast.LENGTH_SHORT).show();
                 } else if (urlList.size() == 0) {
                     displayText();
                 } else if (!CommonUtilities.isOnline() && urlList.size() != 0) {
@@ -167,13 +166,13 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
                     boolean isRemoved = dao.removeFromFavourites(feed.getGuid());
                     if (isRemoved) {
                         item.setIcon(R.drawable.ic_action_3_rating_not_important);
-                        CommonUtilities.showToast("Article removed from favourites");
+                        CommonUtilities.showToast(getResources().getString(R.string.article_removed_from_fav));
                     }
                 } else {
                     boolean isAdded = dao.addToFavourites(feed.getGuid());
                     if (isAdded) {
                         item.setIcon(R.drawable.ic_action_3_rating_important);
-                        CommonUtilities.showToast("Article added to favourites");
+                        CommonUtilities.showToast(getResources().getString(R.string.article_added_to_fav));
                     }
                 }
 
@@ -188,8 +187,8 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
 
     @TargetApi(14)
     private void setShareOption(MenuItem shareitem) {
-        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareitem);
-        shareActionProvider.setShareIntent(getShareIntent());
+        //ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareitem);
+        //shareActionProvider.setShareIntent(getShareIntent());
     }
 
     @TargetApi(14)
@@ -199,16 +198,6 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this article " + feed.getLink());
         sendIntent.setType("text/plain");
         return sendIntent;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     private void getImagesUrl(String textIn) {
@@ -248,9 +237,7 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
 
     private void displayText() {
 
-        titleView.setText(feed.getTitle());
-        creatorView.setText(feed.getCreator());
-        dateView.setText(CommonUtilities.getFormattedDate(feed.getDate()));
+        displayOnlyText();
 
         descriptionView.setText(Html.fromHtml(feed.getDescription(), new Html.ImageGetter() {
 
@@ -275,6 +262,12 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
                 return drawable;
             }
         }, null));
+
+        /*Bitmap bitmap = CommonUtilities.getCachedBlurredImage(urlList.get(0).toString());
+
+        if(bitmap != null) {
+            backgroundImageView.setImageBitmap(bitmap);
+        }*/
     }
 
     private Bitmap blurImage(Bitmap bitmap) {
@@ -334,10 +327,8 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
 
                 URL url = urlList.get(0);
                 BitmapDrawable d = cachedImages.get(url.toString());
-
-                Bitmap bitmap = d.getBitmap();
-
-                backgroundImageView.setImageBitmap(blurImage(bitmap));
+                Bitmap blurredBitmap = blurImage(d.getBitmap());
+                CommonUtilities.addCachedBlurredImage(url.toString(), blurredBitmap);
 
                 displayText();
 
