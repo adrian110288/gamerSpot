@@ -18,6 +18,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activities.NewsHeadlinesActivity"
             android:launchMode="singleTop"
@@ -30,13 +31,16 @@
 
         <activity
             android:name=".activities.NewsDetailsActivity"
-            android:parentActivityName=".activities.NewsHeadlinesActivity"
             android:screenOrientation="portrait"
-            tools:ignore="UnusedAttribute">
+            tools:ignore="UnusedAttribute"></activity>
 
+        <activity
+            android:name=".activities.SearchResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.NewsActivity" />
+                android:value=".activities.NewsHeadlinesActivity" />
         </activity>
 
         <provider
@@ -46,5 +50,4 @@
             android:exported="false" />
 
     </application>
-
 </manifest>

@@ -237,11 +237,18 @@ public class DAO {
         database = dbHelper.getReadableDatabase();
         ArrayList<NewsFeed> list = null;
 
-        String statement = "SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME + " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE + " LIKE '" + "%" + stringPhrase + "%" + "'";
+        String selectFrom = "SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME;
+        String where1 = " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE + " LIKE '" + "%" + stringPhrase + "%" + "' OR ";
+        String where2 = DatabaseContract.NewsFeedTable.COLUMN_NAME_DESCRIPTION + " LIKE '" + "%" + stringPhrase + "%" + "' ";
+        String order = "ORDER BY " + DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
+
+
+//        String searchStatementForHeadlines = "SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME + " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE + " LIKE '" + "%" + stringPhrase + "%" + "' ORDER BY " + DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
+        String searchStatementForHeadlines = selectFrom + where1 + where2 + order;
         Cursor c = null;
 
         if(stringPhrase.length() > 3) {
-            c = database.rawQuery(statement, null);
+            c = database.rawQuery(searchStatementForHeadlines, null);
             list = traverseCursor(c);
         }
 

@@ -2,13 +2,13 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minWidth="500dp"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ACTION_BAR_COLOR">
 
@@ -32,24 +32,24 @@
             android:id="@+id/me_image_button"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/me"/>
+            android:background="@drawable/me" />
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/header_google_plus"
-            android:layout_alignRight="@id/me_image_button"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="30dp" />
+            android:layout_alignRight="@id/me_image_button"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/header_google_plus" />
 
         <com.adrianlesniak.gamerspot.views.GamerSpotTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_me_text"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/me_image_button"
             android:lineSpacingExtra="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp" />
+            android:text="@string/about_me_text" />
 
 
     </RelativeLayout>
@@ -65,8 +65,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.5"
             android:layout_marginBottom="8dp"
+            android:layout_weight="0.5"
             custom:type="email" />
 
         <com.adrianlesniak.gamerspot.views.GamerSpotButton
@@ -74,8 +74,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.5"
             android:layout_marginBottom="8dp"
+            android:layout_weight="0.5"
             custom:type="playstore" />
 
 

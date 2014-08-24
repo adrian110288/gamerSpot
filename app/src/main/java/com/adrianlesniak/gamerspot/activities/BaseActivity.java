@@ -92,4 +92,10 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
     }
 
+    protected void setActionBarSubtitle(String subtitle) {
+        SpannableString spannableString = new SpannableString(subtitle);
+        spannableString.setSpan(new CustomTypefaceSpan(this, "fonts/sans.semi-condensed.ttf"), 0, subtitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        actionBar.setSubtitle(spannableString);
+    }
+
 }

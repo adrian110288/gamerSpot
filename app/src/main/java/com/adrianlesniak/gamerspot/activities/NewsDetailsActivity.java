@@ -21,12 +21,14 @@ public class NewsDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
         NewsFeed feedIn = (NewsFeed) getIntent().getSerializableExtra("FEED");
+        boolean isSearched = getIntent().getBooleanExtra("isSearched", false);
         setActionBar(feedIn.getPlatform(), "");
 
         detailsFragment = new NewsDetailsFragment();
         fullArticleClickListener = detailsFragment;
         Bundle b = new Bundle();
         b.putSerializable("FEED", feedIn);
+        b.putBoolean("searched", isSearched);
         detailsFragment.setArguments(b);
 
         getSupportFragmentManager().beginTransaction().add(R.id.details_content_frame, detailsFragment).commit();

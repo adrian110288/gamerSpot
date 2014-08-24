@@ -4,8 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +41,7 @@ public class AboutDialogFragment extends DialogFragment {
         playstoreButton = (GamerSpotButton) view.findViewById(R.id.playstoreButton);
         playstoreButton.setOnClickListener(new PlaystoreClickListener());
         emailMe = (GamerSpotButton) view.findViewById(R.id.emailme_button);
+        emailMe.setOnClickListener(new EmailOnClickListener());
 
         return view;
     }
@@ -68,6 +69,24 @@ public class AboutDialogFragment extends DialogFragment {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://plus.google.com/+AdrianLe%C5%9Bniak/posts"));
             startActivity(intent);
+        }
+    }
+
+    private class EmailOnClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822");
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"adrian110288@gmail.com"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "GamerSpot in-app user feedback");
+
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                CommonUtilities.showToast("Please install email client");
+            }
+
         }
     }
 }

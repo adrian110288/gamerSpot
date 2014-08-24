@@ -2,7 +2,6 @@ package com.adrianlesniak.gamerspot.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -69,16 +68,6 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_news_headlines, null);
     }
@@ -97,7 +86,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        mCallback.onArticleSelected(feedList.get(position));
+        mCallback.onArticleSelected(feedList.get(position), false);
         listView.setItemChecked(position, true);
     }
 
@@ -193,7 +182,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         SpannableString spannableString;
 
-        for(int i=0;i<menu.size();i++) {
+        for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
             spannableString = new SpannableString(item.getTitle());
             spannableString.setSpan(new CustomTypefaceSpan(getActivity(), "fonts/sans.semi-condensed.ttf"), 0, item.getTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -236,12 +225,6 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         }
 
         return false;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Toast.makeText(getActivity(), data.getStringExtra("no") + "", Toast.LENGTH_SHORT).show();
     }
 
     public void refresh(long id) {

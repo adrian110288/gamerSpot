@@ -1,6 +1,5 @@
 package com.adrianlesniak.gamerspot.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -18,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adrianlesniak.gamerspot.R;
+import com.adrianlesniak.gamerspot.activities.SearchResultActivity;
 import com.adrianlesniak.gamerspot.beans.NewsFeed;
 import com.adrianlesniak.gamerspot.database.DAO;
 import com.adrianlesniak.gamerspot.extra.CommonUtilities;
@@ -70,12 +70,12 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
 
     private void setCheckboxes() {
 
-        for(int i=0; i<checkboxGroup.getChildCount(); i++) {
+        for (int i = 0; i < checkboxGroup.getChildCount(); i++) {
 
             final CheckBox checkBox = (CheckBox) checkboxGroup.getChildAt(i);
             checkBox.setTypeface(CommonUtilities.getTextFont());
 
-            if(i == 0) {
+            if (i == 0) {
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -83,14 +83,12 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
                         checkAllBoxes(isChecked);
                     }
                 });
-            }
-
-            else {
+            } else {
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                        if (((CheckBox)checkboxGroup.getChildAt(0)).isChecked()) {
+                        if (((CheckBox) checkboxGroup.getChildAt(0)).isChecked()) {
                             checkAllBoxes(isChecked);
                             checkBox.setChecked(true);
                         }
@@ -103,7 +101,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
 
     private void checkAllBoxes(boolean isChecked) {
 
-        for(int i=0; i<checkboxGroup.getChildCount(); i++) {
+        for (int i = 0; i < checkboxGroup.getChildCount(); i++) {
             CheckBox checkBox = (CheckBox) checkboxGroup.getChildAt(i);
             checkBox.setChecked(isChecked);
         }
@@ -145,21 +143,21 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
 
         String phrase = editText.getText().toString();
 
-        if(phrase.length() > 3) {
+        if (phrase.length() > 3) {
             ArrayList<NewsFeed> list = dao.searchArticles(phrase);
+            dao.insertPhrase(phrase);
 
-            Intent i = new Intent();
-            Bundle b = new Bundle();
+            Intent i = new Intent(getActivity(), SearchResultActivity.class);
 
-            if(list != null){
-                b.putString("no", list.size() + "");
-                i.putExtras(b);
-                dao.insertPhrase(phrase);
-                getTargetFragment().onActivityResult(1, Activity.RESULT_OK, i);
+            if (list != null && list.size() != 0) {
+                i.putExtra("resultList", list);
+                i.putExtra("searchPhrase", phrase);
+                dismiss();
+                startActivity(i);
             } else {
-                CommonUtilities.showToast("Could not search");
+                CommonUtilities.showToast("No results");
             }
-            dismiss();
+
 
         } else {
             CommonUtilities.showToast("Phrase too short");

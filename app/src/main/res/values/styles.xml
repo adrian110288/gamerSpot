@@ -8,11 +8,20 @@
 
     <style name="ActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/ACTION_BAR_COLOR</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleColor</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+        <item name="android:subtitleTextStyle">@style/ActionBarSubtitleStyle</item>
     </style>
 
-    <style name="ActionBarTitleColor" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="ActionBarTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ActionBarSubtitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
@@ -22,14 +31,14 @@
     <style name="SearchDialog" parent="android:Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
     </style>
-    
+
     <declare-styleable name="custom">
         <attr name="type" format="string">
-            <enum name="article" value="0"/>
-            <enum name="search" value="1"/>
-            <enum name="playstore" value="2"/>
-            <enum name="email" value="3"/>
-            <enum name="plain" value="4"/>
+            <enum name="article" value="0" />
+            <enum name="search" value="1" />
+            <enum name="playstore" value="2" />
+            <enum name="email" value="3" />
+            <enum name="plain" value="4" />
         </attr>
     </declare-styleable>
 

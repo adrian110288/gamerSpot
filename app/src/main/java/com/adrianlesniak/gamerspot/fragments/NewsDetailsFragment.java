@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -25,13 +24,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.enrique.stackblur.StackBlurManager;
 import com.adrianlesniak.gamerspot.R;
 import com.adrianlesniak.gamerspot.beans.NewsFeed;
 import com.adrianlesniak.gamerspot.database.DAO;
 import com.adrianlesniak.gamerspot.extra.CommonUtilities;
 import com.adrianlesniak.gamerspot.interfaces.FullArticleClickListener;
 import com.adrianlesniak.gamerspot.views.GamerSpotButton;
+import com.enrique.stackblur.StackBlurManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -60,6 +59,7 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
     private ViewTreeObserver viewTreeObserver;
     private DAO dao;
     private boolean isArticleFavourite = false;
+    private boolean isSearched;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,7 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
 
         setHasOptionsMenu(true);
         feed = (NewsFeed) getArguments().get("FEED");
+        isSearched = getArguments().getBoolean("searched");
         urlList = new ArrayList<URL>();
         dao = CommonUtilities.getDatabaseAccessor();
         getImagesUrl(feed.getDescription());
@@ -156,7 +157,16 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
 
         switch (id) {
             case android.R.id.home: {
-                NavUtils.navigateUpFromSameTask(getActivity());
+
+                /*if(isSearched) {
+                    getActivity().finish();
+                }
+                else {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }*/
+
+                getActivity().onBackPressed();
+
                 return true;
             }
 
