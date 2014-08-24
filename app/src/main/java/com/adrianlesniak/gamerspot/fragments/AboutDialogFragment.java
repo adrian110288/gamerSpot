@@ -65,7 +65,6 @@ public class AboutDialogFragment extends DialogFragment {
 
         @Override
         public void onClick(View v) {
-
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("https://plus.google.com/+AdrianLe%C5%9Bniak/posts"));
             startActivity(intent);
