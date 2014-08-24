@@ -47,10 +47,16 @@
     <!-- Search dialog strings -->
     <string name="search_dialog_title">Search</string>
     <string name="search_dialog_radiogroup_header">Search through:</string>
-    <string name="search_dialog_radiogroup_item1">Article titles</string>
-    <string name="search_dialog_radiogroup_item2">Article titles and text</string>
+    <string name="search_dialog_radiogroup_item1">Headlines</string>
+    <string name="search_dialog_radiogroup_item2">Headlines and texts</string>
     <string name="search_dialog_button">Search</string>
     <string name="search_dialog_edittext_hint">Enter search phrase</string>
+
+    <!-- About me dialog strings -->
+    <string name="about_me_dialog_title">About me</string>
+    <string name="about_me_playstore">My apps</string>
+    <string name="about_me_email">Email me</string>
+    <string name="about_me_text">Independent Android Developer based in Manchester, UK.\nFeel free to explore the application and let me know what you think.</string>
 
     <!-- Button texts -->
     <string name="button_full_article">Read full article</string>

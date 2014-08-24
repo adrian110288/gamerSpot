@@ -2,7 +2,21 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/OverflowButton</item>
+    </style>
+
+    <style name="ActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/ACTION_BAR_COLOR</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleColor</item>
+    </style>
+
+    <style name="ActionBarTitleColor" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_core_overflow</item>
     </style>
 
     <style name="SearchDialog" parent="android:Theme.Dialog">
@@ -13,6 +27,9 @@
         <attr name="type" format="string">
             <enum name="article" value="0"/>
             <enum name="search" value="1"/>
+            <enum name="playstore" value="2"/>
+            <enum name="email" value="3"/>
+            <enum name="plain" value="4"/>
         </attr>
     </declare-styleable>
 

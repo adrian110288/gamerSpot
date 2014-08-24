@@ -23,52 +23,71 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="vertical">
+
     <AutoCompleteTextView
         android:id="@+id/search_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+
         android:hint="@string/search_dialog_edittext_hint"
         android:inputType="textCapSentences"
         android:singleLine="true" />
 
-    <TextView
-        android:id="@+id/search_header"
+    <LinearLayout
+        android:id="@+id/checkbox_group_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:text="@string/search_dialog_radiogroup_header" />
+        android:orientation="vertical">
 
-    <RadioGroup
-        android:id="@+id/search_radioGroup"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp">
-
-        <RadioButton
-            android:id="@+id/radio1"
-            android:layout_width="fill_parent"
+        <CheckBox
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/search_dialog_radiogroup_item1" />
+            android:text="All platforms"/>
 
-        <RadioButton
-            android:id="@+id/radio2"
-            android:layout_width="fill_parent"
+        <CheckBox
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_dialog_radiogroup_item2" />
+            android:text="PC"/>
 
-    </RadioGroup>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xbox"/>
 
-    <com.gamerspot.views.CustomButton
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Playstation"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nintendo"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mobile"/>
+
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <com.adrianlesniak.gamerspot.views.GamerSpotButton
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         custom:type="search" />
 
 </LinearLayout>
