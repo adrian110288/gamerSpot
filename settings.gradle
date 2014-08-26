@@ -1,2 +1,3 @@
-include ':app', ':StackBlur'
+include ':app', ':StackBlur', ':android-stackblur-master'
 project(':StackBlur').projectDir = new File('libraries/android-stackblur-master/StackBlur')
+project(':android-stackblur-master').projectDir = new File('libraries/android-stackblur-master')
