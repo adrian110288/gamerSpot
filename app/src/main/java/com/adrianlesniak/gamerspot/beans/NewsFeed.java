@@ -33,6 +33,7 @@ public class NewsFeed implements Serializable, Comparable {
     private String creator;
     private String provider;
     private int platform;
+    private boolean visited;
 
     public NewsFeed() {
     }
@@ -73,6 +74,11 @@ public class NewsFeed implements Serializable, Comparable {
         return date;
     }
 
+    public void setDate(long milisecondsIn) {
+
+        date = new Date(milisecondsIn);
+    }
+
     public void setDate(String dateIn) {
         try {
             date = new Date(dateIn);
@@ -85,11 +91,6 @@ public class NewsFeed implements Serializable, Comparable {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void setDate(long milisecondsIn) {
-
-        date = new Date(milisecondsIn);
     }
 
     public String getCreator() {
@@ -114,6 +115,15 @@ public class NewsFeed implements Serializable, Comparable {
 
     public void setPlatform(int platformIn) {
         this.platform = platformIn;
+    }
+
+    public boolean getVisited() {
+        return this.visited;
+    }
+
+    public void setVisited(boolean visited) {
+
+        this.visited = visited;
     }
 
     @Override

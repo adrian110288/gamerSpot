@@ -22,6 +22,7 @@ public final class DatabaseContract {
         public static final String COLUMN_NAME_CREATOR = "creator";
         public static final String COLUMN_NAME_PROVIDER = "provider";
         public static final String COLUMN_NAME_PLATFORM = "platform";
+        public static final String COLUMN_NAME_VISITED = "visited";
     }
 
     public static abstract class SearchPhrasesTable implements BaseColumns {
