@@ -8,6 +8,8 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adrianlesniak.gamerspot.R;
@@ -52,6 +55,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     private int mLastFirstVisibleItem = 0;
     private boolean animDownFinished = false;
     private boolean animUpFinished = false;
+    private NewsFeed feedSelectedForContextmenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,6 +157,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         listView.setAdapter(feedsAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
+        registerForContextMenu(listView);
     }
 
     private void loadMoreData() {
@@ -183,10 +188,10 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         SpannableString spannableString;
 
         for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            spannableString = new SpannableString(item.getTitle());
-            spannableString.setSpan(new CustomTypefaceSpan(getActivity(), "fonts/sans.semi-condensed.ttf"), 0, item.getTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            item.setTitle(spannableString);
+            MenuItem menuItem = menu.getItem(i);
+            spannableString = new SpannableString(menuItem.getTitle());
+            spannableString.setSpan(new CustomTypefaceSpan(getActivity(), "fonts/sans.semi-condensed.ttf"), 0, menuItem.getTitle().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            menuItem.setTitle(spannableString);
         }
     }
 
@@ -225,6 +230,72 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         }
 
         return false;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        SpannableString spannableString;
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        feedSelectedForContextmenu = feedList.get(info.position);
+
+        if (v.getId() == R.id.headlines_list_view) {
+            getActivity().getMenuInflater().inflate(R.menu.context_menu_list_item, menu);
+
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem menuItem = menu.getItem(i);
+                String infotext = "";
+
+                if (menuItem.getItemId() == R.id.context_toggle_favourite) {
+                    if (dao.isFavourite(feedSelectedForContextmenu.getGuid())) {
+                        infotext = "Remove from favourites";
+                    } else {
+                        infotext = "Add to favourites";
+                    }
+                } else if (menuItem.getItemId() == R.id.context_toggle_read) {
+                    /*if(dao.isRead(feedSelectedForContextmenu.getGuid())) {
+                        infotext = "Mark as unread";
+                    } else {
+                        infotext = "Mark as read";
+                    }*/
+                } else {
+                    infotext = "Delete";
+                }
+
+                spannableString = new SpannableString(infotext);
+                spannableString.setSpan(new CustomTypefaceSpan(getActivity(), "fonts/sans.semi-condensed.ttf"), 0, infotext.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                menuItem.setTitle(spannableString);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.context_toggle_favourite: {
+                //dao.toggleFavourite(feedSelectedForContextmenu.getGuid());
+            }
+
+            case R.id.context_toggle_read: {
+                // dao.toggleRead(feedSelectedForContextmenu.getGuid());
+            }
+
+            case R.id.context_delete_feed: {
+                /*boolean deleted = dao.deleteFeed(feedSelectedForContextmenu.getGuid());
+
+                if(deleted){
+                    feedList.remove(feedSelectedForContextmenu);
+                    feedsAdapter.notifyDataSetChanged();
+                }*/
+            }
+        }
+
+
+        return super.onContextItemSelected(item);
     }
 
     public void refresh(long id) {

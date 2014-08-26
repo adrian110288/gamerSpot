@@ -11,6 +11,9 @@
     <string name="action_search">Search articles</string>
     <string name="action_favourite">Add to favourites</string>
     <string name="action_share">Share</string>
+    <string name="action_show_unread">Show all unread</string>
+    <string name="action_show_read">Show all read</string>
+    <string name="action_night_mode">Night mode</string>
 
     <string name="date_format">dd/MM/yyyy hh:mm</string>
 
