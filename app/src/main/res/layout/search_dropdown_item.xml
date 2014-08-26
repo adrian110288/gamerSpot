@@ -2,11 +2,11 @@
 <com.adrianlesniak.gamerspot.views.GamerSpotTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="?android:attr/dropDownItemStyle"
-    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-    android:singleLine="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="18sp"
+    android:ellipsize="marquee"
     android:padding="10dp"
-    android:ellipsize="marquee" />
+    android:singleLine="true"
+    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+    android:textSize="18sp" />
 

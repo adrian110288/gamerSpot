@@ -7,7 +7,8 @@ import android.provider.BaseColumns;
  */
 public final class DatabaseContract {
 
-    public DatabaseContract(){}
+    public DatabaseContract() {
+    }
 
     public static abstract class NewsFeedTable implements BaseColumns {
 

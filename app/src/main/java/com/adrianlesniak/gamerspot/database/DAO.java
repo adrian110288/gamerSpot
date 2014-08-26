@@ -107,7 +107,7 @@ public class DAO {
         return queryData(platform, sortOrderWithLimit);
     }
 
-    private ArrayList<NewsFeed> queryData(Long platform, String sortStatement){
+    private ArrayList<NewsFeed> queryData(Long platform, String sortStatement) {
 
         database = dbHelper.getReadableDatabase();
         queriedList = new ArrayList<NewsFeed>();
@@ -132,7 +132,7 @@ public class DAO {
         Cursor cursor = c;
         NewsFeed feed;
 
-        if(cursor != null) {
+        if (cursor != null) {
             c.moveToNext();
 
             while (!c.isAfterLast()) {
@@ -166,7 +166,7 @@ public class DAO {
         database = dbHelper.getWritableDatabase();
         long inserted = -1;
 
-        if(!phraseExists(phraseIn) && phraseIn.length() > 1) {
+        if (!phraseExists(phraseIn) && phraseIn.length() > 1) {
             values = new ContentValues();
             values.put(DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE, phraseIn);
             inserted = database.insertOrThrow(DatabaseContract.SearchPhrasesTable.TABLE_NAME, null, values);
@@ -196,10 +196,11 @@ public class DAO {
 
     private boolean phraseExists(String phraseIn) {
 
-        String selectStatement = "SELECT " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " FROM " + DatabaseContract.SearchPhrasesTable.TABLE_NAME + " WHERE " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " = " + "'" + phraseIn + "'";;
+        String selectStatement = "SELECT " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " FROM " + DatabaseContract.SearchPhrasesTable.TABLE_NAME + " WHERE " + DatabaseContract.SearchPhrasesTable.COLUMN_NAME_PHRASE + " = " + "'" + phraseIn + "'";
+        ;
         Cursor c = database.rawQuery(selectStatement, null);
 
-        return (c.getCount() == 0) ? false  :true ;
+        return (c.getCount() == 0) ? false : true;
     }
 
     public boolean isFavourite(String feedId) {
@@ -247,7 +248,7 @@ public class DAO {
         String searchStatementForHeadlines = selectFrom + where1 + where2 + order;
         Cursor c = null;
 
-        if(stringPhrase.length() > 3) {
+        if (stringPhrase.length() > 3) {
             c = database.rawQuery(searchStatementForHeadlines, null);
             list = traverseCursor(c);
         }

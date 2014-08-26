@@ -3,7 +3,7 @@ package com.adrianlesniak.gamerspot.enums;
 /**
  * Created by Adrian on 12-Jul-14.
  */
-public enum  ButtonType {
+public enum ButtonType {
 
     ARTICLE(0),
     SEARCH(1),

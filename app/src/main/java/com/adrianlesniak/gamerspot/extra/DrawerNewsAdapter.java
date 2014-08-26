@@ -52,7 +52,7 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
         mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         this.convertView = convertView;
 
-        if(convertView == null) {
+        if (convertView == null) {
 
             convertView = mInflater.inflate(R.layout.drawer_news_item, null);
 
@@ -64,8 +64,7 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
 
             convertView.setTag(holder);
 
-        }
-        else {
+        } else {
             holder = (DrawerNewsViewHolder) convertView.getTag();
         }
 
@@ -73,12 +72,17 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
         holder.newsItem.setText(itemText);
 
 
-        if(position == 0) holder.indicator.setVisibility(View.INVISIBLE);
-        else if(position == 1) holder.indicator.setBackgroundColor(context.getResources().getColor(android.R.color.white));
-        else if(position == 2) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
-        else if(position == 3) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
-        else if(position == 4) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
-        else if(position == 5) holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
+        if (position == 0) holder.indicator.setVisibility(View.INVISIBLE);
+        else if (position == 1)
+            holder.indicator.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+        else if (position == 2)
+            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
+        else if (position == 3)
+            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
+        else if (position == 4)
+            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
+        else if (position == 5)
+            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
 
         return convertView;
 

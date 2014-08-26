@@ -22,50 +22,52 @@ import android.text.style.MetricAffectingSpan;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
  * Style a {@link Spannable} with a custom {@link android.graphics.Typeface}.
- * 
+ *
  * @author Tristan Waddington
  */
 public class CustomTypefaceSpan extends MetricAffectingSpan {
-      /** An <code>LruCache</code> for previously loaded typefaces. */
+    /**
+     * An <code>LruCache</code> for previously loaded typefaces.
+     */
     private static LruCache<String, Typeface> sTypefaceCache =
             new LruCache<String, Typeface>(12);
- 
+
     private Typeface mTypeface;
- 
+
     /**
      * Load the {@link android.graphics.Typeface} and apply to a {@link Spannable}.
      */
     public CustomTypefaceSpan(Context context, String typefaceName) {
         mTypeface = sTypefaceCache.get(typefaceName);
- 
+
         if (mTypeface == null) {
             mTypeface = Typeface.createFromAsset(context.getAssets(), typefaceName);
- 
+
             // Cache the loaded Typeface
             sTypefaceCache.put(typefaceName, mTypeface);
         }
     }
- 
+
     public void updateMeasureState1(TextPaint p) {
         p.setTypeface(mTypeface);
-        
+
         // Note: This flag is required for proper typeface rendering
         p.setFlags(p.getFlags() | Paint.SUBPIXEL_TEXT_FLAG);
     }
- 
+
     public void updateDrawState(TextPaint tp) {
         tp.setTypeface(mTypeface);
-        
+
         // Note: This flag is required for proper typeface rendering
         tp.setFlags(tp.getFlags() | Paint.SUBPIXEL_TEXT_FLAG);
     }
 
-	@Override
-	public void updateMeasureState(TextPaint p) {
+    @Override
+    public void updateMeasureState(TextPaint p) {
 
-	}
+    }
 
 }

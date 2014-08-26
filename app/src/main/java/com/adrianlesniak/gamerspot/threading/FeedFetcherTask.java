@@ -30,18 +30,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class FeedFetcherTask extends AsyncTask<String, Void, Integer> {
 
+    private static final String junkText = "<p style=\"padding:5px;background:#ffffcc;";
     private Context context;
-
     private String[] pcFeedUrls;
     private String[] xboxFeedUrls;
     private String[] playstationFeedUrls;
     private String[] nintendoFeedUrls;
     private String[] mobileFeedUrls;
-
     private ArrayList<NewsFeed> newFeeds = new ArrayList<NewsFeed>();
     private DAO dao;
     private Handler feedFetchHandler;
-    private static final String junkText = "<p style=\"padding:5px;background:#ffffcc;";
 
     public FeedFetcherTask(Context c, Handler handler) {
 
@@ -181,7 +179,7 @@ public class FeedFetcherTask extends AsyncTask<String, Void, Integer> {
 
                     description = element.getElementsByTagName("description").item(0).getTextContent();
 
-                    if(description.contains(junkText)) {
+                    if (description.contains(junkText)) {
                         String substring = description.substring(description.indexOf(junkText), description.length());
                         description = description.replace(substring, "");
                     }

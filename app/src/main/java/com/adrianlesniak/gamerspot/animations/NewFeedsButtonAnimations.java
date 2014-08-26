@@ -11,13 +11,13 @@ import android.widget.Button;
 public class NewFeedsButtonAnimations {
 
     @TargetApi(14)
-    public static void slideButtonUp (final Button buttonIn, int rootViewHeight) {
+    public static void slideButtonUp(final Button buttonIn, int rootViewHeight) {
 
         ObjectAnimator.ofFloat(buttonIn, View.TRANSLATION_Y, rootViewHeight - 300).setDuration(200).start();
     }
 
     @TargetApi(14)
-    public static void slideButtonDown (final Button buttonIn, int rootViewHeight) {
+    public static void slideButtonDown(final Button buttonIn, int rootViewHeight) {
 
         ObjectAnimator.ofFloat(buttonIn, View.TRANSLATION_Y, rootViewHeight).setDuration(200).start();
     }

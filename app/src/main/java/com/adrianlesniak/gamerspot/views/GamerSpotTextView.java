@@ -26,7 +26,7 @@ public class GamerSpotTextView extends TextView {
         init();
     }
 
-   private void init(){
-       setTypeface(CommonUtilities.getTextFont());
-   }
+    private void init() {
+        setTypeface(CommonUtilities.getTextFont());
+    }
 }
