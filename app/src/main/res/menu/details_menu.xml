@@ -8,12 +8,12 @@
         android:id="@+id/action_share"
         app:showAsAction="ifRoom"
         android:title="@string/action_share"
-        android:icon="@drawable/ic_social_share"
+        android:icon="@drawable/ic_action_social_share"
         bwq:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
 
     <item android:id="@+id/action_favourite"
         android:title="@string/action_favourite"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_action_3_rating_not_important"
+        android:icon="@drawable/ic_action_rating_not_important"
         app:showAsAction="ifRoom" />
 </menu>

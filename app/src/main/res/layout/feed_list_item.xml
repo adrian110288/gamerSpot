@@ -34,7 +34,8 @@
         android:layout_alignBottom="@id/helperView"
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
-        android:textColor="@color/APP_TEXT_COLOR" />
+        android:textColor="@color/APP_TEXT_COLOR"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/feed_creator"
@@ -44,7 +45,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
-        android:textColor="@color/FEED_LIST_ITEM_CREATOR" />
+        android:textColor="@color/FEED_LIST_ITEM_CREATOR"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/feed_title"
@@ -53,10 +55,9 @@
         android:layout_below="@+id/feed_creator"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-
         android:layout_marginTop="5dp"
         android:textColor="@color/APP_TEXT_COLOR"
-        android:textSize="18dp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
 </RelativeLayout>

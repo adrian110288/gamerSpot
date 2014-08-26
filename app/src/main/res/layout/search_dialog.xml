@@ -2,14 +2,13 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:minWidth="500dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/search_bck">
+    android:minWidth="500dp"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ACTION_BAR_COLOR">
 
@@ -17,60 +16,77 @@
             android:id="@+id/search_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_dialog_title"
-            android:textSize="25dp"
             android:layout_margin="15dp"
-            android:textColor="@android:color/white"/>
+            android:text="@string/search_dialog_title"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
 
     </LinearLayout>
 
-    <AutoCompleteTextView
-        android:id="@+id/search_edittext"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:layout_margin="15dp"
-        android:inputType="textCapSentences"
-        android:hint="@string/search_dialog_edittext_hint"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/search_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:text="@string/search_dialog_radiogroup_header"/>
+        <AutoCompleteTextView
+            android:id="@+id/search_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-   <RadioGroup
-       android:id="@+id/search_radioGroup"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-       android:layout_margin="15dp">
+            android:hint="@string/search_dialog_edittext_hint"
+            android:inputType="textCapSentences"
+            android:singleLine="true" />
 
-       <RadioButton
-           android:id="@+id/radio1"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:text="@string/search_dialog_radiogroup_item1"
-           android:checked="true"/>
+        <LinearLayout
+            android:id="@+id/checkbox_group_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-       <RadioButton
-           android:id="@+id/radio2"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:text="@string/search_dialog_radiogroup_item2"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All platforms" />
 
-   </RadioGroup>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PC" />
 
-    <com.gamerspot.views.CustomButton
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xbox" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Playstation" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nintendo" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.adrianlesniak.gamerspot.views.GamerSpotButton
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        custom:type="search"
-        />
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        custom:type="search" />
 
 </LinearLayout>

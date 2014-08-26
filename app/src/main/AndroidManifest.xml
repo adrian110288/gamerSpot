@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gamerspot">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.adrianlesniak.gamerspot"
+    android:versionCode="1"
+    android:versionName="0.1">
 
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".extra.GamerSpotApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activities.NewsHeadlinesActivity"
             android:launchMode="singleTop"
@@ -23,18 +31,23 @@
 
         <activity
             android:name=".activities.NewsDetailsActivity"
-            android:parentActivityName=".activities.NewsHeadlinesActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="UnusedAttribute"></activity>
 
+        <activity
+            android:name=".activities.SearchResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.NewsActivity" />
+                android:value=".activities.NewsHeadlinesActivity" />
         </activity>
 
+        <provider
+            android:name=".database.NewsContentProvider"
+            android:authorities=".database.NewsContentProvider"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 </manifest>

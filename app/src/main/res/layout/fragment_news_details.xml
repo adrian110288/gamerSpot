@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,50 +10,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#D4D4D4"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/scroll_view"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/details_header_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:padding="8dp"
-                android:background="@drawable/layer_card_background">
+                android:background="@drawable/layer_card_background"
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/details_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
-                    android:textSize="28dp"/>
+                    android:textSize="28sp" />
 
                 <TextView
                     android:id="@+id/details_creator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:layout_below="@+id/details_title" />
+                    android:layout_below="@+id/details_title"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/details_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:textSize="16dp"
-                    android:layout_alignTop="@+id/details_creator"/>
+                    android:layout_alignTop="@+id/details_creator"
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -62,28 +62,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:padding="8dp"
-                android:background="@drawable/layer_card_background" >
+                android:background="@drawable/layer_card_background"
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/details_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="2dp"
-                    android:textSize="19dp"
-                    />
+                    android:textSize="19sp" />
 
             </LinearLayout>
 
-            <com.gamerspot.views.CustomButton
+            <com.adrianlesniak.gamerspot.views.GamerSpotButton
                 android:id="@+id/button_full_article"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:gravity="center"
+                android:layout_marginBottom="8dp"
                 android:onClick="goToFullArticle"
-                custom:type="article"
-                />
+                custom:type="article" />
 
         </LinearLayout>
 

@@ -11,6 +11,9 @@
     <string name="action_search">Search articles</string>
     <string name="action_favourite">Add to favourites</string>
     <string name="action_share">Share</string>
+    <string name="action_show_unread">Show all unread</string>
+    <string name="action_show_read">Show all read</string>
+    <string name="action_night_mode">Night mode</string>
 
     <string name="date_format">dd/MM/yyyy hh:mm</string>
 
@@ -20,6 +23,8 @@
     <string name="new_feeds_count"> new game news added. Scroll up to see them</string>
     <string name="no_network_connection">Please check your internet connection</string>
     <string name="network_connecton_lost">Cannot check news at this time</string>
+    <string name="article_added_to_fav">Article added to favourites</string>
+    <string name="article_removed_from_fav">Article removed from favourites</string>
 
     <plurals name="new_feeds_plurals">
         <item quantity="zero">No updates</item>
@@ -45,13 +50,20 @@
     <!-- Search dialog strings -->
     <string name="search_dialog_title">Search</string>
     <string name="search_dialog_radiogroup_header">Search through:</string>
-    <string name="search_dialog_radiogroup_item1">Article titles</string>
-    <string name="search_dialog_radiogroup_item2">Article titles and text</string>
+    <string name="search_dialog_radiogroup_item1">Headlines</string>
+    <string name="search_dialog_radiogroup_item2">Headlines and texts</string>
     <string name="search_dialog_button">Search</string>
     <string name="search_dialog_edittext_hint">Enter search phrase</string>
 
+    <!-- About me dialog strings -->
+    <string name="about_me_dialog_title">About me</string>
+    <string name="about_me_playstore">My apps</string>
+    <string name="about_me_email">Email me</string>
+    <string name="about_me_text">Independent Android Developer based in Manchester, UK.\nFeel free to explore the application and let me know what you think.</string>
+
     <!-- Button texts -->
     <string name="button_full_article">Read full article</string>
+
     <!-- RSS Urls -->
     <string-array name="pc_feeds">
         <item>http://www.pcgamer.com/feed/</item>
