@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.adrianlesniak.gamerspot.R;
@@ -33,7 +34,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     private TextView title;
     private AutoCompleteTextView editText;
     private GamerSpotButton button;
-    private LinearLayout checkboxGroup;
+    private RelativeLayout checkboxGroup;
     private DAO dao;
     private ArrayAdapter<String> autocompleteAdapter;
     private ArrayList<String> phrases;
@@ -62,7 +63,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
         editText.setAdapter(autocompleteAdapter);
         button = (GamerSpotButton) view.findViewById(R.id.search_button);
         button.setOnClickListener(this);
-        checkboxGroup = (LinearLayout) view.findViewById(R.id.checkbox_group_layout);
+        checkboxGroup = (RelativeLayout) view.findViewById(R.id.checkbox_group_layout);
         setCheckboxes();
 
         return view;
@@ -73,25 +74,77 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
         for (int i = 0; i < checkboxGroup.getChildCount(); i++) {
 
             final CheckBox checkBox = (CheckBox) checkboxGroup.getChildAt(i);
+
             checkBox.setTypeface(CommonUtilities.getTextFont());
 
             if (i == 0) {
+
+                checkBox.setChecked(true);
+
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                        checkAllBoxes(isChecked);
+                        if (isChecked) {
+                            checkAllBoxes(!isChecked);
+                            checkBox.setChecked(isChecked);
+                        } else {
+
+                            boolean uncheck = false;
+
+                            for (int i = 1; i < checkboxGroup.getChildCount(); i++) {
+
+                                CheckBox childCB = (CheckBox) checkboxGroup.getChildAt(i);
+
+                                if (childCB.isChecked()) {
+                                    uncheck = true;
+                                }
+
+                                checkBox.setChecked(!uncheck);
+                            }
+                        }
                     }
                 });
+
             } else {
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                        if (((CheckBox) checkboxGroup.getChildAt(0)).isChecked()) {
-                            checkAllBoxes(isChecked);
-                            checkBox.setChecked(true);
+
+                        int numberChecked = 0;
+                        CheckBox firstChild = ((CheckBox) checkboxGroup.getChildAt(0));
+
+                        for (int i = 1; i < checkboxGroup.getChildCount(); i++) {
+
+                            CheckBox childCB = (CheckBox) checkboxGroup.getChildAt(i);
+
+                            if (childCB.isChecked()) {
+                                numberChecked++;
+                            }
                         }
+
+                        if (isChecked) {
+
+                            if (firstChild.isChecked()) {
+                                firstChild.setChecked(!isChecked);
+                            }
+
+
+                            if (numberChecked == 5) {
+                                checkAllBoxes(!isChecked);
+                                firstChild.setChecked(isChecked);
+                            } else if (numberChecked == 0) {
+                                checkAllBoxes(!isChecked);
+                                checkBox.setChecked(isChecked);
+                            }
+                        } else {
+                            if (numberChecked == 0) {
+                                checkAllBoxes(isChecked);
+                                firstChild.setChecked(!isChecked);
+                            }
+                        }
+
 
                     }
                 });
@@ -144,7 +197,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
         String phrase = editText.getText().toString();
 
         if (phrase.length() > 3) {
-            ArrayList<NewsFeed> list = dao.searchArticles(phrase);
+            ArrayList<NewsFeed> list = dao.searchArticles(phrase, getBoxesChecked());
             dao.insertPhrase(phrase);
 
             Intent i = new Intent(getActivity(), SearchResultActivity.class);
@@ -162,5 +215,25 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
         } else {
             CommonUtilities.showToast("Phrase too short");
         }
+    }
+
+    public ArrayList<Integer> getBoxesChecked() {
+
+        ArrayList<Integer> checkedList = new ArrayList<Integer>(6);
+
+        for (int i = 0; i < checkboxGroup.getChildCount(); i++) {
+
+            CheckBox checkBox = (CheckBox) checkboxGroup.getChildAt(i);
+
+            if (i == 0 && checkBox.isChecked()) {
+                break;
+            } else if (checkBox.isChecked()) {
+                checkedList.add(i);
+            }
+        }
+
+        Log.i("PLATFORMS", checkedList.toString());
+
+        return checkedList;
     }
 }

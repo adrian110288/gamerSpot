@@ -62,7 +62,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
                 case 1: {
                     colorDrawable = new ColorDrawable(this.getResources().getColor(R.color.PLATFORM_PC));
-                    iconDrawable = getResources().getDrawable(R.drawable.ic_action_mouse_512);
+                    iconDrawable = getResources().getDrawable(R.drawable.ic_action_90px_noun_project_216);
                     break;
                 }
                 case 2: {

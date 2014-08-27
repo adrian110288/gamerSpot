@@ -38,44 +38,58 @@
             android:inputType="textCapSentences"
             android:singleLine="true" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/checkbox_group_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <CheckBox
+                android:id="@+id/checkbox_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All platforms" />
+                android:text="All news" />
 
             <CheckBox
+                android:id="@+id/checkbox_pc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/checkbox_all"
                 android:text="PC" />
 
             <CheckBox
+                android:id="@+id/checkbox_xb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/checkbox_pc"
                 android:text="Xbox" />
 
             <CheckBox
+                android:id="@+id/checkbox_ps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="70dp"
+                android:layout_toRightOf="@id/checkbox_all"
                 android:text="Playstation" />
 
             <CheckBox
+                android:id="@+id/checkbox_nt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/checkbox_pc"
+                android:layout_alignLeft="@id/checkbox_ps"
                 android:text="Nintendo" />
 
             <CheckBox
+                android:id="@+id/checkbox_mb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/checkbox_xb"
+                android:layout_alignLeft="@id/checkbox_ps"
                 android:text="Mobile" />
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

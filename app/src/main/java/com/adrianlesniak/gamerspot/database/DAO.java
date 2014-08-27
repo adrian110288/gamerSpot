@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.adrianlesniak.gamerspot.beans.NewsFeed;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by Adrian on 10-Jun-14.
@@ -209,29 +210,57 @@ public class DAO {
         return exists;
     }
 
-    public ArrayList<NewsFeed> searchArticles(String stringPhrase) {
+    public ArrayList<NewsFeed> searchArticles(String stringPhrase, ArrayList<Integer> checkedList) {
 
         database = dbHelper.getReadableDatabase();
-        ArrayList<NewsFeed> list = null;
+        ArrayList<NewsFeed> tempList = null;
 
         String selectFrom = "SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME;
         String where1 = " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE + " LIKE '" + "%" + stringPhrase + "%" + "' OR ";
         String where2 = DatabaseContract.NewsFeedTable.COLUMN_NAME_DESCRIPTION + " LIKE '" + "%" + stringPhrase + "%" + "' ";
         String order = "ORDER BY " + DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
 
-
-//        String searchStatementForHeadlines = "SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME + " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE + " LIKE '" + "%" + stringPhrase + "%" + "' ORDER BY " + DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
+//      String searchStatementForHeadlines = "SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME + " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE + " LIKE '" + "%" + stringPhrase + "%" + "' ORDER BY " + DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE + " DESC";
         String searchStatementForHeadlines = selectFrom + where1 + where2 + order;
+
         Cursor c = null;
 
         if (stringPhrase.length() > 3) {
             c = database.rawQuery(searchStatementForHeadlines, null);
-            list = traverseCursor(c);
+            tempList = traverseCursor(c);
+            c.close();
+
+            if (checkedList.size() != 0) {
+
+                ListIterator<NewsFeed> iter = tempList.listIterator();
+                ArrayList<NewsFeed> feedsToRemove = new ArrayList<NewsFeed>();
+
+                while (iter.hasNext()) {
+
+                    NewsFeed feed = iter.next();
+
+                    boolean remove = true;
+
+                    for (Integer i : checkedList) {
+                        if (feed.getPlatform() == i) {
+                            remove = false;
+                            break;
+                        }
+                    }
+
+                    if (remove) {
+                        feedsToRemove.add(feed);
+                    }
+                }
+
+                for (NewsFeed delFeed : feedsToRemove) {
+                    tempList.remove(delFeed);
+                }
+
+            }
         }
 
-        c.close();
-
-        return list;
+        return tempList;
     }
 
 

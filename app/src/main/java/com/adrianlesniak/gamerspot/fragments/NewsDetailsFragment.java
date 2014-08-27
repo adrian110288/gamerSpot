@@ -139,7 +139,6 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.details_menu, menu);
-        setShareOption(menu.findItem(R.id.action_share));
 
         MenuItem menuItem = menu.findItem(R.id.action_favourite);
 
@@ -157,16 +156,7 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
 
         switch (id) {
             case android.R.id.home: {
-
-                /*if(isSearched) {
-                    getActivity().finish();
-                }
-                else {
-                    NavUtils.navigateUpFromSameTask(getActivity());
-                }*/
-
                 getActivity().onBackPressed();
-
                 return true;
             }
 
@@ -190,24 +180,19 @@ public class NewsDetailsFragment extends Fragment implements FullArticleClickLis
 
                 return true;
             }
+
+            case R.id.action_share: {
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this article " + feed.getLink());
+                sendIntent.setType("text/plain");
+
+                startActivity(sendIntent);
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @TargetApi(14)
-    private void setShareOption(MenuItem shareitem) {
-        //ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareitem);
-        //shareActionProvider.setShareIntent(getShareIntent());
-    }
-
-    @TargetApi(14)
-    private Intent getShareIntent() {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this article " + feed.getLink());
-        sendIntent.setType("text/plain");
-        return sendIntent;
     }
 
     private void getImagesUrl(String textIn) {
