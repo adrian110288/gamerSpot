@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.adrianlesniak.gamerspot.R;
 import com.adrianlesniak.gamerspot.beans.NewsFeed;
@@ -54,7 +53,7 @@ public class SearchResultsFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_news_headlines, null);
+        return inflater.inflate(R.layout.fragment_search_headlines, null);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class SearchResultsFragment extends Fragment implements AdapterView.OnIte
     }
 
     private void setListView(View view) {
-        listView = (ListView) view.findViewById(R.id.headlines_list_view);
+        listView = (ListView) view.findViewById(R.id.search_headlines_list_view);
         listView.setAdapter(feedsAdapter);
         listView.setOnItemClickListener(this);
         registerForContextMenu(listView);
@@ -75,7 +74,7 @@ public class SearchResultsFragment extends Fragment implements AdapterView.OnIte
 
         SpannableString spannableString;
 
-        if (v.getId() == R.id.headlines_list_view) {
+        if (v.getId() == R.id.search_headlines_list_view) {
             getActivity().getMenuInflater().inflate(R.menu.context_menu_list_item, menu);
 
             for (int i = 0; i < menu.size(); i++) {

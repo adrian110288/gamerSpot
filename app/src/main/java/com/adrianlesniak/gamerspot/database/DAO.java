@@ -91,6 +91,36 @@ public class DAO {
         return queryFeeds(platform, sortOrderWithLimit);
     }
 
+    public NewsFeed getFeedById(String guid) {
+
+        database = dbHelper.getReadableDatabase();
+
+        NewsFeed feed;
+
+        String statement = "SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME + " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_ID + "='" + guid + "'";
+
+        Cursor c = database.rawQuery(statement, null);
+
+        if (c.moveToFirst()) {
+
+            feed = new NewsFeed();
+
+            feed.setGuid(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_ID)));
+            feed.setTitle(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_TITLE)));
+            feed.setLink(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_LINK)));
+            feed.setDescription(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_DESCRIPTION)));
+            feed.setDate(c.getLong(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_DATE)));
+            feed.setCreator(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_CREATOR)));
+            feed.setProvider(c.getString(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_PROVIDER)));
+            feed.setPlatform(c.getInt(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM)));
+            feed.setVisited((c.getInt(c.getColumnIndex(DatabaseContract.NewsFeedTable.COLUMN_NAME_PLATFORM)) == 0) ? false : true);
+
+        } else feed = null;
+
+        return feed;
+
+    }
+
     public boolean removeFeed(String guid) {
 
         database = dbHelper.getWritableDatabase();
@@ -278,6 +308,37 @@ public class DAO {
     /*
     Those methods takes care of adding and removing favourite feeds from database.
      */
+
+    public ArrayList<NewsFeed> getAllFavourites() {
+
+        database = dbHelper.getReadableDatabase();
+
+        ArrayList<NewsFeed> tempList = new ArrayList<NewsFeed>();
+
+        String selectAllFavouites = "SELECT * " + "FROM " + DatabaseContract.FavouriteFeedsTable.TABLE_NAME;
+        Cursor cursor = database.rawQuery(selectAllFavouites, null);
+
+        if (cursor != null) {
+            cursor.moveToNext();
+
+            while (!cursor.isAfterLast()) {
+
+                String guid = cursor.getString(cursor.getColumnIndex(DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID));
+                NewsFeed feed = getFeedById(guid);
+
+                if (feed != null) {
+                    tempList.add(feed);
+                }
+
+                cursor.moveToNext();
+            }
+        }
+
+        cursor.close();
+
+        return tempList;
+    }
+
 
     public boolean isFavourite(String feedId) {
         database = dbHelper.getReadableDatabase();

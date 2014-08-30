@@ -7,7 +7,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.adrianlesniak.gamerspot.R;
 import com.adrianlesniak.gamerspot.extra.CommonUtilities;
@@ -20,6 +22,8 @@ import com.adrianlesniak.gamerspot.fragments.NewsHeadlinesFragment;
 public abstract class NavigationDrawerActivity extends BaseActivity implements ListView.OnItemClickListener {
 
     private DrawerLayout drawerLayout;
+    private LinearLayout drawerContainer;
+    private TextView catHeader;
     private ListView drawerNewsListView;
     private DrawerNewsAdapter drawerListAdapter;
     private ActionBarDrawerToggle drawerToggle;
@@ -54,11 +58,15 @@ public abstract class NavigationDrawerActivity extends BaseActivity implements L
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
+        catHeader.setTypeface(CommonUtilities.getThemeFont());
     }
 
     private void findViewReferences() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerContainer = (LinearLayout) findViewById(R.id.drawerlayout);
         drawerNewsListView = (ListView) findViewById(R.id.left_drawer_newslist);
+        catHeader = (TextView) findViewById(R.id.cat_header);
+
     }
 
     @Override
@@ -72,10 +80,12 @@ public abstract class NavigationDrawerActivity extends BaseActivity implements L
 
         if (selectedDrawerItem != id) {
             setDrawerItemSelected(id);
+
             fragment = (NewsHeadlinesFragment) getSupportFragmentManager().findFragmentByTag("MAIN");
             fragment.refresh(id);
+            drawerLayout.closeDrawer(drawerContainer);
         }
-        drawerLayout.closeDrawer(drawerNewsListView);
+
     }
 
     public long getDrawerItemSelected() {

@@ -27,6 +27,7 @@ import com.adrianlesniak.gamerspot.beans.NewsFeed;
 import com.adrianlesniak.gamerspot.database.DAO;
 import com.adrianlesniak.gamerspot.extra.CommonUtilities;
 import com.adrianlesniak.gamerspot.extra.CustomTypefaceSpan;
+import com.adrianlesniak.gamerspot.extra.GamerSpotApplication;
 import com.adrianlesniak.gamerspot.extra.NewsFeedsAdapter;
 import com.adrianlesniak.gamerspot.interfaces.OnHeadlineSelectedListener;
 import com.adrianlesniak.gamerspot.threading.FeedFetcherTask;
@@ -60,7 +61,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         context = getActivity();
         setHasOptionsMenu(true);
-        dao = CommonUtilities.getDatabaseAccessor();
+        dao = GamerSpotApplication.getUtils(context).getDatabaseAccessor();
         feedFetchHandler = new FeedFetchHandler();
 
         //TODO Loader required - Genymotion log (Skipped xxx frames. The application may be doing too much work on its main thread.)
@@ -281,6 +282,9 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
                 if (dao.isFavourite(feedId)) {
                     dao.removeFromFavourites(feedId);
                     CommonUtilities.showToast(getResources().getString(R.string.article_removed_from_fav));
+
+                    //TODO remove from list if Nav drawer item == 6
+
                 } else {
                     dao.addToFavourites(feedId);
                     CommonUtilities.showToast(getResources().getString(R.string.article_added_to_fav));
@@ -317,10 +321,20 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
     public void refresh(long id) {
 
-        if (id != 0) {
-            feedList = dao.getFeeds(id);
+        if (id == 6) {
+            feedList = dao.getAllFavourites();
+
+            if (feedList.size() == 0) {
+                CommonUtilities.showToast("No favourites");
+            }
         } else {
-            feedList = dao.getFeeds(null);
+
+            if (id > 0 && id < 6) {
+                feedList = dao.getFeeds(id);
+            } else if (id == 0) {
+                feedList = dao.getFeeds(null);
+            }
+
         }
 
         feedsAdapter = new NewsFeedsAdapter(context, feedList);

@@ -9,6 +9,7 @@
     <color name="NAV_DRAWER_DIVIDER_COLOR">#282828</color>
     <color name="FEED_LIST_ITEM_CREATOR">#FF4719</color>
     <color name="DISMISS_SELECTOR_COLOR">#666666</color>
+    <color name="FAVOURITE_FEEDS">#FFCC00</color>
 
     <!-- ListView items - game platform indicators -->
     <color name="PLATFORM_PC">#1A1A1A</color>

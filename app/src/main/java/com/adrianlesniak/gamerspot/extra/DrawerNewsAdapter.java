@@ -58,9 +58,8 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
 
             holder = new DrawerNewsViewHolder();
             holder.newsItem = (android.widget.TextView) convertView.findViewById(R.id.drawer_news_listItem_textView);
-            holder.newsItem.setTypeface(typeface);
-
-            holder.indicator = (View) convertView.findViewById(R.id.drawer_news_listItem_indicator);
+            holder.indicator = convertView.findViewById(R.id.drawer_news_listItem_indicator);
+            holder.itemIcon = (android.widget.ImageView) convertView.findViewById(R.id.item_icon);
 
             convertView.setTag(holder);
 
@@ -71,18 +70,33 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
         itemText = getItem(position);
         holder.newsItem.setText(itemText);
 
-
-        if (position == 0) holder.indicator.setVisibility(View.INVISIBLE);
-        else if (position == 1)
+        if (position == 0)
+            holder.indicator.setVisibility(View.INVISIBLE);
+        else if (position == 1) {
             holder.indicator.setBackgroundColor(context.getResources().getColor(android.R.color.white));
-        else if (position == 2)
+            holder.itemIcon.setVisibility(View.VISIBLE);
+            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_90px_noun_project_216));
+        } else if (position == 2) {
             holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
-        else if (position == 3)
+            holder.itemIcon.setVisibility(View.VISIBLE);
+            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_consoles_xbox_512));
+        } else if (position == 3) {
             holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
-        else if (position == 4)
+            holder.itemIcon.setVisibility(View.VISIBLE);
+            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_consoles_ps_512));
+        } else if (position == 4) {
             holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
-        else if (position == 5)
+            holder.itemIcon.setVisibility(View.VISIBLE);
+            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_nintendo_logo_2));
+        } else if (position == 5) {
             holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
+            holder.itemIcon.setVisibility(View.VISIBLE);
+            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_mobile_phone_8_512));
+        } else if (position == 6) {
+            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.FAVOURITE_FEEDS));
+            holder.itemIcon.setVisibility(View.VISIBLE);
+            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_3_rating_important));
+        }
 
         return convertView;
 

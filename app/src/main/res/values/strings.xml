@@ -40,6 +40,7 @@
         <item>Playstation news</item>
         <item>Nintendo news</item>
         <item>Mobile news</item>
+        <item>Favourites</item>
     </string-array>
 
     <!-- Navigation Drawer Accessibility -->
