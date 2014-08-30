@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.adrianlesniak.gamerspot.R;
@@ -50,13 +51,13 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
             holder = new FeedViewHolder();
 
             holder.title_textView = (TextView) convertView.findViewById(R.id.feed_title);
-            holder.platform_textView = (TextView) convertView.findViewById(R.id.feed_platform);
+            holder.platform_imageView = (ImageView) convertView.findViewById(R.id.platform_image_view);
             holder.date_textView = (TextView) convertView.findViewById(R.id.feed_date);
             holder.creator_textView = (TextView) convertView.findViewById(R.id.feed_creator);
-            holder.helperView = convertView.findViewById(R.id.helperView);
+            holder.image_holder = (android.widget.LinearLayout) convertView.findViewById(R.id.image_holder);
+            holder.infoView = (android.widget.RelativeLayout) convertView.findViewById(R.id.info_view);
 
             holder.title_textView.setTypeface(CommonUtilities.getTextFont());
-            holder.platform_textView.setTypeface(CommonUtilities.getThemeFont());
             holder.date_textView.setTypeface(CommonUtilities.getTextFont());
             holder.creator_textView.setTypeface(CommonUtilities.getBoldTextFont());
 
@@ -71,43 +72,46 @@ public class NewsFeedsAdapter extends ArrayAdapter<NewsFeed> {
 
         switch (platform) {
             case 1: {
-                holder.platform_textView.setText("PC");
-                holder.helperView.setBackgroundColor(getColor(R.color.PLATFORM_PC));
-                convertView.setBackgroundResource(R.drawable.pc_newsfeed_selector);
+                // holder.platform_textView.setText("PC");
+                holder.platform_imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_action_90px_noun_project_216));
+                holder.image_holder.setBackgroundColor(getColor(R.color.PLATFORM_PC));
+                holder.infoView.setBackgroundResource(R.drawable.pc_newsfeed_selector);
                 break;
             }
 
             case 2: {
-                holder.platform_textView.setText("XBOX");
-                holder.helperView.setBackgroundColor(getColor(R.color.PLATFORM_XBOX));
-                convertView.setBackgroundResource(R.drawable.xbox_newsfeed_selector);
+                //holder.platform_textView.setText("XBOX");
+                holder.platform_imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_action_consoles_xbox_512));
+                holder.image_holder.setBackgroundColor(getColor(R.color.PLATFORM_XBOX));
+                holder.infoView.setBackgroundResource(R.drawable.xbox_newsfeed_selector);
                 break;
             }
 
             case 3: {
-                holder.platform_textView.setText("PLAYSTATION");
-                holder.helperView.setBackgroundColor(getColor(R.color.PLATFORM_PLAYSTATION));
-                convertView.setBackgroundResource(R.drawable.playstation_newsfeed_selector);
+                // holder.platform_textView.setText("PLAYSTATION");
+                holder.platform_imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_action_consoles_ps_512));
+                holder.image_holder.setBackgroundColor(getColor(R.color.PLATFORM_PLAYSTATION));
+                holder.infoView.setBackgroundResource(R.drawable.playstation_newsfeed_selector);
                 break;
             }
 
             case 4: {
-                holder.platform_textView.setText("NINTENDO");
-                holder.helperView.setBackgroundColor(getColor(R.color.PLATFORM_NINTENDO));
-                convertView.setBackgroundResource(R.drawable.nintendo_newsfeed_selector);
+                //holder.platform_textView.setText("NINTENDO");
+                holder.platform_imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_action_nintendo_logo_2));
+                holder.image_holder.setBackgroundColor(getColor(R.color.PLATFORM_NINTENDO));
+                holder.infoView.setBackgroundResource(R.drawable.nintendo_newsfeed_selector);
                 break;
             }
 
             case 5: {
-                holder.platform_textView.setText("MOBILE");
-                holder.helperView.setBackgroundColor(getColor(R.color.PLATFORM_MOBILE));
-                convertView.setBackgroundResource(R.drawable.mobile_newsfeed_selector);
+                //holder.platform_textView.setText("MOBILE");
+                holder.platform_imageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_action_mobile_phone_8_512));
+                holder.image_holder.setBackgroundColor(getColor(R.color.PLATFORM_MOBILE));
+                holder.infoView.setBackgroundResource(R.drawable.mobile_newsfeed_selector);
                 break;
             }
 
             default: {
-                holder.platform_textView.setText("");
-                holder.helperView.setBackgroundColor(0);
                 break;
             }
         }

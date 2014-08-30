@@ -35,6 +35,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     private AutoCompleteTextView editText;
     private GamerSpotButton button;
     private RelativeLayout checkboxGroup;
+    private RelativeLayout dismissButton;
     private DAO dao;
     private ArrayAdapter<String> autocompleteAdapter;
     private ArrayList<String> phrases;
@@ -42,7 +43,6 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         dao = CommonUtilities.getDatabaseAccessor();
 
         phrases = new ArrayList<String>();
@@ -57,12 +57,15 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
 
         View view = inflater.inflate(R.layout.search_dialog, container);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        setCancelable(false);
 
         title = (TextView) view.findViewById(R.id.search_title);
         editText = (AutoCompleteTextView) view.findViewById(R.id.search_edittext);
         editText.setAdapter(autocompleteAdapter);
         button = (GamerSpotButton) view.findViewById(R.id.search_button);
         button.setOnClickListener(this);
+        dismissButton = (RelativeLayout) view.findViewById(R.id.dismissButton);
+        dismissButton.setOnClickListener(this);
         checkboxGroup = (RelativeLayout) view.findViewById(R.id.checkbox_group_layout);
         setCheckboxes();
 
@@ -194,6 +197,16 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public void onClick(View v) {
 
+        int id = v.getId();
+
+        if (id == R.id.search_button) {
+            performSearch();
+        } else if (id == R.id.dismissButton) {
+            dismiss();
+        }
+    }
+
+    private void performSearch() {
         String phrase = editText.getText().toString();
 
         if (phrase.length() > 3) {
@@ -205,8 +218,9 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
             if (list != null && list.size() != 0) {
                 i.putExtra("resultList", list);
                 i.putExtra("searchPhrase", phrase);
-                dismiss();
                 startActivity(i);
+                getActivity().overridePendingTransition(R.anim.activity_slide_to_top, R.anim.activity_stay_visible);
+
             } else {
                 CommonUtilities.showToast("No results");
             }
@@ -217,7 +231,7 @@ public class SearchDialogFragment extends DialogFragment implements View.OnClick
         }
     }
 
-    public ArrayList<Integer> getBoxesChecked() {
+    private ArrayList<Integer> getBoxesChecked() {
 
         ArrayList<Integer> checkedList = new ArrayList<Integer>(6);
 

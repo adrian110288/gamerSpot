@@ -8,13 +8,14 @@
     <color name="NEW_FEEDS_BUTTON">#D9222222</color>
     <color name="NAV_DRAWER_DIVIDER_COLOR">#282828</color>
     <color name="FEED_LIST_ITEM_CREATOR">#FF4719</color>
+    <color name="DISMISS_SELECTOR_COLOR">#666666</color>
 
     <!-- ListView items - game platform indicators -->
     <color name="PLATFORM_PC">#1A1A1A</color>
     <color name="PLATFORM_XBOX">#009933</color>
     <color name="PLATFORM_PLAYSTATION">#0052CC</color>
     <color name="PLATFORM_NINTENDO">#29A3CC</color>
-    <color name="PLATFORM_MOBILE">#D11919</color>
+    <color name="PLATFORM_MOBILE">#FF1919</color>
 
     <!-- ListView items selected indicators -->
     <color name="PC_SELECTED">#E8E8E8</color>

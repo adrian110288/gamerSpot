@@ -37,4 +37,10 @@ public class NewsDetailsActivity extends BaseActivity {
     public void goToFullArticle(View view) {
         detailsFragment.goToFullArticle(view);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.activity_stay_visible, R.anim.activity_slide_to_bottom);
+    }
 }

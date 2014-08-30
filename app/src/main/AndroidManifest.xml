@@ -43,11 +43,11 @@
                 android:value=".activities.NewsHeadlinesActivity" />
         </activity>
 
-        <provider
+        <!--<provider
             android:name=".database.NewsContentProvider"
-            android:authorities=".database.NewsContentProvider"
+            android:authorities=".database.NewsContentProvider2"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false" />-->
 
     </application>
 </manifest>

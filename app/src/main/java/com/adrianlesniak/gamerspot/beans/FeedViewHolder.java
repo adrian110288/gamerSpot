@@ -1,6 +1,8 @@
 package com.adrianlesniak.gamerspot.beans;
 
-import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -8,9 +10,10 @@ import android.widget.TextView;
  */
 public class FeedViewHolder {
 
-    public TextView platform_textView;
+    public ImageView platform_imageView;
     public TextView date_textView;
     public TextView title_textView;
     public TextView creator_textView;
-    public View helperView;
+    public LinearLayout image_holder;
+    public RelativeLayout infoView;
 }

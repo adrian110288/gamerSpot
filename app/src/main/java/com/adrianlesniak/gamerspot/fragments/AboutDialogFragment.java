@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.adrianlesniak.gamerspot.R;
@@ -20,11 +21,12 @@ import com.adrianlesniak.gamerspot.views.GamerSpotButton;
 /**
  * Created by Adrian on 24-Aug-14.
  */
-public class AboutDialogFragment extends DialogFragment {
+public class AboutDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private Button imageGooglePlus;
     private GamerSpotButton playstoreButton;
     private GamerSpotButton emailMe;
+    private RelativeLayout dismissButton;
     private TextView title;
 
     @Nullable
@@ -33,6 +35,7 @@ public class AboutDialogFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.about_dialog, container);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        setCancelable(false);
 
         title = (TextView) view.findViewById(R.id.about_title);
         title.setTypeface(CommonUtilities.getThemeFont());
@@ -42,8 +45,18 @@ public class AboutDialogFragment extends DialogFragment {
         playstoreButton.setOnClickListener(new PlaystoreClickListener());
         emailMe = (GamerSpotButton) view.findViewById(R.id.emailme_button);
         emailMe.setOnClickListener(new EmailOnClickListener());
+        dismissButton = (RelativeLayout) view.findViewById(R.id.dismissButton);
+        dismissButton.setOnClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (v.getId() == R.id.dismissButton) {
+            dismiss();
+        }
     }
 
     private class PlaystoreClickListener implements View.OnClickListener {

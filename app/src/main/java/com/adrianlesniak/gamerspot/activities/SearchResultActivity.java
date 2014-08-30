@@ -46,4 +46,10 @@ public class SearchResultActivity extends BaseActivity implements OnHeadlineSele
         intent.putExtra("isSearched", isSearched);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.activity_stay_visible, R.anim.activity_slide_to_bottom);
+    }
 }
