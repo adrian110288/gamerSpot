@@ -31,6 +31,7 @@ public class NewsHeadlinesActivity extends NavigationDrawerActivity implements O
 
         Intent intent = new Intent(this, NewsDetailsActivity.class);
         intent.putExtra("FEED", feedClicked);
+
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_to_top, R.anim.activity_stay_visible);
     }

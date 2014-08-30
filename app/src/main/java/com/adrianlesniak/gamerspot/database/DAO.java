@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.adrianlesniak.gamerspot.beans.NewsFeed;
 
@@ -90,6 +91,16 @@ public class DAO {
         return queryFeeds(platform, sortOrderWithLimit);
     }
 
+    public boolean removeFeed(String guid) {
+
+        database = dbHelper.getWritableDatabase();
+        int rowsAffected = database.delete(DatabaseContract.NewsFeedTable.TABLE_NAME, DatabaseContract.NewsFeedTable.COLUMN_NAME_ID + "=" + "'" + guid + "'", null);
+
+        Log.i("DELETED", (rowsAffected > 0) ? true + "" : false + "");
+
+        return (rowsAffected > 0);
+    }
+
 
     /*
     Methods that facilitate loading more feeds are listview is scrolled.
@@ -152,7 +163,7 @@ public class DAO {
 
     public boolean isVisited(String quid) {
         database = dbHelper.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME + " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_ID + "=" + quid + " AND " + DatabaseContract.NewsFeedTable.COLUMN_NAME_VISITED + "=1", null);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + DatabaseContract.NewsFeedTable.TABLE_NAME + " WHERE " + DatabaseContract.NewsFeedTable.COLUMN_NAME_ID + "= '" + quid + "' AND " + DatabaseContract.NewsFeedTable.COLUMN_NAME_VISITED + "=1", null);
 
         boolean visited = (cursor.getCount() > 0) ? true : false;
         cursor.close();
@@ -300,7 +311,6 @@ public class DAO {
         int rowsAffected = database.delete(DatabaseContract.FavouriteFeedsTable.TABLE_NAME, DatabaseContract.FavouriteFeedsTable.COLUMN_FAVOURITE_FEED_ID + "=" + "'" + feedId + "'", null);
         return (rowsAffected > 0);
     }
-
 
     /*
     Helpers methods that traverse cursor and query data for listview.

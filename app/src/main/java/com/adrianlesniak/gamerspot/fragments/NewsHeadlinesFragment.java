@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +19,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adrianlesniak.gamerspot.R;
@@ -92,6 +90,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         mCallback.onArticleSelected(feedList.get(position), false);
         listView.setItemChecked(position, true);
+        dao.setFeedVisited(feedList.get(position).getGuid());
     }
 
     @Override
@@ -146,7 +145,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
             getActivity().setProgressBarIndeterminateVisibility(true);
             downloadTask = new FeedFetcherTask(context, feedFetchHandler);
-            downloadTask.execute();
+            //downloadTask.execute();
         } else {
             Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
@@ -255,11 +254,11 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
                         infotext = "Add to favourites";
                     }
                 } else if (menuItem.getItemId() == R.id.context_toggle_read) {
-                    /*if(dao.isRead(feedSelectedForContextmenu.getGuid())) {
+                    if (dao.isVisited(feedSelectedForContextmenu.getGuid())) {
                         infotext = "Mark as unread";
                     } else {
                         infotext = "Mark as read";
-                    }*/
+                    }
                 } else {
                     infotext = "Delete";
                 }
@@ -274,23 +273,41 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
+        String feedId = feedSelectedForContextmenu.getGuid();
+
         switch (item.getItemId()) {
 
             case R.id.context_toggle_favourite: {
-                //dao.toggleFavourite(feedSelectedForContextmenu.getGuid());
+                if (dao.isFavourite(feedId)) {
+                    dao.removeFromFavourites(feedId);
+                    CommonUtilities.showToast(getResources().getString(R.string.article_removed_from_fav));
+                } else {
+                    dao.addToFavourites(feedId);
+                    CommonUtilities.showToast(getResources().getString(R.string.article_added_to_fav));
+                }
+
+                break;
             }
 
             case R.id.context_toggle_read: {
-                // dao.toggleRead(feedSelectedForContextmenu.getGuid());
+                if (dao.isVisited(feedId)) {
+                    dao.setFeedNotVisited(feedId);
+                    CommonUtilities.showToast("Marked as unread");
+                } else {
+                    dao.setFeedVisited(feedId);
+                    CommonUtilities.showToast("Marked as read");
+                }
+                break;
             }
 
             case R.id.context_delete_feed: {
-                /*boolean deleted = dao.deleteFeed(feedSelectedForContextmenu.getGuid());
+                boolean deleted = dao.removeFeed(feedId);
 
                 if(deleted){
                     feedList.remove(feedSelectedForContextmenu);
                     feedsAdapter.notifyDataSetChanged();
-                }*/
+                    CommonUtilities.showToast("News removed");
+                }
             }
         }
 
