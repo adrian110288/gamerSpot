@@ -78,6 +78,8 @@ public abstract class NavigationDrawerActivity extends BaseActivity implements L
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        sendEvent("Navigation drawer", "Select", id + "");
+
         if (selectedDrawerItem != id) {
             setDrawerItemSelected(id);
 
@@ -95,6 +97,22 @@ public abstract class NavigationDrawerActivity extends BaseActivity implements L
     public void setDrawerItemSelected(long id) {
         selectedDrawerItem = id;
         CommonUtilities.getDatabaseAccessor().resetLimits();
+
+        for (int i = 0; i < drawerNewsListView.getCount(); i++) {
+
+            View drawerItem = drawerNewsListView.getChildAt(i);
+            drawerItem.setBackgroundResource(R.drawable.navigation_drawer_selector);
+            View indicator = drawerItem.findViewById(R.id.drawer_news_listItem_indicator);
+            indicator.setVisibility(View.INVISIBLE);
+
+            if (i == id) {
+
+                drawerItem.setBackgroundResource(R.color.NAV_DRAWER_COLOR_SELECTED);
+                indicator.setVisibility(View.VISIBLE);
+                break;
+            }
+
+        }
     }
 
     @Override
@@ -103,7 +121,6 @@ public abstract class NavigationDrawerActivity extends BaseActivity implements L
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 
 import com.adrianlesniak.gamerspot.R;
 import com.adrianlesniak.gamerspot.beans.DrawerNewsViewHolder;
@@ -70,32 +71,34 @@ public class DrawerNewsAdapter extends ArrayAdapter<String> {
         itemText = getItem(position);
         holder.newsItem.setText(itemText);
 
-        if (position == 0)
-            holder.indicator.setVisibility(View.INVISIBLE);
-        else if (position == 1) {
-            holder.indicator.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+
+        if (position == 0) {
+            holder.indicator.setVisibility(View.VISIBLE);
+            holder.indicator.setBackgroundColor(context.getResources().getColor(android.R.color.black));
+            holder.itemIcon.setVisibility(View.GONE);
+            ((LinearLayout) holder.indicator.getParent()).setBackgroundColor(getContext().getResources().getColor(R.color.NAV_DRAWER_COLOR_SELECTED));
+        } else {
             holder.itemIcon.setVisibility(View.VISIBLE);
-            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_90px_noun_project_216));
-        } else if (position == 2) {
-            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
-            holder.itemIcon.setVisibility(View.VISIBLE);
-            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_consoles_xbox_512));
-        } else if (position == 3) {
-            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
-            holder.itemIcon.setVisibility(View.VISIBLE);
-            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_consoles_ps_512));
-        } else if (position == 4) {
-            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
-            holder.itemIcon.setVisibility(View.VISIBLE);
-            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_nintendo_logo_2));
-        } else if (position == 5) {
-            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
-            holder.itemIcon.setVisibility(View.VISIBLE);
-            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_mobile_phone_8_512));
-        } else if (position == 6) {
-            holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.FAVOURITE_FEEDS));
-            holder.itemIcon.setVisibility(View.VISIBLE);
-            holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_3_rating_important));
+
+            if (position == 1) {
+                holder.indicator.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+                holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_90px_noun_project_216));
+            } else if (position == 2) {
+                holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_XBOX));
+                holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_consoles_xbox_512));
+            } else if (position == 3) {
+                holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_PLAYSTATION));
+                holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_consoles_ps_512));
+            } else if (position == 4) {
+                holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_NINTENDO));
+                holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_nintendo_logo_2));
+            } else if (position == 5) {
+                holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.PLATFORM_MOBILE));
+                holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_mobile_phone_8_512));
+            } else if (position == 6) {
+                holder.indicator.setBackgroundColor(context.getResources().getColor(R.color.FAVOURITE_FEEDS));
+                holder.itemIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_rating_important));
+            }
         }
 
         return convertView;

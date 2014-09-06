@@ -8,12 +8,12 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent" />
 
 
     <LinearLayout
         android:id="@+id/drawerlayout"
-        android:layout_width="240dp"
+        android:layout_width="260dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/NAV_DRAWER_COLOR"
@@ -32,7 +32,8 @@
             android:id="@+id/left_drawer_newslist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:choiceMode="singleChoice" />
+            android:choiceMode="singleChoice"
+            android:drawSelectorOnTop="true" />
 
     </LinearLayout>
 

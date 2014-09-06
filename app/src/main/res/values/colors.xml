@@ -5,6 +5,7 @@
     <color name="APP_TEXT_COLOR">#1A1A1A</color>
     <color name="ACTION_BAR_COLOR">#333333</color>
     <color name="NAV_DRAWER_COLOR">#FF222222</color>
+    <color name="NAV_DRAWER_COLOR_SELECTED">#383838</color>
     <color name="NEW_FEEDS_BUTTON">#D9222222</color>
     <color name="NAV_DRAWER_DIVIDER_COLOR">#282828</color>
     <color name="FEED_LIST_ITEM_CREATOR">#FF4719</color>

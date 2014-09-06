@@ -7,10 +7,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.Window;
 
 import com.adrianlesniak.gamerspot.R;
 import com.adrianlesniak.gamerspot.extra.CustomTypefaceSpan;
+import com.adrianlesniak.gamerspot.extra.GamerSpotApplication;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 /**
  * Created by Adrian on 12-Jun-14.
@@ -96,6 +100,26 @@ public abstract class BaseActivity extends ActionBarActivity {
         SpannableString spannableString = new SpannableString(subtitle);
         spannableString.setSpan(new CustomTypefaceSpan(this, "fonts/sans.semi-condensed.ttf"), 0, subtitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         actionBar.setSubtitle(spannableString);
+    }
+
+    public void sendEvent(String category, String action, String label) {
+
+        Tracker tracker = GamerSpotApplication.getTracker(getApplicationContext());
+
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .setLabel(label)
+                .build());
+
+        Log.i("LOG", "Sending Event");
+    }
+
+    public void sendScreen(String screenName) {
+
+        Tracker tracker = GamerSpotApplication.getTracker(getApplicationContext());
+        tracker.setScreenName(screenName);
+        tracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
 }

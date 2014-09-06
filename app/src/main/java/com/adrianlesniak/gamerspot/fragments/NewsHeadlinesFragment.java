@@ -68,6 +68,8 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
         feedList = dao.getFeeds(null);
         feedsAdapter = new NewsFeedsAdapter(context, feedList);
+
+
     }
 
     @Override
@@ -146,7 +148,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
 
             getActivity().setProgressBarIndeterminateVisibility(true);
             downloadTask = new FeedFetcherTask(context, feedFetchHandler);
-            //downloadTask.execute();
+            downloadTask.execute();
         } else {
             Toast.makeText(getActivity(), getResources().getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
@@ -307,7 +309,7 @@ public class NewsHeadlinesFragment extends Fragment implements AdapterView.OnIte
             case R.id.context_delete_feed: {
                 boolean deleted = dao.removeFeed(feedId);
 
-                if(deleted){
+                if (deleted) {
                     feedList.remove(feedSelectedForContextmenu);
                     feedsAdapter.notifyDataSetChanged();
                     CommonUtilities.showToast("News removed");

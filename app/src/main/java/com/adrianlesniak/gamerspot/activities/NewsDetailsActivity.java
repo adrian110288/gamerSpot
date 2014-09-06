@@ -32,6 +32,7 @@ public class NewsDetailsActivity extends BaseActivity {
         detailsFragment.setArguments(b);
 
         getSupportFragmentManager().beginTransaction().add(R.id.details_content_frame, detailsFragment).commit();
+
     }
 
     public void goToFullArticle(View view) {
